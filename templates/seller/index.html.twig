@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Seller index{% endblock %}
+
+{% block body %}
+    <h1>Seller index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FirstNameSeller</th>
+                <th>LastNameSeller</th>
+                <th>PhoneSeller</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for seller in sellers %}
+            <tr>
+                <td>{{ seller.id }}</td>
+                <td>{{ seller.firstNameSeller }}</td>
+                <td>{{ seller.lastNameSeller }}</td>
+                <td>{{ seller.phoneSeller }}</td>
+                <td>
+                    <a href="{{ path('app_seller_show', {'id': seller.id}) }}">show</a>
+                    <a href="{{ path('app_seller_edit', {'id': seller.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_seller_new') }}">Create new</a>
+{% endblock %}
