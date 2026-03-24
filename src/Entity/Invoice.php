@@ -20,6 +20,9 @@ class Invoice
     #[ORM\Column(length: 255)]
     private ?string $descriptionItem = null;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $marque = null; 
+
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $priceItem = null;
 
@@ -40,6 +43,10 @@ class Invoice
     #[ORM\JoinColumn(nullable: false)]
     private ?customer $customer = null;
 
+    // =========================
+    // GETTERS / SETTERS
+    // =========================
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,7 +60,6 @@ class Invoice
     public function setNumberInvoice(string $numberInvoice): static
     {
         $this->numberInvoice = $numberInvoice;
-
         return $this;
     }
 
@@ -65,7 +71,18 @@ class Invoice
     public function setDescriptionItem(string $descriptionItem): static
     {
         $this->descriptionItem = $descriptionItem;
+        return $this;
+    }
 
+    // ✅ MARQUE
+    public function getMarque(): ?string
+    {
+        return $this->marque;
+    }
+
+    public function setMarque(?string $marque): static
+    {
+        $this->marque = $marque;
         return $this;
     }
 
@@ -77,7 +94,6 @@ class Invoice
     public function setPriceItem(string $priceItem): static
     {
         $this->priceItem = $priceItem;
-
         return $this;
     }
 
@@ -89,7 +105,6 @@ class Invoice
     public function setQty(int $qty): static
     {
         $this->qty = $qty;
-
         return $this;
     }
 
@@ -101,7 +116,6 @@ class Invoice
     public function setTotal(string $total): static
     {
         $this->total = $total;
-
         return $this;
     }
 
@@ -113,7 +127,6 @@ class Invoice
     public function setSaleDate(\DateTime $saleDate): static
     {
         $this->saleDate = $saleDate;
-
         return $this;
     }
 
@@ -125,7 +138,6 @@ class Invoice
     public function setSeller(?seller $seller): static
     {
         $this->seller = $seller;
-
         return $this;
     }
 
@@ -137,7 +149,6 @@ class Invoice
     public function setCustomer(?customer $customer): static
     {
         $this->customer = $customer;
-
         return $this;
     }
 }

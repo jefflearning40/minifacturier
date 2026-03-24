@@ -17,6 +17,7 @@ class InvoiceType extends AbstractType
         $builder
             ->add('numberInvoice')
             ->add('descriptionItem')
+            ->add('marque')
             ->add('priceItem')
             ->add('qty')
             ->add('total')
