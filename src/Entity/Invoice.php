@@ -21,7 +21,7 @@ class Invoice
     private ?string $descriptionItem = null;
 
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $marque = null; 
+    private ?string $marque = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $priceItem = null;
@@ -37,15 +37,11 @@ class Invoice
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?seller $seller = null;
+    private ?Seller $seller = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?customer $customer = null;
-
-    // =========================
-    // GETTERS / SETTERS
-    // =========================
+    private ?Customer $customer = null;
 
     public function getId(): ?int
     {
@@ -74,7 +70,6 @@ class Invoice
         return $this;
     }
 
-    // ✅ MARQUE
     public function getMarque(): ?string
     {
         return $this->marque;
@@ -130,23 +125,23 @@ class Invoice
         return $this;
     }
 
-    public function getSeller(): ?seller
+    public function getSeller(): ?Seller
     {
         return $this->seller;
     }
 
-    public function setSeller(?seller $seller): static
+    public function setSeller(?Seller $seller): static
     {
         $this->seller = $seller;
         return $this;
     }
 
-    public function getCustomer(): ?customer
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
-    public function setCustomer(?customer $customer): static
+    public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
         return $this;

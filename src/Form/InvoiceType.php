@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\customer;
 use App\Entity\Invoice;
-use App\Entity\seller;
+use App\Entity\Seller;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,7 +23,7 @@ class InvoiceType extends AbstractType
             ->add('total')
             ->add('saleDate')
             ->add('seller', EntityType::class, [
-                'class' => seller::class,
+                'class' => Seller::class,
                 'choice_label' => 'id',
             ])
             ->add('customer', EntityType::class, [
