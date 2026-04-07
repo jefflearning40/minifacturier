@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_home') }}">MiniFacturier</a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Ouvrir le menu"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}"
+                       href="{{ path('app_home') }}">
+                        Accueil
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_customer_' %}active{% endif %}"
+                       href="{{ path('app_customer_index') }}">
+                        Clients
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_invoice_' %}active{% endif %}"
+                       href="{{ path('app_invoice_index') }}">
+                        Factures
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_seller_' %}active{% endif %}"
+                       href="{{ path('app_seller_index') }}">
+                        Vendeurs
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
