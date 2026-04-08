@@ -1,39 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Seller index{% endblock %}
+{% block title %}Liste des vendeurs{% endblock %}
 
 {% block body %}
-    <h1>Seller index</h1>
 
-    <table class="table">
-        <thead>
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Liste des vendeurs</h1>
+
+        <a href="{{ path('app_seller_new') }}" class="btn btn-success">
+            + Nouveau vendeur
+        </a>
+    </div>
+
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
             <tr>
                 <th>Id</th>
-                <th>FirstNameSeller</th>
-                <th>LastNameSeller</th>
-                <th>PhoneSeller</th>
-                <th>actions</th>
+                <th>Nom complet</th>
+                <th>Téléphone</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
+
         <tbody>
         {% for seller in sellers %}
             <tr>
                 <td>{{ seller.id }}</td>
-                <td>{{ seller.firstNameSeller }}</td>
-                <td>{{ seller.lastNameSeller }}</td>
-                <td>{{ seller.phoneSeller }}</td>
+
                 <td>
-                    <a href="{{ path('app_seller_show', {'id': seller.id}) }}">show</a>
-                    <a href="{{ path('app_seller_edit', {'id': seller.id}) }}">edit</a>
+                    {{ seller.firstNameSeller }}
+                    {{ seller.lastNameSeller|upper }}
+                </td>
+
+                <td>{{ seller.phoneSeller }}</td>
+
+                <td class="text-center">
+
+                    {{ include('components/buttons/_show.html.twig', {
+                        route: 'app_seller_show',
+                        id: seller.id
+                    }) }}
+
+                    {{ include('components/buttons/_edit.html.twig', {
+                        route: 'app_seller_edit',
+                        id: seller.id
+                    }) }}
+
+                    {{ include('components/buttons/_delete.html.twig', {
+                        route: 'app_seller_delete',
+                        id: seller.id
+                    }) }}
+
                 </td>
             </tr>
+
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="4" class="text-center">
+                    Aucun vendeur trouvé
+                </td>
             </tr>
         {% endfor %}
         </tbody>
+
     </table>
 
-    <a href="{{ path('app_seller_new') }}">Create new</a>
+</div>
+
 {% endblock %}

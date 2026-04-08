@@ -1,4 +1,28 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div class="mb-3">
+        {{ form_label(form.firstNameSeller, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.firstNameSeller, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.firstNameSeller) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.lastNameSeller, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.lastNameSeller, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.lastNameSeller) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.phoneSeller, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.phoneSeller, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.phoneSeller) }}
+    </div>
+
+    <div class="d-grid">
+        {{ include('components/buttons/_submit.html.twig', {
+            label: button_label|default('Enregistrer'),
+            class: button_class|default('btn-primary')
+        }) }}
+    </div>
+
 {{ form_end(form) }}

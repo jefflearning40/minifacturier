@@ -1,13 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Seller{% endblock %}
+{% block title %}Modifier vendeur{% endblock %}
 
 {% block body %}
-    <h1>Edit Seller</h1>
+<div class="container mt-5">
 
-    {{ include('seller/_form.html.twig', {'button_label': 'Update'}) }}
+    <h1 class="mb-4">Modifier vendeur</h1>
 
-    <a href="{{ path('app_seller_index') }}">back to list</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
 
-    {{ include('seller/_delete_form.html.twig') }}
+            {{ include('seller/_form.html.twig', {
+                button_label: 'Modifier',
+                button_class: 'btn-primary'
+            }) }}
+
+            <div class="d-flex justify-content-between mt-4">
+
+                {{ include('components/buttons/_back.html.twig', {
+                    route: 'app_seller_index'
+                }) }}
+
+                {{ include('components/buttons/_delete.html.twig', {
+                    route: 'app_seller_delete',
+                    id: seller.id
+                }) }}
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
 {% endblock %}

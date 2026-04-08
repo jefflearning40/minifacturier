@@ -1,11 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Seller{% endblock %}
+{% block title %}Nouveau vendeur{% endblock %}
 
 {% block body %}
-    <h1>Create new Seller</h1>
+<div class="container mt-5">
 
-    {{ include('seller/_form.html.twig') }}
+    <h1 class="mb-4">Créer un nouveau vendeur</h1>
 
-    <a href="{{ path('app_seller_index') }}">back to list</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            {{ include('seller/_form.html.twig', {
+                button_label: 'Enregistrer',
+                button_class: 'btn-success'
+            }) }}
+
+            <div class="mt-4">
+                {{ include('components/buttons/_back.html.twig', {
+                    route: 'app_seller_index'
+                }) }}
+            </div>
+
+        </div>
+    </div>
+
+</div>
 {% endblock %}

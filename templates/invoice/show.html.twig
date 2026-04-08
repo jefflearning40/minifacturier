@@ -1,46 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Invoice{% endblock %}
+{% block title %}Détail facture{% endblock %}
 
 {% block body %}
-    <h1>Invoice</h1>
+<div class="container mt-5">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ invoice.id }}</td>
-            </tr>
-            <tr>
-                <th>NumberInvoice</th>
-                <td>{{ invoice.numberInvoice }}</td>
-            </tr>
-            <tr>
-                <th>DescriptionItem</th>
-                <td>{{ invoice.descriptionItem }}</td>
-            </tr>
-            <tr>
-                <th>PriceItem</th>
-                <td>{{ invoice.priceItem }}</td>
-            </tr>
-            <tr>
-                <th>Qty</th>
-                <td>{{ invoice.qty }}</td>
-            </tr>
-            <tr>
-                <th>Total</th>
-                <td>{{ invoice.total }}</td>
-            </tr>
-            <tr>
-                <th>SaleDate</th>
-                <td>{{ invoice.saleDate ? invoice.saleDate|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <h1 class="mb-4">Détail facture</h1>
 
-    <a href="{{ path('app_invoice_index') }}">back to list</a>
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
 
-    <a href="{{ path('app_invoice_edit', {'id': invoice.id}) }}">edit</a>
+            <table class="table table-bordered mb-4">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ invoice.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Numéro de facture</th>
+                        <td>{{ invoice.numberInvoice }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ invoice.descriptionItem }}</td>
+                    </tr>
+                    <tr>
+                        <th>Marque</th>
+                        <td>{{ invoice.marque }}</td>
+                    </tr>
+                    <tr>
+                        <th>Prix unitaire</th>
+                        <td>{{ invoice.priceItem }}</td>
+                    </tr>
+                    <tr>
+                        <th>Quantité</th>
+                        <td>{{ invoice.qty }}</td>
+                    </tr>
+                    <tr>
+                        <th>Total</th>
+                        <td>{{ invoice.total }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de vente</th>
+                        <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Vendeur</th>
+                        <td>
+                            {% if invoice.seller %}
+                                {{ invoice.seller.firstNameSeller }} {{ invoice.seller.lastNameSeller|upper }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Client</th>
+                        <td>
+                            {% if invoice.customer %}
+                                {{ invoice.customer.firstNameCustomer }} {{ invoice.customer.lastNameCustomer|upper }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-    {{ include('invoice/_delete_form.html.twig') }}
+            <div class="d-flex justify-content-between">
+
+                {{ include('components/buttons/_back.html.twig', {
+                    route: 'app_invoice_index'
+                }) }}
+
+                <div>
+                    {{ include('components/buttons/_edit.html.twig', {
+                        route: 'app_invoice_edit',
+                        id: invoice.id
+                    }) }}
+
+                    {{ include('components/buttons/_delete.html.twig', {
+                        route: 'app_invoice_delete',
+                        id: invoice.id
+                    }) }}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
 {% endblock %}

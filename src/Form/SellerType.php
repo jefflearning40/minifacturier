@@ -12,10 +12,24 @@ class SellerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstNameSeller')
-            ->add('lastNameSeller')
-            ->add('phoneSeller')
-        ;
+            ->add('firstNameSeller', null, [
+                'label' => 'Prénom',
+                'attr' => [
+                    'placeholder' => 'Entrez le prénom'
+                ]
+            ])
+            ->add('lastNameSeller', null, [
+                'label' => 'Nom',
+                'attr' => [
+                    'placeholder' => 'Entrez le nom'
+                ]
+            ])
+            ->add('phoneSeller', null, [
+                'label' => 'Téléphone',
+                'attr' => [
+                    'placeholder' => 'Entrez le numéro'
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

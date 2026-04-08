@@ -1,4 +1,64 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div class="mb-3">
+        {{ form_label(form.numberInvoice, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.numberInvoice, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.numberInvoice) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.descriptionItem, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.descriptionItem, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.descriptionItem) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.marque, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.marque, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.marque) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.priceItem, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.priceItem, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.priceItem) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.qty, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.qty, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.qty) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.total, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.total, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.total) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.saleDate, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.saleDate, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.saleDate) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.seller, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.seller, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.seller) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.customer, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.customer, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.customer) }}
+    </div>
+
+    <div class="d-grid">
+        {{ include('components/buttons/_submit.html.twig', {
+            label: button_label|default('Enregistrer'),
+            class: button_class|default('btn-primary')
+        }) }}
+    </div>
+
 {{ form_end(form) }}

@@ -3,6 +3,61 @@
 {% block title %}Minifacturier{% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur mon mini facturier</h1>
-    <p>preparation pour examen CCP1 et 2</p>
+<div class="container mt-5">
+
+    <div class="text-center mb-5">
+        <h1 class="mb-3">Bienvenue sur Minifacturier</h1>
+        <p class="lead">
+            Application de gestion de clients, vendeurs et factures
+        </p>
+        <p class="text-muted">
+            Préparation aux examens CCP1 & CCP2
+        </p>
+    </div>
+
+    <div class="row text-center">
+
+        <div class="col-md-4 mb-4">
+            <h3>👤 Clients</h3>
+            <p>Gérer les informations de vos clients</p>
+            <a href="{{ path('app_customer_index') }}" class="btn btn-primary">
+                Voir les clients
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <h3>🧑‍💼 Vendeurs</h3>
+            <p>Consulter et modifier les vendeurs</p>
+            <a href="{{ path('app_seller_index') }}" class="btn btn-primary">
+                Voir les vendeurs
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <h3>🧾 Factures</h3>
+            <p>Créer et suivre les factures</p>
+            <a href="{{ path('app_invoice_index') }}" class="btn btn-primary">
+                Voir les factures
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <h3>📦 Catalogue</h3>
+            <p>Consulter les produits disponibles</p>
+            <a href="{{ path('app_catalog_index') }}" class="btn btn-warning">
+                Voir le catalogue
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <h3>📊 Statistiques</h3>
+            <p>Analyser vos ventes et performances</p>
+            <a href="{{ path('app_stats_index') }}" class="btn btn-info">
+                Voir les statistiques
+            </a>
+        </div>
+
+    </div>
+
+</div>
 {% endblock %}

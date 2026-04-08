@@ -1,34 +1,100 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Seller{% endblock %}
+{% block title %}Détail vendeur{% endblock %}
 
 {% block body %}
-    <h1>Seller</h1>
+<div class="container mt-5">
 
-    <table class="table">
+    <h1 class="mb-4">Détail vendeur</h1>
+
+    <table class="table table-bordered mb-4">
         <tbody>
             <tr>
                 <th>Id</th>
                 <td>{{ seller.id }}</td>
             </tr>
             <tr>
-                <th>FirstNameSeller</th>
+                <th>Nom</th>
+                <td class="fw-bold">{{ seller.lastNameSeller|upper }}</td>
+            </tr>
+            <tr>
+                <th>Prénom</th>
                 <td>{{ seller.firstNameSeller }}</td>
             </tr>
             <tr>
-                <th>LastNameSeller</th>
-                <td>{{ seller.lastNameSeller }}</td>
-            </tr>
-            <tr>
-                <th>PhoneSeller</th>
+                <th>Téléphone</th>
                 <td>{{ seller.phoneSeller }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_seller_index') }}">back to list</a>
+    <div class="d-flex justify-content-between mb-5">
 
-    <a href="{{ path('app_seller_edit', {'id': seller.id}) }}">edit</a>
+        {{ include('components/buttons/_back.html.twig', {
+            route: 'app_seller_index'
+        }) }}
 
-    {{ include('seller/_delete_form.html.twig') }}
+        <div>
+            {{ include('components/buttons/_edit.html.twig', {
+                route: 'app_seller_edit',
+                id: seller.id
+            }) }}
+
+            {{ include('components/buttons/_delete.html.twig', {
+                route: 'app_seller_delete',
+                id: seller.id
+            }) }}
+        </div>
+
+    </div>
+
+    {# BONUS : factures liées au vendeur #}
+    {% if seller.invoices is defined %}
+        <h2 class="mb-3">
+            Factures liées ({{ seller.invoices|length }})
+        </h2>
+
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Numéro</th>
+                    <th>Description</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for invoice in seller.invoices %}
+                <tr>
+                    <td>{{ invoice.id }}</td>
+                    <td>{{ invoice.numberInvoice }}</td>
+                    <td>{{ invoice.descriptionItem }}</td>
+                    <td>{{ invoice.total }}</td>
+                    <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
+                    <td class="text-center">
+                        {{ include('components/buttons/_show.html.twig', {
+                            route: 'app_invoice_show',
+                            id: invoice.id
+                        }) }}
+
+                        {{ include('components/buttons/_edit.html.twig', {
+                            route: 'app_invoice_edit',
+                            id: invoice.id
+                        }) }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">
+                        Aucune facture liée
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+</div>
 {% endblock %}

@@ -1,11 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Customer{% endblock %}
+{% block title %}Nouveau client{% endblock %}
 
 {% block body %}
-    <h1>Create new Customer</h1>
+<div class="container mt-5">
 
-    {{ include('customer/_form.html.twig') }}
+    <h1 class="mb-4">Créer un nouveau client</h1>
 
-    <a href="{{ path('app_customer_index') }}">back to list</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            {{ include('customer/_form.html.twig', {
+                button_label: 'Enregistrer',
+                button_class: 'btn-success'
+            }) }}
+
+            <div class="mt-4">
+                {{ include('components/buttons/_back.html.twig', {
+                    route: 'app_customer_index'
+                }) }}
+            </div>
+
+        </div>
+    </div>
+
+</div>
 {% endblock %}
