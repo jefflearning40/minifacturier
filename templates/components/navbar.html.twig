@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
         <a class="navbar-brand" href="{{ path('app_home') }}">
             MiniFacturier
@@ -30,7 +30,7 @@
                         class="nav-link {% if app.request.attributes.get('_route') starts with 'app_customer_' %}active{% endif %}"
                         href="{{ path('app_customer_index') }}"
                     >
-                        Clients
+                    👤Clients
                     </a>
                 </li>
 
@@ -39,7 +39,7 @@
                         class="nav-link {% if app.request.attributes.get('_route') starts with 'app_invoice_' %}active{% endif %}"
                         href="{{ path('app_invoice_index') }}"
                     >
-                        Factures
+                    🧾Factures
                     </a>
                 </li>
 
@@ -48,7 +48,27 @@
                         class="nav-link {% if app.request.attributes.get('_route') starts with 'app_seller_' %}active{% endif %}"
                         href="{{ path('app_seller_index') }}"
                     >
-                        Vendeurs
+                    🧑‍💼Vendeurs
+                    </a>
+                </li>
+
+                <!-- Catalogue -->
+                <li class="nav-item">
+                    <a
+                        class="nav-link catalogue {% if app.request.attributes.get('_route') starts with 'app_catalog_' %}active{% endif %}"
+                        href="{{ path('app_catalog_index') }}"
+                    >
+                    📦 Catalogue
+                    </a>
+                </li>
+
+                <!-- Statistiques -->
+                <li class="nav-item">
+                    <a
+                        class="nav-link stats {% if app.request.attributes.get('_route') starts with 'app_stats_' %}active{% endif %}"
+                        href="{{ path('app_stats_index') }}"
+                    >
+                    📊 Statistiques
                     </a>
                 </li>
 
