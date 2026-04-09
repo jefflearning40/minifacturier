@@ -10,7 +10,7 @@
         <p class="lead">
             Application de gestion de clients, vendeurs et factures
         </p>
-        <p class="text-muted"> et consultation du catalogue</p>
+        <p class="text-muted">et consultation du catalogue</p>
     </div>
 
     <div class="row text-center">
@@ -47,13 +47,15 @@
             </a>
         </div>
 
-        <div class="col-md-6 mb-4">
-            <h3>📊 Statistiques</h3>
-            <p>Analyser vos ventes et performances</p>
-            <a href="{{ path('app_stats_index') }}" class="btn btn-info">
-                Voir les statistiques
-            </a>
-        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="col-md-6 mb-4">
+                <h3>📊 Statistiques</h3>
+                <p>Analyser vos ventes et performances</p>
+                <a href="{{ path('app_stats_index') }}" class="btn btn-info">
+                    Voir les statistiques
+                </a>
+            </div>
+        {% endif %}
 
     </div>
 

@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
+
         <a class="navbar-brand" href="{{ path('app_home') }}">
             MiniFacturier
         </a>
@@ -14,6 +15,8 @@
         </button>
 
         <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <!-- MENU GAUCHE -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
@@ -30,7 +33,7 @@
                         class="nav-link {% if app.request.attributes.get('_route') starts with 'app_customer_' %}active{% endif %}"
                         href="{{ path('app_customer_index') }}"
                     >
-                    👤Clients
+                        👤 Clients
                     </a>
                 </li>
 
@@ -39,7 +42,7 @@
                         class="nav-link {% if app.request.attributes.get('_route') starts with 'app_invoice_' %}active{% endif %}"
                         href="{{ path('app_invoice_index') }}"
                     >
-                    🧾Factures
+                        🧾 Factures
                     </a>
                 </li>
 
@@ -48,31 +51,60 @@
                         class="nav-link {% if app.request.attributes.get('_route') starts with 'app_seller_' %}active{% endif %}"
                         href="{{ path('app_seller_index') }}"
                     >
-                    🧑‍💼Vendeurs
+                        🧑‍💼 Vendeurs
                     </a>
                 </li>
 
-                <!-- Catalogue -->
                 <li class="nav-item">
                     <a
                         class="nav-link catalogue {% if app.request.attributes.get('_route') starts with 'app_catalog_' %}active{% endif %}"
                         href="{{ path('app_catalog_index') }}"
                     >
-                    📦 Catalogue
+                        📦 Catalogue
                     </a>
                 </li>
 
-                <!-- Statistiques -->
-                <li class="nav-item">
-                    <a
-                        class="nav-link stats {% if app.request.attributes.get('_route') starts with 'app_stats_' %}active{% endif %}"
-                        href="{{ path('app_stats_index') }}"
-                    >
-                    📊 Statistiques
-                    </a>
-                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a
+                            class="nav-link stats {% if app.request.attributes.get('_route') starts with 'app_stats_' %}active{% endif %}"
+                            href="{{ path('app_stats_index') }}"
+                        >
+                            📊 Statistiques
+                        </a>
+                    </li>
+                {% endif %}
 
             </ul>
+
+            <!-- MENU DROITE -->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+                {% if app.user %}
+                    <li class="nav-item">
+                        <span class="nav-link text-light">
+                            {{ app.user.firstname }} {{ app.user.lastname }}
+                        </span>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">
+                            Se déconnecter
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a
+                            class="nav-link {% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}"
+                            href="{{ path('app_login') }}"
+                        >
+                            Se connecter
+                        </a>
+                    </li>
+                {% endif %}
+
+            </ul>
+
         </div>
     </div>
 </nav>
