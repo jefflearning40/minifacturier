@@ -1,63 +1,99 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Minifacturier{% endblock %}
+{% block title %}MiniFacturier{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
+<div class="container h-100 d-flex flex-column justify-content-center py-4">
 
     <div class="text-center mb-5">
-        <h1 class="mb-3">Bienvenue sur Minifacturier</h1>
-        <p class="lead">
-            Application de gestion de clients, vendeurs et factures
+        <h1 class="fw-bold mb-3">MiniFacturier</h1>
+        <p class="lead mb-2">
+            Gérez vos clients, vendeurs et factures simplement
         </p>
-        <p class="text-muted">et consultation du catalogue</p>
+        <p class="text-muted mb-0">
+            Interface rapide et efficace pour votre activité
+        </p>
     </div>
 
-    <div class="row text-center">
+    <div class="row g-4 text-center justify-content-center">
 
-        <div class="col-md-4 mb-4">
-            <h3><i class="fa-solid fa-circle-user"></i> Clients</h3>
-            <p>Gérer les informations de vos clients</p>
-            <a href="{{ path('app_customer_index') }}" class="btn btn-primary">
-                Voir les clients
-            </a>
+        <div class="col-md-6 col-lg-4">
+            <div class="border rounded-4 p-4 h-100">
+                <div class="mb-3">
+                    <i class="fa-solid fa-user-group fa-2x text-primary"></i>
+                </div>
+                <h3 class="h5 fw-bold mb-3">Clients</h3>
+                <p class="text-muted mb-4">
+                    Gérez les informations de vos clients rapidement.
+                </p>
+                <a href="{{ path('app_customer_index') }}" class="btn btn-primary w-100">
+                    Voir les clients
+                </a>
+            </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <h3><i class="fa-regular fa-circle-user"></i> Vendeurs</h3>
-            <p>Consulter et modifier les vendeurs</p>
-            <a href="{{ path('app_seller_index') }}" class="btn btn-primary">
-                Voir les vendeurs
-            </a>
+        <div class="col-md-6 col-lg-4">
+            <div class="border rounded-4 p-4 h-100">
+                <div class="mb-3">
+                    <i class="fa-solid fa-user-tie fa-2x text-success"></i>
+                </div>
+                <h3 class="h5 fw-bold mb-3">Vendeurs</h3>
+                <p class="text-muted mb-4">
+                    Consultez et modifiez vos vendeurs facilement.
+                </p>
+                <a href="{{ path('app_seller_index') }}" class="btn btn-success w-100">
+                    Voir les vendeurs
+                </a>
+            </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <h3><i class="fa-solid fa-euro-sign"></i> Factures</h3>
-            <p>Créer et suivre les factures</p>
-            <a href="{{ path('app_invoice_index') }}" class="btn btn-primary">
-                Voir les factures
-            </a>
+        <div class="col-md-6 col-lg-4">
+            <div class="border rounded-4 p-4 h-100">
+                <div class="mb-3">
+                    <i class="fa-solid fa-file-invoice-dollar fa-2x text-warning"></i>
+                </div>
+                <h3 class="h5 fw-bold mb-3">Factures</h3>
+                <p class="text-muted mb-4">
+                    Créez et suivez vos factures en toute simplicité.
+                </p>
+                <a href="{{ path('app_invoice_index') }}" class="btn btn-warning w-100">
+                    Voir les factures
+                </a>
+            </div>
         </div>
 
-        <div class="col-md-6 mb-4">
-            <h3><i class="fa fa-book" aria-hidden="true"></i> Catalogue</h3>
-            <p>Consulter les produits disponibles</p>
-            <a href="{{ path('app_catalog_index') }}" class="btn btn-warning">
-                Voir le catalogue
-            </a>
+        <div class="col-md-6 {% if is_granted('ROLE_ADMIN') %}col-lg-4{% else %}col-lg-6{% endif %}">
+            <div class="border rounded-4 p-4 h-100">
+                <div class="mb-3">
+                    <i class="fa-solid fa-book fa-2x text-dark"></i>
+                </div>
+                <h3 class="h5 fw-bold mb-3">Catalogue</h3>
+                <p class="text-muted mb-4">
+                    Consultez les produits disponibles dans le catalogue.
+                </p>
+                <a href="{{ path('app_catalog_index') }}" class="btn btn-dark w-100">
+                    Voir le catalogue
+                </a>
+            </div>
         </div>
 
         {% if is_granted('ROLE_ADMIN') %}
-            <div class="col-md-6 mb-4">
-                <h3><i class="fa fa-line-chart" aria-hidden="true"></i> Statistiques</h3>
-                <p>Analyser vos ventes et performances</p>
-                <a href="{{ path('app_stats_index') }}" class="btn btn-info">
-                    Voir les statistiques
-                </a>
+            <div class="col-md-6 col-lg-4">
+                <div class="border rounded-4 p-4 h-100">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-chart-line fa-2x text-info"></i>
+                    </div>
+                    <h3 class="h5 fw-bold mb-3">Statistiques</h3>
+                    <p class="text-muted mb-4">
+                        Analysez vos ventes et suivez vos performances.
+                    </p>
+                    <a href="{{ path('app_stats_index') }}" class="btn btn-info text-white w-100">
+                        Voir les statistiques
+                    </a>
+                </div>
             </div>
         {% endif %}
 
     </div>
-
 </div>
 {% endblock %}

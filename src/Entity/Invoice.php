@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,23 +19,8 @@ class Invoice
     #[ORM\Column(length: 50)]
     private ?string $numberInvoice = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $descriptionItem = null;
-
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $marque = null;
-
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $priceItem = null;
-
-    #[ORM\Column]
-    private ?int $qty = null;
-
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $total = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $saleDate = null;
+    private ?\DateTimeInterface $saleDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
@@ -42,6 +29,22 @@ class Invoice
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
+
+    /**
+     * @var Collection<int, InvoiceItem>
+     */
+    #[ORM\OneToMany(
+        targetEntity: InvoiceItem::class,
+        mappedBy: 'invoice',
+        orphanRemoval: true,
+        cascade: ['persist']
+    )]
+    private Collection $invoiceItems;
+
+    public function __construct()
+    {
+        $this->invoiceItems = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -56,72 +59,19 @@ class Invoice
     public function setNumberInvoice(string $numberInvoice): static
     {
         $this->numberInvoice = $numberInvoice;
+
         return $this;
     }
 
-    public function getDescriptionItem(): ?string
-    {
-        return $this->descriptionItem;
-    }
-
-    public function setDescriptionItem(string $descriptionItem): static
-    {
-        $this->descriptionItem = $descriptionItem;
-        return $this;
-    }
-
-    public function getMarque(): ?string
-    {
-        return $this->marque;
-    }
-
-    public function setMarque(?string $marque): static
-    {
-        $this->marque = $marque;
-        return $this;
-    }
-
-    public function getPriceItem(): ?string
-    {
-        return $this->priceItem;
-    }
-
-    public function setPriceItem(string $priceItem): static
-    {
-        $this->priceItem = $priceItem;
-        return $this;
-    }
-
-    public function getQty(): ?int
-    {
-        return $this->qty;
-    }
-
-    public function setQty(int $qty): static
-    {
-        $this->qty = $qty;
-        return $this;
-    }
-
-    public function getTotal(): ?string
-    {
-        return $this->total;
-    }
-
-    public function setTotal(string $total): static
-    {
-        $this->total = $total;
-        return $this;
-    }
-
-    public function getSaleDate(): ?\DateTime
+    public function getSaleDate(): ?\DateTimeInterface
     {
         return $this->saleDate;
     }
 
-    public function setSaleDate(\DateTime $saleDate): static
+    public function setSaleDate(\DateTimeInterface $saleDate): static
     {
         $this->saleDate = $saleDate;
+
         return $this;
     }
 
@@ -133,6 +83,7 @@ class Invoice
     public function setSeller(?Seller $seller): static
     {
         $this->seller = $seller;
+
         return $this;
     }
 
@@ -144,6 +95,36 @@ class Invoice
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InvoiceItem>
+     */
+    public function getInvoiceItems(): Collection
+    {
+        return $this->invoiceItems;
+    }
+
+    public function addInvoiceItem(InvoiceItem $invoiceItem): static
+    {
+        if (!$this->invoiceItems->contains($invoiceItem)) {
+            $this->invoiceItems->add($invoiceItem);
+            $invoiceItem->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoiceItem(InvoiceItem $invoiceItem): static
+    {
+        if ($this->invoiceItems->removeElement($invoiceItem)) {
+            if ($invoiceItem->getInvoice() === $this) {
+                $invoiceItem->setInvoice(null);
+            }
+        }
+
         return $this;
     }
 }
