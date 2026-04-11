@@ -2,7 +2,7 @@
 
 ## Description
 
-MiniFacturier est une application web développée avec Symfony permettant de gérer :
+Application web développée avec Symfony permettant de gérer :
 
 * les clients
 * les vendeurs
@@ -54,12 +54,16 @@ Invoice (1) → (N) InvoiceItem
 * Gestion des vendeurs
 * Création de factures
 * Ajout de plusieurs produits à une facture
+* Calcul du total de la facture
+* statistiques :nombre de ventes et montant par vendeurs
+* statistiques :nombre de clients
+* statistiques: quantité vendu d'un produit
+* catalogue :listes des produits et leur prix
 
 ## Installation
 
 ```
 git clone <repo>
-cd minifacturier
 composer install
 php bin/console doctrine:migrations:migrate
 symfony server:start
