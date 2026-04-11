@@ -1,0 +1,101 @@
+invoice_id;product_name;brand;price;quantity;total
+6;Casque audio;JBL;80.0;2;160.0
+16;Casque audio;Sony;75.0;2;150.0
+26;Casque audio;Logitech;90.0;2;180.0
+36;Casque audio;Lenovo;85.0;2;170.0
+46;Casque audio;Bose;78.0;2;156.0
+56;Casque audio;Dell;82.0;2;164.0
+66;Casque audio;JBL;76.0;2;152.0
+76;Casque audio;Asus;88.0;2;176.0
+86;Casque audio;Beats;79.0;2;158.0
+96;Casque audio;HP;83.0;2;166.0
+2;Clavier mécanique;Logitech;120.0;2;240.0
+12;Clavier mécanique;Logitech;130.0;1;130.0
+22;Clavier mécanique;Logitech;110.0;2;220.0
+32;Clavier mécanique;Logitech;125.0;2;250.0
+42;Clavier mécanique;Logitech;115.0;2;230.0
+52;Clavier mécanique;Logitech;118.0;2;236.0
+62;Clavier mécanique;Logitech;112.0;2;224.0
+72;Clavier mécanique;Logitech;122.0;2;244.0
+82;Clavier mécanique;Logitech;119.0;2;238.0
+92;Clavier mécanique;Logitech;121.0;2;242.0
+19;Clé USB 32Go;Kingston;20.0;3;60.0
+9;Clé USB 64Go;SanDisk;25.0;4;100.0
+29;Clé USB 64Go;SanDisk;30.0;4;120.0
+39;Clé USB 64Go;SanDisk;28.0;3;84.0
+49;Clé USB 64Go;SanDisk;26.0;4;104.0
+59;Clé USB 64Go;SanDisk;27.0;4;108.0
+69;Clé USB 64Go;SanDisk;24.0;4;96.0
+79;Clé USB 64Go;SanDisk;29.0;4;116.0
+89;Clé USB 64Go;SanDisk;26.0;4;104.0
+99;Clé USB 64Go;SanDisk;28.0;4;112.0
+8;Disque SSD 1 To;Samsung;150.0;2;300.0
+28;Disque SSD 1 To;Samsung;160.0;2;320.0
+38;Disque SSD 1 To;Samsung;155.0;2;310.0
+48;Disque SSD 1 To;Samsung;145.0;2;290.0
+58;Disque SSD 1 To;Samsung;152.0;2;304.0
+68;Disque SSD 1 To;Samsung;140.0;2;280.0
+78;Disque SSD 1 To;Samsung;165.0;2;330.0
+88;Disque SSD 1 To;Samsung;150.0;2;300.0
+98;Disque SSD 1 To;Samsung;158.0;2;316.0
+18;Disque SSD 500Go;Kingston;120.0;2;240.0
+14;Ecran 24 pouces;LG;250.0;1;250.0
+4;Ecran 27 pouces;Samsung;300.0;1;300.0
+24;Ecran 27 pouces;Samsung;320.0;1;320.0
+34;Ecran 27 pouces;Samsung;310.0;1;310.0
+44;Ecran 27 pouces;Samsung;305.0;1;305.0
+54;Ecran 27 pouces;Samsung;315.0;1;315.0
+64;Ecran 27 pouces;Samsung;295.0;1;295.0
+74;Ecran 27 pouces;Samsung;325.0;1;325.0
+84;Ecran 27 pouces;Samsung;305.0;1;305.0
+94;Ecran 27 pouces;Samsung;315.0;1;315.0
+15;Imprimante jet encre;Canon;180.0;1;180.0
+5;Imprimante laser;HP;220.0;1;220.0
+25;Imprimante laser;HP;210.0;1;210.0
+35;Imprimante laser;HP;230.0;1;230.0
+45;Imprimante laser;HP;215.0;1;215.0
+55;Imprimante laser;HP;225.0;1;225.0
+65;Imprimante laser;HP;205.0;1;205.0
+75;Imprimante laser;HP;235.0;1;235.0
+85;Imprimante laser;HP;220.0;1;220.0
+95;Imprimante laser;HP;230.0;1;230.0
+1;Ordinateur portable;Acer;899.99;1;899.99
+11;Ordinateur portable;Samsung;799.99;1;799.99
+21;Ordinateur portable;Canon;850.0;1;850.0
+31;Ordinateur portable;Xiaomi;920.0;1;920.0
+41;Ordinateur portable;LG;880.0;1;880.0
+51;Ordinateur portable;Huawei;910.0;1;910.0
+61;Ordinateur portable;Kingston;870.0;1;870.0
+71;Ordinateur portable;Apple;930.0;1;930.0
+81;Ordinateur portable;SanDisk;890.0;1;890.0
+91;Ordinateur portable;MSI;905.0;1;905.0
+3;Souris sans fil;Logitech;45.5;3;136.5
+13;Souris sans fil;Logitech;40.0;2;80.0
+23;Souris sans fil;Logitech;35.0;3;105.0
+33;Souris sans fil;Logitech;50.0;2;100.0
+43;Souris sans fil;Logitech;42.0;3;126.0
+53;Souris sans fil;Logitech;44.0;3;132.0
+63;Souris sans fil;Logitech;39.0;3;117.0
+73;Souris sans fil;Logitech;48.0;3;144.0
+83;Souris sans fil;Logitech;41.0;3;123.0
+93;Souris sans fil;Logitech;43.0;3;129.0
+10;Tablette tactile;Lenovo;350.0;1;350.0
+20;Tablette tactile;Lenovo;300.0;1;300.0
+30;Tablette tactile;Lenovo;370.0;1;370.0
+40;Tablette tactile;Lenovo;360.0;1;360.0
+50;Tablette tactile;Lenovo;340.0;1;340.0
+60;Tablette tactile;Lenovo;355.0;1;355.0
+70;Tablette tactile;Lenovo;330.0;1;330.0
+80;Tablette tactile;Lenovo;375.0;1;375.0
+90;Tablette tactile;Lenovo;345.0;1;345.0
+100;Tablette tactile;Lenovo;365.0;1;365.0
+7;Webcam HD;Logitech;60.0;1;60.0
+17;Webcam HD;Logitech;55.0;1;55.0
+27;Webcam HD;Logitech;65.0;1;65.0
+37;Webcam HD;Logitech;70.0;1;70.0
+47;Webcam HD;Logitech;62.0;1;62.0
+57;Webcam HD;Logitech;68.0;1;68.0
+67;Webcam HD;Logitech;58.0;1;58.0
+77;Webcam HD;Logitech;72.0;1;72.0
+87;Webcam HD;Logitech;63.0;1;63.0
+97;Webcam HD;Logitech;67.0;1;67.0
