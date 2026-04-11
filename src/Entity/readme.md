@@ -9,8 +9,6 @@ MiniFacturier est une application web développée avec Symfony permettant de g�
 * les factures
 * les produits associés aux factures
 
----
-
 ## Structure de la base de données
 
 ### Table `invoice`
@@ -32,54 +30,41 @@ Contient les lignes de produits d’une facture :
 * price
 * quantity
 * total
-* invoice_id (clé étrangère)
-
----
+* invoice_id
 
 ## Relations
 
-* Une facture peut contenir plusieurs produits
-* Un produit appartient à une seule facture
+Une facture peut contenir plusieurs produits.
 
 ```
 Invoice (1) → (N) InvoiceItem
 ```
 
----
-
 ## Technologies utilisées
 
-* PHP 8
+* PHP
 * Symfony
 * Doctrine ORM
-* MySQL (Laragon / HeidiSQL)
+* MySQL
 * Bootstrap
-* Font Awesome
-
----
 
 ## Fonctionnalités
 
 * Gestion des clients
 * Gestion des vendeurs
 * Création de factures
-* Association de plusieurs produits à une facture
-
----
+* Ajout de plusieurs produits à une facture
 
 ## Installation
 
-```bash
+```
 git clone <repo>
 cd minifacturier
 composer install
-php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 symfony server:start
 ```
 
----
-
-## Auteur Jean Francois
+## Auteur
 
 Projet réalisé dans le cadre d’une formation développeur web.
