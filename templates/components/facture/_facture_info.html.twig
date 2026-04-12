@@ -1,0 +1,34 @@
+<div class="border rounded-3 p-3 mb-4 shadow-sm">
+
+    <div class="mb-3">
+        <div class="mb-1">
+            <strong>Vendeur :</strong>
+            {% if invoice.seller %}
+                {{ invoice.seller.lastNameSeller|upper }} {{ invoice.seller.firstNameSeller }}
+            {% else %}
+                <span class="text-muted">Non renseigné</span>
+            {% endif %}
+        </div>
+
+        <div>
+            <strong>Client :</strong>
+            {% if invoice.customer %}
+                {{ invoice.customer.lastNameCustomer|upper }} {{ invoice.customer.firstNameCustomer }}
+            {% else %}
+                <span class="text-muted">Non renseigné</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="text-muted">
+        <div class="mb-1">
+            <strong>Numéro de facture :</strong> {{ invoice.numberInvoice }}
+        </div>
+
+        <div>
+            <strong>Date :</strong>
+            {{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : 'Non renseignée' }}
+        </div>
+    </div>
+
+</div>
