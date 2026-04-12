@@ -21,6 +21,8 @@ final class SellerController extends AbstractController
         SellerRepository $sellerRepository,
         PaginatorInterface $paginator
     ): Response {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $query = $sellerRepository->createQueryBuilder('s')
             ->orderBy('s.id', 'DESC')
             ->getQuery();
@@ -39,6 +41,8 @@ final class SellerController extends AbstractController
     #[Route('/new', name: 'app_seller_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $seller = new Seller();
         $form = $this->createForm(SellerType::class, $seller);
         $form->handleRequest($request);
@@ -59,6 +63,8 @@ final class SellerController extends AbstractController
     #[Route('/{id}', name: 'app_seller_show', methods: ['GET'])]
     public function show(Seller $seller): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('seller/show.html.twig', [
             'seller' => $seller,
         ]);
@@ -67,6 +73,8 @@ final class SellerController extends AbstractController
     #[Route('/{id}/edit', name: 'app_seller_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Seller $seller, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $form = $this->createForm(SellerType::class, $seller);
         $form->handleRequest($request);
 
@@ -85,7 +93,9 @@ final class SellerController extends AbstractController
     #[Route('/{id}', name: 'app_seller_delete', methods: ['POST'])]
     public function delete(Request $request, Seller $seller, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$seller->getId(), $request->getPayload()->getString('_token'))) {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if ($this->isCsrfTokenValid('delete' . $seller->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($seller);
             $entityManager->flush();
         }

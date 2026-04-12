@@ -4,25 +4,17 @@
 
 {% block body %}
 <div class="container mt-5">
+    <h1 class="mb-4">Créer une facture</h1>
 
-    <h1 class="mb-4">Créer une nouvelle facture</h1>
+    {{ include('invoice/_form.html.twig', {
+        form: form,
+        button_label: 'Créer'
+    }) }}
 
-    <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8">
-
-            {{ include('invoice/_form.html.twig', {
-                button_label: 'Enregistrer',
-                button_class: 'btn-success'
-            }) }}
-
-            <div class="mt-4">
-                {{ include('components/buttons/_back.html.twig', {
-                    route: 'app_invoice_index'
-                }) }}
-            </div>
-
-        </div>
+    <div class="mt-4">
+        {{ include('components/buttons/_back.html.twig', {
+            route: 'app_invoice_index'
+        }) }}
     </div>
-
 </div>
 {% endblock %}

@@ -21,6 +21,8 @@ final class CustomerController extends AbstractController
         CustomerRepository $customerRepository,
         PaginatorInterface $paginator
     ): Response {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $query = $customerRepository->createQueryBuilder('c')
             ->orderBy('c.id', 'DESC')
             ->getQuery();
@@ -39,6 +41,8 @@ final class CustomerController extends AbstractController
     #[Route('/new', name: 'app_customer_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SELLER');
+
         $customer = new Customer();
         $form = $this->createForm(CustomerType::class, $customer);
         $form->handleRequest($request);
@@ -59,6 +63,8 @@ final class CustomerController extends AbstractController
     #[Route('/{id}', name: 'app_customer_show', methods: ['GET'])]
     public function show(Customer $customer): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('customer/show.html.twig', [
             'customer' => $customer,
         ]);
@@ -67,6 +73,8 @@ final class CustomerController extends AbstractController
     #[Route('/{id}/edit', name: 'app_customer_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SELLER');
+
         $form = $this->createForm(CustomerType::class, $customer);
         $form->handleRequest($request);
 
@@ -85,7 +93,9 @@ final class CustomerController extends AbstractController
     #[Route('/{id}', name: 'app_customer_delete', methods: ['POST'])]
     public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$customer->getId(), $request->getPayload()->getString('_token'))) {
+        $this->denyAccessUnlessGranted('ROLE_SELLER');
+
+        if ($this->isCsrfTokenValid('delete' . $customer->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($customer);
             $entityManager->flush();
         }

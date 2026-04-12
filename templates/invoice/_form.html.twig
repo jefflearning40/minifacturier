@@ -1,64 +1,208 @@
 {{ form_start(form) }}
 
-    <div class="mb-3">
-        {{ form_label(form.numberInvoice, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.numberInvoice, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.numberInvoice) }}
+<div class="row">
+    <div class="col-md-6 mb-3">
+        {{ form_row(form.numberInvoice) }}
     </div>
 
-    <div class="mb-3">
-        {{ form_label(form.descriptionItem, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.descriptionItem, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.descriptionItem) }}
+    <div class="col-md-6 mb-3">
+        {{ form_row(form.saleDate) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        {{ form_row(form.seller) }}
     </div>
 
-    <div class="mb-3">
-        {{ form_label(form.marque, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.marque, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.marque) }}
+    <div class="col-md-6 mb-3">
+        {{ form_row(form.customer) }}
     </div>
+</div>
 
-    <div class="mb-3">
-        {{ form_label(form.priceItem, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.priceItem, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.priceItem) }}
-    </div>
+<hr class="my-4">
 
-    <div class="mb-3">
-        {{ form_label(form.qty, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.qty, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.qty) }}
-    </div>
+<h2 class="h5 mb-3">Lignes de facture</h2>
 
-    <div class="mb-3">
-        {{ form_label(form.total, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.total, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.total) }}
-    </div>
+<div id="invoice-items-wrapper">
+    {% for itemForm in form.invoiceItems %}
+        <div class="border rounded p-3 mb-3 invoice-item">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_row(itemForm.productName) }}
+                </div>
 
-    <div class="mb-3">
-        {{ form_label(form.saleDate, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.saleDate, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.saleDate) }}
-    </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_row(itemForm.brand) }}
+                </div>
+            </div>
 
-    <div class="mb-3">
-        {{ form_label(form.seller, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.seller, {'attr': {'class': 'form-select'}}) }}
-        {{ form_errors(form.seller) }}
-    </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    {{ form_row(itemForm.price) }}
+                </div>
 
-    <div class="mb-3">
-        {{ form_label(form.customer, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.customer, {'attr': {'class': 'form-select'}}) }}
-        {{ form_errors(form.customer) }}
-    </div>
+                <div class="col-md-4 mb-3">
+                    {{ form_row(itemForm.quantity) }}
+                </div>
 
-    <div class="d-grid">
-        {{ include('components/buttons/_submit.html.twig', {
-            label: button_label|default('Enregistrer'),
-            class: button_class|default('btn-primary')
-        }) }}
-    </div>
+                <div class="col-md-4 mb-3">
+                    {{ form_row(itemForm.total) }}
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-danger btn-sm remove-item">
+                Supprimer cette ligne
+            </button>
+        </div>
+    {% endfor %}
+</div>
+
+<div
+    id="invoice-item-prototype"
+    data-prototype="
+        <div class='border rounded p-3 mb-3 invoice-item'>
+            <div class='row'>
+                <div class='col-md-6 mb-3'>
+                    {{ form_row(form.invoiceItems.vars.prototype.productName)|e('html_attr') }}
+                </div>
+                <div class='col-md-6 mb-3'>
+                    {{ form_row(form.invoiceItems.vars.prototype.brand)|e('html_attr') }}
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class='col-md-4 mb-3'>
+                    {{ form_row(form.invoiceItems.vars.prototype.price)|e('html_attr') }}
+                </div>
+                <div class='col-md-4 mb-3'>
+                    {{ form_row(form.invoiceItems.vars.prototype.quantity)|e('html_attr') }}
+                </div>
+                <div class='col-md-4 mb-3'>
+                    {{ form_row(form.invoiceItems.vars.prototype.total)|e('html_attr') }}
+                </div>
+            </div>
+
+            <button type='button' class='btn btn-outline-danger btn-sm remove-item'>
+                Supprimer cette ligne
+            </button>
+        </div>
+    "
+></div>
+
+<div class="d-flex gap-2 mb-4">
+    <button type="button" id="add-invoice-item" class="btn btn-outline-dark">
+        Ajouter une ligne produit
+    </button>
+</div>
+
+<div class="mb-3">
+    <strong>Total général :</strong>
+    <span id="invoice-grand-total">0.00</span>
+</div>
+
+<div>
+    <button class="btn btn-primary">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+</div>
 
 {{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const wrapper = document.getElementById('invoice-items-wrapper');
+    const prototypeHolder = document.getElementById('invoice-item-prototype');
+    const addButton = document.getElementById('add-invoice-item');
+    const grandTotalElement = document.getElementById('invoice-grand-total');
+
+    let index = wrapper.querySelectorAll('.invoice-item').length;
+
+    function toNumber(value) {
+        if (!value) {
+            return 0;
+        }
+        return parseFloat(String(value).replace(',', '.')) || 0;
+    }
+
+    function updateLineTotal(item) {
+        const priceInput = item.querySelector('input[id*="_price"]');
+        const quantityInput = item.querySelector('input[id*="_quantity"]');
+        const totalInput = item.querySelector('input[id*="_total"]');
+
+        if (!priceInput || !quantityInput || !totalInput) {
+            return;
+        }
+
+        const price = toNumber(priceInput.value);
+        const quantity = toNumber(quantityInput.value);
+        const total = price * quantity;
+
+        totalInput.value = total.toFixed(2);
+    }
+
+    function updateGrandTotal() {
+        let grandTotal = 0;
+
+        wrapper.querySelectorAll('.invoice-item').forEach(item => {
+            const totalInput = item.querySelector('input[id*="_total"]');
+            if (totalInput) {
+                grandTotal += toNumber(totalInput.value);
+            }
+        });
+
+        grandTotalElement.textContent = grandTotal.toFixed(2);
+    }
+
+    function bindCalculationEvents(item) {
+        const priceInput = item.querySelector('input[id*="_price"]');
+        const quantityInput = item.querySelector('input[id*="_quantity"]');
+        const totalInput = item.querySelector('input[id*="_total"]');
+        const removeButton = item.querySelector('.remove-item');
+
+        if (totalInput) {
+            totalInput.readOnly = true;
+        }
+
+        [priceInput, quantityInput].forEach(input => {
+            if (input) {
+                input.addEventListener('input', function () {
+                    updateLineTotal(item);
+                    updateGrandTotal();
+                });
+            }
+        });
+
+        if (removeButton) {
+            removeButton.addEventListener('click', function () {
+                item.remove();
+                updateGrandTotal();
+            });
+        }
+
+        updateLineTotal(item);
+    }
+
+    addButton.addEventListener('click', function () {
+        let prototype = prototypeHolder.dataset.prototype;
+        prototype = prototype.replace(/__name__/g, index);
+
+        const temp = document.createElement('div');
+        temp.innerHTML = prototype.trim();
+
+        const newItem = temp.firstElementChild;
+        wrapper.appendChild(newItem);
+
+        bindCalculationEvents(newItem);
+        updateGrandTotal();
+
+        index++;
+    });
+
+    wrapper.querySelectorAll('.invoice-item').forEach(item => {
+        bindCalculationEvents(item);
+    });
+
+    updateGrandTotal();
+});
+</script>
