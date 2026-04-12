@@ -4,3 +4,5 @@ icone font awesome
 <i class="fa-solid fa-circle-user"></i>			pour les clients
 <i class="fa fa-book" aria-hidden="true"></i> 		pour le catalogue
 <i class="fa fa-line-chart" aria-hidden="true"></i>	pour les statistiques
+
+INSTALLATION DE BOOTSTRAP ICON UTILISES DANS LA PAGE MAINTENANCE
