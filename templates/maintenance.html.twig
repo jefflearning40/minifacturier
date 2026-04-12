@@ -5,17 +5,27 @@
 {% block body %}
 <div class="container mt-5 text-center">
 
-    <h1 class="mb-4"> Page en cours de développement</h1>
+    <div class="mb-4">
+        <i class="bi bi-tools fs-1 text-warning"></i>
+    </div>
+
+    <h1 class="mb-4">
+        <i class="bi bi-exclamation-triangle me-2 text-warning"></i>
+        Page en cours de développement
+    </h1>
 
     <p class="lead">
+        <i class="bi bi-hourglass-split me-2"></i>
         Cette fonctionnalité sera bientôt disponible.
     </p>
 
     <p class="text-muted mb-4">
-        Merci de votre patience 
+        
+        Merci de votre patience
     </p>
 
     <a href="{{ path('app_home') }}" class="btn btn-primary">
+        
         Retour à l'accueil
     </a>
 

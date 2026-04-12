@@ -91,7 +91,7 @@ Cela permet :
 * Symfony
 * Doctrine ORM
 * MySQL
-* Bootstrap
+* Bootstrap et bootstrap icons et Fontawesome
 
 ## Fonctionnalités
 
