@@ -7,30 +7,12 @@
 
     <h1 class="mb-4">Détail client</h1>
 
-    <table class="table table-bordered mb-4">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ customer.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td class="fw-bold">{{ customer.lastNameCustomer|upper }}</td>
-            </tr>
-            <tr>
-                <th>Prénom</th>
-                <td>{{ customer.firstNameCustomer }}</td>
-            </tr>
-            <tr>
-                <th>Adresse mail</th>
-                <td>{{ customer.addressCustomer }}</td>
-            </tr>
-            <tr>
-                <th>Téléphone</th>
-                <td>{{ customer.phoneCustomer }}</td>
-            </tr>
-        </tbody>
-    </table>
+    {{ include('components/identity/_person_info.html.twig', {
+        id: customer.id,
+        lastName: customer.lastNameCustomer,
+        firstName: customer.firstNameCustomer,
+        phone: customer.phoneCustomer
+    }) }}
 
     <div class="d-flex justify-content-between mb-5">
         {{ include('components/buttons/_back.html.twig', {
@@ -50,52 +32,7 @@
         </div>
     </div>
 
-    <h2 class="mb-3">Factures liées ({{ customer.invoices|length }})</h2>
-
-    <table class="table table-striped table-hover table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>Id</th>
-                <th>Numéro</th>
-                <th>Description</th>
-                <th>Prix</th>
-                <th>Qté</th>
-                <th>Total</th>
-                <th>Date</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for invoice in customer.invoices %}
-            <tr>
-                <td>{{ invoice.id }}</td>
-                <td>{{ invoice.numberInvoice }}</td>
-                <td>{{ invoice.descriptionItem }}</td>
-                <td>{{ invoice.priceItem }}</td>
-                <td>{{ invoice.qty }}</td>
-                <td>{{ invoice.total }}</td>
-                <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
-                <td class="text-center">
-                    {{ include('components/buttons/_show.html.twig', {
-                        route: 'app_invoice_show',
-                        id: invoice.id
-                    }) }}
-
-                    {{ include('components/buttons/_edit.html.twig', {
-                        route: 'app_invoice_edit',
-                        id: invoice.id
-                    }) }}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8" class="text-center">
-                    Aucune facture liée
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {# le reste de la page... #}
 
 </div>
 {% endblock %}

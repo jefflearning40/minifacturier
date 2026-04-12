@@ -75,5 +75,25 @@
         </tbody>
     </table>
 
+    <div class="d-flex justify-content-between align-items-center mt-4">
+
+        {{ include('components/buttons/_prev.html.twig', {
+            pagination: invoices
+        }) }}
+
+        <span class="fw-bold">
+            Page {{ invoices.currentPageNumber }} / {{ invoices.pageCount }}
+        </span>
+
+        {{ include('components/buttons/_next.html.twig', {
+            pagination: invoices
+        }) }}
+
+    </div>
+
+    <div class="text-center text-muted mt-2">
+        {{ invoices.getTotalItemCount }} factures au total
+    </div>
+
 </div>
 {% endblock %}

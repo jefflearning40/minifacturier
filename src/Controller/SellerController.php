@@ -6,6 +6,7 @@ use App\Entity\Seller;
 use App\Form\SellerType;
 use App\Repository\SellerRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,23 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SellerController extends AbstractController
 {
     #[Route(name: 'app_seller_index', methods: ['GET'])]
-    public function index(SellerRepository $sellerRepository): Response
-    {
+    public function index(
+        Request $request,
+        SellerRepository $sellerRepository,
+        PaginatorInterface $paginator
+    ): Response {
+        $query = $sellerRepository->createQueryBuilder('s')
+            ->orderBy('s.id', 'DESC')
+            ->getQuery();
+
+        $sellers = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('seller/index.html.twig', [
-            'sellers' => $sellerRepository->findAll(),
+            'sellers' => $sellers,
         ]);
     }
 

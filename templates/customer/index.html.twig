@@ -9,9 +9,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3">Liste des clients</h1>
 
+        {#
         <a href="{{ path('app_customer_new') }}" class="btn btn-success">
             + Nouveau client
         </a>
+        #}
     </div>
 
     <table class="table table-striped table-hover table-bordered">
@@ -39,7 +41,6 @@
                 <td>{{ customer.phoneCustomer }}</td>
 
                 <td class="text-center">
-
                     {{ include('components/buttons/_show.html.twig', {
                         route: 'app_customer_show',
                         id: customer.id
@@ -54,10 +55,8 @@
                         route: 'app_customer_delete',
                         id: customer.id
                     }) }}
-
                 </td>
             </tr>
-
         {% else %}
             <tr>
                 <td colspan="5" class="text-center">
@@ -66,8 +65,29 @@
             </tr>
         {% endfor %}
         </tbody>
-
     </table>
+
+    {# Pagination personnalisée #}
+    <div class="d-flex justify-content-between align-items-center mt-4">
+
+        {{ include('components/buttons/_prev.html.twig', {
+            pagination: customers
+        }) }}
+
+        <span class="fw-bold">
+            Page {{ customers.currentPageNumber }} / {{ customers.pageCount }}
+        </span>
+
+        {{ include('components/buttons/_next.html.twig', {
+            pagination: customers
+        }) }}
+
+    </div>
+
+    {# Total clients #}
+    <div class="text-center text-muted mt-2">
+        {{ customers.getTotalItemCount }} clients au total
+    </div>
 
 </div>
 

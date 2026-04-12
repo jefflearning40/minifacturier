@@ -9,9 +9,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3">Liste des vendeurs</h1>
 
+        {#
         <a href="{{ path('app_seller_new') }}" class="btn btn-success">
             + Nouveau vendeur
         </a>
+        #}
     </div>
 
     <table class="table table-striped table-hover table-bordered">
@@ -37,7 +39,6 @@
                 <td>{{ seller.phoneSeller }}</td>
 
                 <td class="text-center">
-
                     {{ include('components/buttons/_show.html.twig', {
                         route: 'app_seller_show',
                         id: seller.id
@@ -52,7 +53,6 @@
                         route: 'app_seller_delete',
                         id: seller.id
                     }) }}
-
                 </td>
             </tr>
 
@@ -64,8 +64,27 @@
             </tr>
         {% endfor %}
         </tbody>
-
     </table>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+
+        {{ include('components/buttons/_prev.html.twig', {
+            pagination: sellers
+        }) }}
+
+        <span class="fw-bold">
+            Page {{ sellers.currentPageNumber }} / {{ sellers.pageCount }}
+        </span>
+
+        {{ include('components/buttons/_next.html.twig', {
+            pagination: sellers
+        }) }}
+
+    </div>
+
+    <div class="text-center text-muted mt-2">
+        {{ sellers.getTotalItemCount }} vendeurs au total
+    </div>
 
 </div>
 
