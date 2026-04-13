@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\InvoiceItem;
+use App\Entity\Product;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,36 +14,25 @@ class InvoiceItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('productName', null, [
+            ->add('product', EntityType::class, [
+                'class' => Product::class,
+                'choice_label' => function (Product $product) {
+                    return $product->getName() . ' - ' . $product->getBrand() . ' - ' . $product->getPrice() . ' €';
+                },
                 'label' => 'Produit',
-                'attr' => [
-                    'placeholder' => 'Nom du produit',
-                ],
+                'placeholder' => 'Choisissez un produit',
+                'required' => false,        // ✅ important
+                'empty_data' => null,       // ✅ important
             ])
-            ->add('brand', null, [
-                'label' => 'Marque',
-                'attr' => [
-                    'placeholder' => 'Marque',
-                ],
-            ])
+           
             ->add('price', null, [
                 'label' => 'Prix unitaire',
                 'attr' => [
-                    'placeholder' => 'Prix',
+                    'readonly' => true,
                 ],
             ])
             ->add('quantity', null, [
                 'label' => 'Quantité',
-                'attr' => [
-                    'placeholder' => 'Quantité',
-                ],
-            ])
-            ->add('total', null, [
-                'label' => 'Total',
-                'attr' => [
-                    'placeholder' => 'Total',
-                    'readonly' => true,
-                ],
             ]);
     }
 

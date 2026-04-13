@@ -1,34 +1,100 @@
-<div class="border rounded-3 p-3 mb-4 shadow-sm">
+<div class="border p-4 bg-white">
 
-    <div class="mb-3">
-        <div class="mb-1">
-            <strong>Vendeur :</strong>
-            {% if invoice.seller %}
-                {{ invoice.seller.lastNameSeller|upper }} {{ invoice.seller.firstNameSeller }}
-            {% else %}
-                <span class="text-muted">Non renseigné</span>
-            {% endif %}
+    <div class="row mb-4">
+
+        <div class="col-md-6">
+            <div class="border p-3 h-100">
+                <h6 class="text-uppercase text-muted mb-2">Vendeur</h6>
+
+                {% if invoice.seller %}
+                    <strong>
+                        {{ invoice.seller.lastNameSeller|upper }}
+                        {{ invoice.seller.firstNameSeller }}
+                    </strong>
+                {% else %}
+                    <span class="text-muted">Non renseigné</span>
+                {% endif %}
+            </div>
         </div>
 
-        <div>
-            <strong>Client :</strong>
-            {% if invoice.customer %}
-                {{ invoice.customer.lastNameCustomer|upper }} {{ invoice.customer.firstNameCustomer }}
-            {% else %}
-                <span class="text-muted">Non renseigné</span>
-            {% endif %}
+        <div class="col-md-6">
+            <div class="border p-3 mb-3 text-center">
+                <h4 class="mb-0 text-success fw-bold">
+                    FACTURE N° {{ invoice.numberInvoice }}
+                </h4>
+            </div>
+
+            <div class="border p-3">
+                <h6 class="text-uppercase text-muted mb-2">Client</h6>
+
+                {% if invoice.customer %}
+                    <strong>
+                        {{ invoice.customer.lastNameCustomer|upper }}
+                        {{ invoice.customer.firstNameCustomer }}
+                    </strong>
+                {% else %}
+                    <span class="text-muted">Non renseigné</span>
+                {% endif %}
+            </div>
         </div>
+
     </div>
 
-    <div class="text-muted">
-        <div class="mb-1">
-            <strong>Numéro de facture :</strong> {{ invoice.numberInvoice }}
-        </div>
+    <div class="mb-3">
+        <strong>Date :</strong>
+        {{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : 'Non renseignée' }}
+    </div>
 
-        <div>
-            <strong>Date :</strong>
-            {{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : 'Non renseignée' }}
-        </div>
+    <table class="table table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Désignation</th>
+                <th class="text-center">Qté</th>
+                <th class="text-end">Prix unitaire</th>
+                <th class="text-end">Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in invoice.invoiceItems %}
+                <tr>
+                    <td>
+                        {{ item.productName }}<br>
+                        <small class="text-muted">{{ item.brand }}</small>
+                    </td>
+                    <td class="text-center">{{ item.quantity }}</td>
+                    <td class="text-end">{{ item.price|number_format(2, ',', ' ') }} €</td>
+                    <td class="text-end">{{ item.total|number_format(2, ',', ' ') }} €</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        Aucune ligne
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-end">
+        <table class="table w-auto text-end">
+            <tr>
+                <th>Total HT</th>
+                <td>{{ invoice.grandTotal|number_format(2, ',', ' ') }} €</td>
+            </tr>
+            <tr>
+                <th>TVA (20%)</th>
+                <td>
+                    {{ (invoice.grandTotal * 0.2)|number_format(2, ',', ' ') }} €
+                </td>
+            </tr>
+            <tr class="fw-bold">
+                <th>Total TTC</th>
+                <td>
+                    {{ (invoice.grandTotal * 1.2)|number_format(2, ',', ' ') }} €
+                </td>
+            </tr>
+        </table>
     </div>
 
 </div>

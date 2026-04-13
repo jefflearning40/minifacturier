@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Invoice;
 use App\Repository\InvoiceItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,6 +32,10 @@ class InvoiceItem
     #[ORM\ManyToOne(inversedBy: 'invoiceItems')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Invoice $invoice = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Product $product = null;
 
     public function getId(): ?int
     {
@@ -87,12 +90,15 @@ class InvoiceItem
         return $this;
     }
 
-    public function getTotal(): ?string
+    public function getTotal(): string
     {
-        return $this->total;
+        $price = (float) $this->price;
+        $quantity = (int) $this->quantity;
+
+        return number_format($price * $quantity, 2, '.', '');
     }
 
-    public function setTotal(string $total): static
+    public function setTotal(?string $total): static
     {
         $this->total = $total;
 
@@ -107,6 +113,18 @@ class InvoiceItem
     public function setInvoice(?Invoice $invoice): static
     {
         $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }

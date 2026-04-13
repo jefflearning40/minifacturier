@@ -1,110 +1,138 @@
 {{ form_start(form) }}
 
-<div class="row">
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.numberInvoice) }}
-    </div>
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
 
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.saleDate) }}
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.seller) }}
-    </div>
-
-    <div class="col-md-6 mb-3">
-        {{ form_row(form.customer) }}
-    </div>
-</div>
-
-<hr class="my-4">
-
-<h2 class="h5 mb-3">Lignes de facture</h2>
-
-<div id="invoice-items-wrapper">
-    {% for itemForm in form.invoiceItems %}
-        <div class="border rounded p-3 mb-3 invoice-item">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    {{ form_row(itemForm.productName) }}
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h1 class="h3 mb-1">Facture</h1>
+                    <p class="text-muted mb-0">Création / modification d'une facture</p>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    {{ form_row(itemForm.brand) }}
+                <div class="text-end">
+                    <div class="mb-3">
+                        {{ form_label(form.numberInvoice) }}
+                        {{ form_widget(form.numberInvoice, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.numberInvoice) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.saleDate) }}
+                        {{ form_widget(form.saleDate, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.saleDate) }}
+                    </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    {{ form_row(itemForm.price) }}
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="border rounded p-3 h-100 bg-light-subtle">
+                        <h2 class="h6 text-uppercase text-muted mb-3">Vendeur</h2>
+                        {{ form_row(form.seller) }}
+                    </div>
                 </div>
 
-                <div class="col-md-4 mb-3">
-                    {{ form_row(itemForm.quantity) }}
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    {{ form_row(itemForm.total) }}
+                <div class="col-md-6">
+                    <div class="border rounded p-3 h-100 bg-light-subtle">
+                        <h2 class="h6 text-uppercase text-muted mb-3">Client</h2>
+                        {{ form_row(form.customer) }}
+                    </div>
                 </div>
             </div>
 
-            <button type="button" class="btn btn-outline-danger btn-sm remove-item">
-                Supprimer cette ligne
-            </button>
+            <div class="border rounded overflow-hidden mb-4">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="min-width: 320px;">Produit</th>
+                                <th style="min-width: 140px;">Prix unitaire</th>
+                                <th style="min-width: 120px;">Quantité</th>
+                                <th style="min-width: 140px;">Total ligne</th>
+                                <th style="width: 120px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoice-items-wrapper">
+                            {% for itemForm in form.invoiceItems %}
+                                <tr class="invoice-item">
+                                    <td>
+                                        {{ form_widget(itemForm.product) }}
+                                        {{ form_errors(itemForm.product) }}
+                                    </td>
+                                    <td>
+                                        {{ form_widget(itemForm.price) }}
+                                        {{ form_errors(itemForm.price) }}
+                                    </td>
+                                    <td>
+                                        {{ form_widget(itemForm.quantity) }}
+                                        {{ form_errors(itemForm.quantity) }}
+                                    </td>
+                                    <td>
+                                        <div class="form-control bg-light text-end fw-semibold line-total-display">0.00 €</div>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-outline-danger btn-sm remove-item">
+                                            Supprimer
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr class="invoice-item-empty-placeholder d-none">
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        Aucune ligne de facture
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div
+                id="invoice-item-prototype"
+                data-prototype="
+                    <tr class='invoice-item'>
+                        <td>
+                            {{ form_widget(form.invoiceItems.vars.prototype.product)|e('html_attr') }}
+                        </td>
+                        <td>
+                            {{ form_widget(form.invoiceItems.vars.prototype.price)|e('html_attr') }}
+                        </td>
+                        <td>
+                            {{ form_widget(form.invoiceItems.vars.prototype.quantity)|e('html_attr') }}
+                        </td>
+                        <td>
+                            <div class='form-control bg-light text-end fw-semibold line-total-display'>0.00 €</div>
+                        </td>
+                        <td class='text-center'>
+                            <button type='button' class='btn btn-outline-danger btn-sm remove-item'>
+                                Supprimer
+                            </button>
+                        </td>
+                    </tr>
+                "
+            ></div>
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
+                <button type="button" id="add-invoice-item" class="btn btn-outline-dark">
+                    Ajouter une ligne produit
+                </button>
+
+                <div class="ms-auto">
+                    <div class="border rounded px-4 py-3 bg-light">
+                        <div class="small text-muted text-uppercase mb-1">Total général</div>
+                        <div class="fs-4 fw-bold" id="invoice-grand-total">0.00 €</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button class="btn btn-primary px-4">
+                    {{ button_label|default('Enregistrer') }}
+                </button>
+            </div>
+
         </div>
-    {% endfor %}
-</div>
-
-<div
-    id="invoice-item-prototype"
-    data-prototype="
-        <div class='border rounded p-3 mb-3 invoice-item'>
-            <div class='row'>
-                <div class='col-md-6 mb-3'>
-                    {{ form_row(form.invoiceItems.vars.prototype.productName)|e('html_attr') }}
-                </div>
-                <div class='col-md-6 mb-3'>
-                    {{ form_row(form.invoiceItems.vars.prototype.brand)|e('html_attr') }}
-                </div>
-            </div>
-
-            <div class='row'>
-                <div class='col-md-4 mb-3'>
-                    {{ form_row(form.invoiceItems.vars.prototype.price)|e('html_attr') }}
-                </div>
-                <div class='col-md-4 mb-3'>
-                    {{ form_row(form.invoiceItems.vars.prototype.quantity)|e('html_attr') }}
-                </div>
-                <div class='col-md-4 mb-3'>
-                    {{ form_row(form.invoiceItems.vars.prototype.total)|e('html_attr') }}
-                </div>
-            </div>
-
-            <button type='button' class='btn btn-outline-danger btn-sm remove-item'>
-                Supprimer cette ligne
-            </button>
-        </div>
-    "
-></div>
-
-<div class="d-flex gap-2 mb-4">
-    <button type="button" id="add-invoice-item" class="btn btn-outline-dark">
-        Ajouter une ligne produit
-    </button>
-</div>
-
-<div class="mb-3">
-    <strong>Total général :</strong>
-    <span id="invoice-grand-total">0.00</span>
-</div>
-
-<div>
-    <button class="btn btn-primary">
-        {{ button_label|default('Enregistrer') }}
-    </button>
+    </div>
 </div>
 
 {{ form_end(form) }}
@@ -122,52 +150,82 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!value) {
             return 0;
         }
-        return parseFloat(String(value).replace(',', '.')) || 0;
+
+        return parseFloat(String(value).replace(',', '.').replace(' €', '')) || 0;
+    }
+
+    function updateFromProduct(item) {
+        const select = item.querySelector('select');
+        const priceInput = item.querySelector('input[id*="_price"]');
+
+        if (!select || select.selectedIndex < 0) {
+            return;
+        }
+
+        const selectedText = select.options[select.selectedIndex]?.text || '';
+
+        if (!selectedText || selectedText.includes('Choisissez un produit')) {
+            if (priceInput) {
+                priceInput.value = '';
+            }
+            return;
+        }
+
+        const parts = selectedText.split(' - ');
+
+        if (parts.length >= 3) {
+            const price = parts[2].replace(' €', '').trim();
+
+            if (priceInput) {
+                priceInput.value = price;
+            }
+        }
     }
 
     function updateLineTotal(item) {
         const priceInput = item.querySelector('input[id*="_price"]');
         const quantityInput = item.querySelector('input[id*="_quantity"]');
-        const totalInput = item.querySelector('input[id*="_total"]');
+        const totalDisplay = item.querySelector('.line-total-display');
 
-        if (!priceInput || !quantityInput || !totalInput) {
-            return;
+        if (!priceInput || !quantityInput || !totalDisplay) {
+            return 0;
         }
 
         const price = toNumber(priceInput.value);
         const quantity = toNumber(quantityInput.value);
         const total = price * quantity;
 
-        totalInput.value = total.toFixed(2);
+        totalDisplay.textContent = total.toFixed(2) + ' €';
+
+        return total;
     }
 
     function updateGrandTotal() {
         let grandTotal = 0;
 
         wrapper.querySelectorAll('.invoice-item').forEach(item => {
-            const totalInput = item.querySelector('input[id*="_total"]');
-            if (totalInput) {
-                grandTotal += toNumber(totalInput.value);
-            }
+            grandTotal += updateLineTotal(item);
         });
 
-        grandTotalElement.textContent = grandTotal.toFixed(2);
+        grandTotalElement.textContent = grandTotal.toFixed(2) + ' €';
     }
 
     function bindCalculationEvents(item) {
+        const select = item.querySelector('select');
         const priceInput = item.querySelector('input[id*="_price"]');
         const quantityInput = item.querySelector('input[id*="_quantity"]');
-        const totalInput = item.querySelector('input[id*="_total"]');
         const removeButton = item.querySelector('.remove-item');
 
-        if (totalInput) {
-            totalInput.readOnly = true;
+        if (select) {
+            select.addEventListener('change', function () {
+                updateFromProduct(item);
+                updateGrandTotal();
+            });
         }
 
         [priceInput, quantityInput].forEach(input => {
             if (input) {
                 input.addEventListener('input', function () {
-                    updateLineTotal(item);
                     updateGrandTotal();
                 });
             }
@@ -180,24 +238,31 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        if (select && !select.value) {
+            select.value = '';
+        }
+
+        updateFromProduct(item);
         updateLineTotal(item);
     }
 
-    addButton.addEventListener('click', function () {
-        let prototype = prototypeHolder.dataset.prototype;
-        prototype = prototype.replace(/__name__/g, index);
+    if (addButton) {
+        addButton.addEventListener('click', function () {
+            let prototype = prototypeHolder.dataset.prototype;
+            prototype = prototype.replace(/__name__/g, index);
 
-        const temp = document.createElement('div');
-        temp.innerHTML = prototype.trim();
+            const temp = document.createElement('tbody');
+            temp.innerHTML = prototype.trim();
 
-        const newItem = temp.firstElementChild;
-        wrapper.appendChild(newItem);
+            const newItem = temp.firstElementChild;
+            wrapper.appendChild(newItem);
 
-        bindCalculationEvents(newItem);
-        updateGrandTotal();
+            bindCalculationEvents(newItem);
+            updateGrandTotal();
 
-        index++;
-    });
+            index++;
+        });
+    }
 
     wrapper.querySelectorAll('.invoice-item').forEach(item => {
         bindCalculationEvents(item);

@@ -49,9 +49,16 @@ final class InvoiceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($invoice->getInvoiceItems() as $item) {
-                $price = (float) $item->getPrice();
-                $quantity = (int) $item->getQuantity();
-                $item->setTotal(number_format($price * $quantity, 2, '.', ''));
+                $product = $item->getProduct();
+
+                if (!$product) {
+                    continue;
+                }
+
+                $item->setProductName($product->getName());
+                $item->setBrand($product->getBrand());
+                $item->setPrice($product->getPrice());
+                $item->setTotal($item->getTotal());
             }
 
             $entityManager->persist($invoice);
@@ -86,9 +93,16 @@ final class InvoiceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($invoice->getInvoiceItems() as $item) {
-                $price = (float) $item->getPrice();
-                $quantity = (int) $item->getQuantity();
-                $item->setTotal(number_format($price * $quantity, 2, '.', ''));
+                $product = $item->getProduct();
+
+                if (!$product) {
+                    continue;
+                }
+
+                $item->setProductName($product->getName());
+                $item->setBrand($product->getBrand());
+                $item->setPrice($product->getPrice());
+                $item->setTotal($item->getTotal());
             }
 
             $entityManager->flush();

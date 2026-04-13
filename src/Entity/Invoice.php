@@ -127,4 +127,16 @@ class Invoice
 
         return $this;
     }
+
+    // ✅ NOUVELLE MÉTHODE
+    public function getGrandTotal(): string
+    {
+        $total = 0;
+
+        foreach ($this->invoiceItems as $item) {
+            $total += (float) $item->getTotal();
+        }
+
+        return number_format($total, 2, '.', '');
+    }
 }
