@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\InvoiceItem;
 use App\Entity\Product;
+use App\Repository\ProductRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,14 +20,19 @@ class InvoiceItemType extends AbstractType
                 'choice_label' => function (Product $product) {
                     return $product->getName() . ' - ' . $product->getBrand() . ' - ' . $product->getPrice() . ' €';
                 },
+                'query_builder' => function (ProductRepository $productRepository) {
+                    return $productRepository->createQueryBuilder('p')
+                        ->orderBy('p.name', 'ASC')
+                        ->addOrderBy('p.brand', 'ASC')
+                        ->addOrderBy('p.price', 'ASC');
+                },
                 'label' => 'Produit',
                 'placeholder' => 'Choisissez un produit',
-                'required' => false,        // ✅ important
-                'empty_data' => null,       // ✅ important
+                'required' => false,
+                'empty_data' => null,
             ])
-           
             ->add('price', null, [
-                'label' => 'Prix unitaire',
+                'label' => 'Prix unitaire HT',
                 'attr' => [
                     'readonly' => true,
                 ],

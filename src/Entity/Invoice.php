@@ -128,15 +128,41 @@ class Invoice
         return $this;
     }
 
-    // ✅ NOUVELLE MÉTHODE
-    public function getGrandTotal(): string
+    public function getGrandTotalHt(): string
     {
         $total = 0;
 
         foreach ($this->invoiceItems as $item) {
-            $total += (float) $item->getTotal();
+            $total += (float) $item->getTotalHt();
         }
 
         return number_format($total, 2, '.', '');
+    }
+
+    public function getGrandVatAmount(): string
+    {
+        $total = 0;
+
+        foreach ($this->invoiceItems as $item) {
+            $total += (float) $item->getVatAmount();
+        }
+
+        return number_format($total, 2, '.', '');
+    }
+
+    public function getGrandTotalTtc(): string
+    {
+        $total = 0;
+
+        foreach ($this->invoiceItems as $item) {
+            $total += (float) $item->getTotalTtc();
+        }
+
+        return number_format($total, 2, '.', '');
+    }
+
+    public function getGrandTotal(): string
+    {
+        return $this->getGrandTotalHt();
     }
 }

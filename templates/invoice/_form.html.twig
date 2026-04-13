@@ -9,12 +9,14 @@
                     <h1 class="h3 mb-1">Facture</h1>
                     <p class="text-muted mb-0">Création / modification d'une facture</p>
                 </div>
+
                 <div class="text-end">
                     <div class="mb-3">
                         {{ form_label(form.numberInvoice) }}
                         {{ form_widget(form.numberInvoice, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.numberInvoice) }}
                     </div>
+
                     <div>
                         {{ form_label(form.saleDate) }}
                         {{ form_widget(form.saleDate, {'attr': {'class': 'form-control'}}) }}
@@ -45,12 +47,13 @@
                         <thead class="table-dark">
                             <tr>
                                 <th style="min-width: 320px;">Produit</th>
-                                <th style="min-width: 140px;">Prix unitaire</th>
+                                <th style="min-width: 140px;">Prix unitaire HT</th>
                                 <th style="min-width: 120px;">Quantité</th>
-                                <th style="min-width: 140px;">Total ligne</th>
+                                <th style="min-width: 140px;">Total ligne HT</th>
                                 <th style="width: 120px;">Action</th>
                             </tr>
                         </thead>
+
                         <tbody id="invoice-items-wrapper">
                             {% for itemForm in form.invoiceItems %}
                                 <tr class="invoice-item">
@@ -118,8 +121,8 @@
                 </button>
 
                 <div class="ms-auto">
-                    <div class="border rounded px-4 py-3 bg-light">
-                        <div class="small text-muted text-uppercase mb-1">Total général</div>
+                    <div class="border rounded px-4 py-3 bg-light text-end">
+                        <div class="small text-muted text-uppercase mb-1">Total HT estimé</div>
                         <div class="fs-4 fw-bold" id="invoice-grand-total">0.00 €</div>
                     </div>
                 </div>
@@ -236,10 +239,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.remove();
                 updateGrandTotal();
             });
-        }
-
-        if (select && !select.value) {
-            select.value = '';
         }
 
         updateFromProduct(item);

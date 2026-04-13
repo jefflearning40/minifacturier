@@ -58,7 +58,8 @@ final class InvoiceController extends AbstractController
                 $item->setProductName($product->getName());
                 $item->setBrand($product->getBrand());
                 $item->setPrice($product->getPrice());
-                $item->setTotal($item->getTotal());
+                $item->setVatRate($product->getVatRate());
+                $item->setTotal($item->getTotalHt());
             }
 
             $entityManager->persist($invoice);
@@ -102,7 +103,8 @@ final class InvoiceController extends AbstractController
                 $item->setProductName($product->getName());
                 $item->setBrand($product->getBrand());
                 $item->setPrice($product->getPrice());
-                $item->setTotal($item->getTotal());
+                $item->setVatRate($product->getVatRate());
+                $item->setTotal($item->getTotalHt());
             }
 
             $entityManager->flush();
@@ -128,11 +130,12 @@ final class InvoiceController extends AbstractController
 
         return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
     }
+
     #[Route('/{id}/pdf', name: 'app_invoice_pdf', methods: ['GET'])]
-public function pdf(Invoice $invoice): Response
-{
-    return $this->render('invoice/pdf.html.twig', [
-        'invoice' => $invoice,
-    ]);
-}
+    public function pdf(Invoice $invoice): Response
+    {
+        return $this->render('invoice/pdf.html.twig', [
+            'invoice' => $invoice,
+        ]);
+    }
 }

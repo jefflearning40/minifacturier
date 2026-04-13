@@ -29,6 +29,9 @@ class InvoiceItem
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $total = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    private ?string $vatRate = null;
+
     #[ORM\ManyToOne(inversedBy: 'invoiceItems')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Invoice $invoice = null;
@@ -92,10 +95,7 @@ class InvoiceItem
 
     public function getTotal(): string
     {
-        $price = (float) $this->price;
-        $quantity = (int) $this->quantity;
-
-        return number_format($price * $quantity, 2, '.', '');
+        return $this->getTotalHt();
     }
 
     public function setTotal(?string $total): static
@@ -103,6 +103,42 @@ class InvoiceItem
         $this->total = $total;
 
         return $this;
+    }
+
+    public function getVatRate(): ?string
+    {
+        return $this->vatRate;
+    }
+
+    public function setVatRate(string $vatRate): static
+    {
+        $this->vatRate = $vatRate;
+
+        return $this;
+    }
+
+    public function getTotalHt(): string
+    {
+        $price = (float) $this->price;
+        $quantity = (int) $this->quantity;
+
+        return number_format($price * $quantity, 2, '.', '');
+    }
+
+    public function getVatAmount(): string
+    {
+        $totalHt = (float) $this->getTotalHt();
+        $vatRate = (float) $this->vatRate;
+
+        return number_format($totalHt * ($vatRate / 100), 2, '.', '');
+    }
+
+    public function getTotalTtc(): string
+    {
+        $totalHt = (float) $this->getTotalHt();
+        $vatAmount = (float) $this->getVatAmount();
+
+        return number_format($totalHt + $vatAmount, 2, '.', '');
     }
 
     public function getInvoice(): ?Invoice

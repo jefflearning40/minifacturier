@@ -23,6 +23,9 @@ class Product
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, options: ['default' => 20.00])]
+    private ?string $vatRate = '20.00';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -64,7 +67,18 @@ class Product
         return $this;
     }
 
-    // ✅ AJOUT ICI
+    public function getVatRate(): ?string
+    {
+        return $this->vatRate;
+    }
+
+    public function setVatRate(string $vatRate): static
+    {
+        $this->vatRate = $vatRate;
+
+        return $this;
+    }
+
     public function __toString(): string
     {
         return $this->name . ' - ' . $this->brand . ' - ' . $this->price . ' €';
