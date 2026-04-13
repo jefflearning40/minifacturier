@@ -50,8 +50,10 @@
             <tr>
                 <th>Désignation</th>
                 <th class="text-center">Qté</th>
-                <th class="text-end">Prix unitaire</th>
-                <th class="text-end">Total</th>
+                <th class="text-end">Prix unitaire HT</th>
+                <th class="text-center">TVA</th>
+                <th class="text-end">Montant TVA</th>
+                <th class="text-end">Total TTC</th>
             </tr>
         </thead>
 
@@ -64,11 +66,13 @@
                     </td>
                     <td class="text-center">{{ item.quantity }}</td>
                     <td class="text-end">{{ item.price|number_format(2, ',', ' ') }} €</td>
-                    <td class="text-end">{{ item.total|number_format(2, ',', ' ') }} €</td>
+                    <td class="text-center">{{ item.vatRate|number_format(2, ',', ' ') }} %</td>
+                    <td class="text-end">{{ item.vatAmount|number_format(2, ',', ' ') }} €</td>
+                    <td class="text-end fw-semibold">{{ item.totalTtc|number_format(2, ',', ' ') }} €</td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4" class="text-center text-muted">
+                    <td colspan="6" class="text-center text-muted">
                         Aucune ligne
                     </td>
                 </tr>
@@ -80,19 +84,15 @@
         <table class="table w-auto text-end">
             <tr>
                 <th>Total HT</th>
-                <td>{{ invoice.grandTotal|number_format(2, ',', ' ') }} €</td>
+                <td>{{ invoice.grandTotalHt|number_format(2, ',', ' ') }} €</td>
             </tr>
             <tr>
-                <th>TVA (20%)</th>
-                <td>
-                    {{ (invoice.grandTotal * 0.2)|number_format(2, ',', ' ') }} €
-                </td>
+                <th>Total TVA</th>
+                <td>{{ invoice.grandVatAmount|number_format(2, ',', ' ') }} €</td>
             </tr>
             <tr class="fw-bold">
                 <th>Total TTC</th>
-                <td>
-                    {{ (invoice.grandTotal * 1.2)|number_format(2, ',', ' ') }} €
-                </td>
+                <td>{{ invoice.grandTotalTtc|number_format(2, ',', ' ') }} €</td>
             </tr>
         </table>
     </div>

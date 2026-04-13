@@ -119,8 +119,8 @@ class InvoiceItem
 
     public function getTotalHt(): string
     {
-        $price = (float) $this->price;
-        $quantity = (int) $this->quantity;
+        $price = (float) ($this->price ?? 0);
+        $quantity = (int) ($this->quantity ?? 0);
 
         return number_format($price * $quantity, 2, '.', '');
     }
@@ -128,7 +128,7 @@ class InvoiceItem
     public function getVatAmount(): string
     {
         $totalHt = (float) $this->getTotalHt();
-        $vatRate = (float) $this->vatRate;
+        $vatRate = (float) ($this->vatRate ?? 0);
 
         return number_format($totalHt * ($vatRate / 100), 2, '.', '');
     }
