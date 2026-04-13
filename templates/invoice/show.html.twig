@@ -95,6 +95,10 @@
                 </div>
 
                 <div class="d-flex gap-2">
+                    <a href="{{ path('app_invoice_pdf', {id: invoice.id}) }}" class="btn btn-outline-dark">
+                        Voir PDF
+                    </a>
+
                     {{ include('components/buttons/_edit.html.twig', {
                         route: 'app_invoice_edit',
                         id: invoice.id

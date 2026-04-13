@@ -128,4 +128,11 @@ final class InvoiceController extends AbstractController
 
         return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/{id}/pdf', name: 'app_invoice_pdf', methods: ['GET'])]
+public function pdf(Invoice $invoice): Response
+{
+    return $this->render('invoice/pdf.html.twig', [
+        'invoice' => $invoice,
+    ]);
+}
 }
