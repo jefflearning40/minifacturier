@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques admin{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+
+    <h1 class="mb-4">Tableau de bord admin</h1>
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Vendeurs</h6>
+                    <h2 class="fw-bold">{{ totalSellers }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Clients</h6>
+                    <h2 class="fw-bold">{{ totalCustomers }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Factures</h6>
+                    <h2 class="fw-bold">{{ totalInvoices }}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h4 class="mb-4">Chiffre d'affaires</h4>
+
+            <table class="table w-auto text-end">
+                <tr>
+                    <th>Total HT</th>
+                    <td>{{ totalSalesHt|number_format(2, ',', ' ') }} €</td>
+                </tr>
+                <tr>
+                    <th>Total TVA</th>
+                    <td>{{ totalVat|number_format(2, ',', ' ') }} €</td>
+                </tr>
+                <tr class="fw-bold">
+                    <th>Total TTC</th>
+                    <td>{{ totalSalesTtc|number_format(2, ',', ' ') }} €</td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
