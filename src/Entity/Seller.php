@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+use App\Entity\User;
 
 use App\Repository\SellerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,6 +30,9 @@ class Seller
      */
     #[ORM\OneToMany(targetEntity: Invoice::class, mappedBy: 'seller')]
     private Collection $invoices;
+    #[ORM\OneToOne(inversedBy: 'seller')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -105,4 +109,15 @@ class Seller
 
         return $this;
     }
+    public function getUser(): ?User
+{
+    return $this->user;
+}
+
+public function setUser(?User $user): static
+{
+    $this->user = $user;
+
+    return $this;
+}
 }
