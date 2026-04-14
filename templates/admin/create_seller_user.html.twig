@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un compte vendeur{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+
+    <h1 class="mb-4">Créer un compte vendeur</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            {{ form_start(form) }}
+
+            <div class="mb-3">
+                {{ form_row(form.seller) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.email) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.password) }}
+            </div>
+
+            <button class="btn btn-primary">
+                Créer le compte
+            </button>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

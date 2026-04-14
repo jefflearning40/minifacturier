@@ -91,7 +91,7 @@
 
                 <li class="nav-item dropdown">
                     <a
-                        class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') starts with 'app_seller_' %}active{% endif %}"
+                        class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') starts with 'app_seller_' or app.request.attributes.get('_route') starts with 'app_admin_create_seller_user' %}active{% endif %}"
                         href="#"
                         role="button"
                         data-bs-toggle="dropdown"
@@ -114,6 +114,13 @@
                                     Ajouter un vendeur
                                 </a>
                             </li>
+
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_admin_create_seller_user') }}">
+                                    <i class="fa-solid fa-user-plus me-2"></i>
+                                    Créer compte vendeur
+                                </a>
+                            </li>
                         {% endif %}
                     </ul>
                 </li>
@@ -128,7 +135,6 @@
                     </a>
                 </li>
 
-                {# 🔥 STATISTIQUES DYNAMIQUE #}
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
                     <li class="nav-item dropdown">
                         <a
