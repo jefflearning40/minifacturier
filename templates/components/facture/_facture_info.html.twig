@@ -51,7 +51,7 @@
                 <th>Désignation</th>
                 <th class="text-center">Qté</th>
                 <th class="text-end">Prix unitaire HT</th>
-                <th class="text-center">TVA</th>
+                <th class="text-center">TVA (%)</th>
                 <th class="text-end">Montant TVA</th>
                 <th class="text-end">Total TTC</th>
             </tr>
@@ -66,7 +66,7 @@
                     </td>
                     <td class="text-center">{{ item.quantity }}</td>
                     <td class="text-end">{{ item.price|number_format(2, ',', ' ') }} €</td>
-                    <td class="text-center">{{ item.vatRate|number_format(2, ',', ' ') }} %</td>
+                    <td class="text-center">{{ item.vatRate|number_format(2, ',', ' ') }}</td>
                     <td class="text-end">{{ item.vatAmount|number_format(2, ',', ' ') }} €</td>
                     <td class="text-end fw-semibold">{{ item.totalTtc|number_format(2, ',', ' ') }} €</td>
                 </tr>
