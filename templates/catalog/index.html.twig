@@ -18,6 +18,44 @@
         {% endif %}
     </div>
 
+    <!-- 🔎 RECHERCHE -->
+    <form method="get" class="mb-4">
+        <div class="row g-2 align-items-center">
+
+            <div class="col-md-6">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    class="form-control"
+                    placeholder="Rechercher un produit..."
+                >
+            </div>
+
+            <div class="col-auto">
+                <button class="btn btn-primary">
+                    Rechercher
+                </button>
+            </div>
+
+            {% if search %}
+                <div class="col-auto">
+                    <a href="{{ path('app_catalog_index') }}" class="btn btn-outline-secondary">
+                        Réinitialiser
+                    </a>
+                </div>
+            {% endif %}
+
+        </div>
+    </form>
+
+    <!-- OPTIONNEL : affichage du filtre actif -->
+    {% if search %}
+        <p class="text-muted">
+            Résultat pour : <strong>{{ search }}</strong>
+        </p>
+    {% endif %}
+
     <div class="border p-4">
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle mb-0">
