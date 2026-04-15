@@ -12,40 +12,76 @@
         {{ seller.lastNameSeller|upper }} {{ seller.firstNameSeller }}
     </div>
 
-    <div class="row g-4 mb-5">
+    <!-- KPI -->
+    <div class="row text-center mb-5">
 
-        <div class="col-md-4">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h6 class="text-muted">Mes factures</h6>
-                    <h2 class="fw-bold">{{ totalInvoices }}</h2>
-                </div>
+        <div class="col-md-6">
+            <div class="border p-3">
+                <div class="text-muted small text-uppercase">Mes factures</div>
+                <div class="fs-3 fw-bold">{{ totalInvoices }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="border p-3">
+                <div class="text-muted small text-uppercase">Produits vendus</div>
+                <div class="fs-3 fw-bold">{{ totalProductsSold }}</div>
             </div>
         </div>
 
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <!-- CA -->
+    <div class="border p-4 mb-5">
+        <h4 class="mb-4">Mes ventes</h4>
 
-            <h4 class="mb-4">Mes ventes</h4>
+        <table class="table w-auto ms-auto text-end">
+            <tr>
+                <th>Total HT</th>
+                <td>{{ totalSalesHt|number_format(2, ',', ' ') }} €</td>
+            </tr>
+            <tr>
+                <th>Total TVA</th>
+                <td>{{ totalVat|number_format(2, ',', ' ') }} €</td>
+            </tr>
+            <tr class="fw-bold">
+                <th>Total TTC</th>
+                <td>{{ totalSalesTtc|number_format(2, ',', ' ') }} €</td>
+            </tr>
+        </table>
+    </div>
 
-            <table class="table w-auto text-end">
-                <tr>
-                    <th>Total HT</th>
-                    <td>{{ totalSalesHt|number_format(2, ',', ' ') }} €</td>
-                </tr>
-                <tr>
-                    <th>Total TVA</th>
-                    <td>{{ totalVat|number_format(2, ',', ' ') }} €</td>
-                </tr>
-                <tr class="fw-bold">
-                    <th>Total TTC</th>
-                    <td>{{ totalSalesTtc|number_format(2, ',', ' ') }} €</td>
-                </tr>
+    <!-- Tableau produits -->
+    <div class="border p-4">
+        <h4 class="mb-4">Produits vendus</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Produit</th>
+                        <th>Marque</th>
+                        <th class="text-end">Quantité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in salesByProduct %}
+                        <tr>
+                            <td>{{ product.productName }}</td>
+                            <td class="text-muted">{{ product.brand }}</td>
+                            <td class="text-end">{{ product.totalQuantity }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">
+                                Aucune vente
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
-
         </div>
+
     </div>
 
 </div>

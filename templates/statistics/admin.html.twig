@@ -3,61 +3,132 @@
 {% block title %}Statistiques admin{% endblock %}
 
 {% block body %}
-<div class="container py-5">
+<div class="container py-4">
 
     <h1 class="mb-4">Tableau de bord admin</h1>
 
-    <div class="row g-4 mb-5">
-
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h6 class="text-muted">Vendeurs</h6>
-                    <h2 class="fw-bold">{{ totalSellers }}</h2>
-                </div>
+    <!-- KPI -->
+    <div class="row text-center g-3 mb-4">
+        <div class="col-md-4">
+            <div class="border p-3 h-100">
+                <div class="text-muted small text-uppercase">Vendeurs</div>
+                <div class="fs-3 fw-bold">{{ totalSellers }}</div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h6 class="text-muted">Clients</h6>
-                    <h2 class="fw-bold">{{ totalCustomers }}</h2>
-                </div>
+        <div class="col-md-4">
+            <div class="border p-3 h-100">
+                <div class="text-muted small text-uppercase">Clients</div>
+                <div class="fs-3 fw-bold">{{ totalCustomers }}</div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h6 class="text-muted">Factures</h6>
-                    <h2 class="fw-bold">{{ totalInvoices }}</h2>
+        <div class="col-md-4">
+            <div class="border p-3 h-100">
+                <div class="text-muted small text-uppercase">Factures</div>
+                <div class="fs-3 fw-bold">{{ totalInvoices }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CA + Résumé produits -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-6">
+            <div class="border p-4 h-100">
+                <h4 class="mb-3">Chiffre d'affaires global</h4>
+
+                <table class="table table-sm w-auto ms-auto text-end mb-0">
+                    <tr>
+                        <th>Total HT</th>
+                        <td>{{ totalSalesHt|number_format(2, ',', ' ') }} €</td>
+                    </tr>
+                    <tr>
+                        <th>Total TVA</th>
+                        <td>{{ totalVat|number_format(2, ',', ' ') }} €</td>
+                    </tr>
+                    <tr class="fw-bold">
+                        <th>Total TTC</th>
+                        <td>{{ totalSalesTtc|number_format(2, ',', ' ') }} €</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="border p-4 h-100">
+                <h4 class="mb-3">Résumé produits</h4>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="border p-3 h-100">
+                            <h6 class="mb-2">Plus vendu</h6>
+
+                            {% if mostSoldProduct %}
+                                <div class="fw-bold">{{ mostSoldProduct.productName }}</div>
+                                <div class="text-muted small mb-2">{{ mostSoldProduct.brand }}</div>
+                                <div class="small">
+                                    Quantité :
+                                    <strong>{{ mostSoldProduct.totalQuantity }}</strong>
+                                </div>
+                            {% else %}
+                                <div class="text-muted small">Aucune donnée</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="border p-3 h-100">
+                            <h6 class="mb-2">Moins vendu</h6>
+
+                            {% if leastSoldProduct %}
+                                <div class="fw-bold">{{ leastSoldProduct.productName }}</div>
+                                <div class="text-muted small mb-2">{{ leastSoldProduct.brand }}</div>
+                                <div class="small">
+                                    Quantité :
+                                    <strong>{{ leastSoldProduct.totalQuantity }}</strong>
+                                </div>
+                            {% else %}
+                                <div class="text-muted small">Aucune donnée</div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <!-- Tableau complet des produits vendus -->
+    <div class="border p-4">
+        <h4 class="mb-3">Produits vendus par quantité</h4>
 
-            <h4 class="mb-4">Chiffre d'affaires</h4>
-
-            <table class="table w-auto text-end">
-                <tr>
-                    <th>Total HT</th>
-                    <td>{{ totalSalesHt|number_format(2, ',', ' ') }} €</td>
-                </tr>
-                <tr>
-                    <th>Total TVA</th>
-                    <td>{{ totalVat|number_format(2, ',', ' ') }} €</td>
-                </tr>
-                <tr class="fw-bold">
-                    <th>Total TTC</th>
-                    <td>{{ totalSalesTtc|number_format(2, ',', ' ') }} €</td>
-                </tr>
+        <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+            <table class="table table-bordered table-sm align-middle mb-0">
+                <thead class="table-light sticky-top">
+                    <tr>
+                        <th>Produit</th>
+                        <th>Marque</th>
+                        <th class="text-end">Quantité vendue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in salesByProduct %}
+                        <tr>
+                            <td>{{ product.productName }}</td>
+                            <td class="text-muted">{{ product.brand }}</td>
+                            <td class="text-end">{{ product.totalQuantity }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">
+                                Aucune vente enregistrée.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
-
         </div>
     </div>
 

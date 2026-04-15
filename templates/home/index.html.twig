@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 {% if is_granted('ROLE_ADMIN') %}col-lg-4{% else %}col-lg-6{% endif %}">
+        <div class="col-md-6 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}col-lg-4{% else %}col-lg-6{% endif %}">
             <div class="border rounded-4 p-4 h-100">
                 <div class="mb-3">
                     <i class="fa-solid fa-book fa-2x text-dark"></i>
@@ -77,18 +77,38 @@
             </div>
         </div>
 
-        {% if is_granted('ROLE_ADMIN') %}
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
             <div class="col-md-6 col-lg-4">
                 <div class="border rounded-4 p-4 h-100">
                     <div class="mb-3">
-                        <i class="fa-solid fa-chart-line fa-2x text-info"></i>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <i class="fa-solid fa-chart-pie fa-2x text-info"></i>
+                        {% elseif is_granted('ROLE_SELLER') %}
+                            <i class="fa-solid fa-chart-column fa-2x text-info"></i>
+                        {% endif %}
                     </div>
-                    <h3 class="h5 fw-bold mb-3">Statistiques</h3>
+
+                    <h3 class="h5 fw-bold mb-3">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            Statistiques admin
+                        {% elseif is_granted('ROLE_SELLER') %}
+                            Mes statistiques
+                        {% endif %}
+                    </h3>
+
                     <p class="text-muted mb-4">
-                        Analysez vos ventes et suivez vos performances.
+                        {% if is_granted('ROLE_ADMIN') %}
+                            Analysez les ventes globales et suivez les performances générales.
+                        {% elseif is_granted('ROLE_SELLER') %}
+                            Consultez vos ventes et suivez vos performances personnelles.
+                        {% endif %}
                     </p>
-                    <a href="{{ path('app_stats_index') }}" class="btn btn-info text-white w-100">
-                        Voir les statistiques
+
+                    <a
+                        href="{% if is_granted('ROLE_ADMIN') %}{{ path('app_statistics_admin') }}{% elseif is_granted('ROLE_SELLER') %}{{ path('app_statistics_seller') }}{% endif %}"
+                        class="btn btn-info text-white w-100"
+                    >
+                        Accéder aux statistiques
                     </a>
                 </div>
             </div>

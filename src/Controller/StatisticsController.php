@@ -30,6 +30,10 @@ final class StatisticsController extends AbstractController
         $totalVat = $invoiceItemRepository->getTotalVat();
         $totalSalesTtc = $invoiceItemRepository->getTotalSalesTtc();
 
+        $mostSoldProduct = $invoiceItemRepository->getMostSoldProduct();
+        $leastSoldProduct = $invoiceItemRepository->getLeastSoldProduct();
+        $salesByProduct = $invoiceItemRepository->getSalesByProduct();
+
         return $this->render('statistics/admin.html.twig', [
             'totalSellers' => $totalSellers,
             'totalCustomers' => $totalCustomers,
@@ -37,6 +41,9 @@ final class StatisticsController extends AbstractController
             'totalSalesHt' => $totalSalesHt,
             'totalVat' => $totalVat,
             'totalSalesTtc' => $totalSalesTtc,
+            'mostSoldProduct' => $mostSoldProduct,
+            'leastSoldProduct' => $leastSoldProduct,
+            'salesByProduct' => $salesByProduct,
         ]);
     }
 
@@ -56,16 +63,20 @@ final class StatisticsController extends AbstractController
         $seller = $user->getSeller();
 
         $totalInvoices = $invoiceRepository->countBySeller($seller);
+        $totalProductsSold = $invoiceItemRepository->getSellerTotalProductsSold($seller);
         $totalSalesHt = $invoiceItemRepository->getSellerTotalSalesHt($seller);
         $totalVat = $invoiceItemRepository->getSellerTotalVat($seller);
         $totalSalesTtc = $invoiceItemRepository->getSellerTotalSalesTtc($seller);
+        $salesByProduct = $invoiceItemRepository->getSellerSalesByProduct($seller);
 
         return $this->render('statistics/seller.html.twig', [
             'seller' => $seller,
             'totalInvoices' => $totalInvoices,
+            'totalProductsSold' => $totalProductsSold,
             'totalSalesHt' => $totalSalesHt,
             'totalVat' => $totalVat,
             'totalSalesTtc' => $totalSalesTtc,
+            'salesByProduct' => $salesByProduct,
         ]);
     }
 }

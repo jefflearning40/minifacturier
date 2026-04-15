@@ -17,13 +17,13 @@ final class HomeController extends AbstractController
         return $this->render('home/index.html.twig');
     }
 
-    #[Route('/catalogue', name: 'app_catalog_index')]
+/* #[Route('/catalogue', name: 'app_catalog_index')]
     public function catalogue(): Response
     {
         return $this->render('maintenance.html.twig', [
             'title' => 'Catalogue en cours de développement'
         ]);
-    }
+    }  ancienne route avant de creer le catalogcontroller*/
 
     #[Route('/statistiques', name: 'app_stats_index')]
     public function stats(): Response
