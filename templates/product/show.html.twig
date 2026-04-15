@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail produit{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+
+    <h1 class="mb-4">Détail produit</h1>
+
+    <div class="border p-4 mb-4">
+        <table class="table mb-0">
+            <tbody>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ product.name }}</td>
+                </tr>
+                <tr>
+                    <th>Marque</th>
+                    <td>{{ product.brand }}</td>
+                </tr>
+                <tr>
+                    <th>Prix HT</th>
+                    <td>{{ product.price|number_format(2, ',', ' ') }} €</td>
+                </tr>
+                <tr>
+                    <th>TVA (%)</th>
+                    <td>{{ product.vatRate|number_format(2, ',', ' ') }}</td>
+                </tr>
+                <tr>
+                    <th>Prix TTC</th>
+                    <td>{{ (product.price * (1 + product.vatRate / 100))|number_format(2, ',', ' ') }} €</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a href="{{ path('app_catalog_index') }}" class="btn btn-outline-secondary">
+            Retour
+        </a>
+
+        <a href="{{ path('app_product_edit', {id: product.id}) }}" class="btn btn-outline-dark">
+            Modifier
+        </a>
+    </div>
+
+</div>
+{% endblock %}

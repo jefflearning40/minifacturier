@@ -1,21 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Catalogue{% endblock %}
+{% block title %}Gestion des produits{% endblock %}
 
 {% block body %}
 <div class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="mb-1">Catalogue</h1>
-            <p class="text-muted mb-0">Liste des produits disponibles</p>
-        </div>
+        <h1 class="mb-0">Gestion des produits</h1>
 
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('app_product_new') }}" class="btn btn-primary">
-                Ajouter un produit
-            </a>
-        {% endif %}
+        <a href="{{ path('app_product_new') }}" class="btn btn-primary">
+            Ajouter un produit
+        </a>
     </div>
 
     <div class="border p-4">
@@ -28,10 +23,7 @@
                         <th class="text-end">Prix HT</th>
                         <th class="text-end">TVA (%)</th>
                         <th class="text-end">Prix TTC</th>
-
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <th class="text-center">Actions</th>
-                        {% endif %}
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,9 +36,8 @@
                             <td class="text-end">
                                 {{ (product.price * (1 + product.vatRate / 100))|number_format(2, ',', ' ') }} €
                             </td>
-
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <td class="text-center">
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
                                     {{ include('components/buttons/_show.html.twig', {
                                         route: 'app_product_show',
                                         id: product.id
@@ -61,12 +52,12 @@
                                         route: 'app_product_delete',
                                         id: product.id
                                     }) }}
-                                </td>
-                            {% endif %}
+                                </div>
+                            </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="{% if is_granted('ROLE_ADMIN') %}6{% else %}5{% endif %}" class="text-center text-muted">
+                            <td colspan="6" class="text-center text-muted">
                                 Aucun produit disponible.
                             </td>
                         </tr>

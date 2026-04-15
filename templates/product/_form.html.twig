@@ -1,0 +1,35 @@
+app_catalog_index{{ form_start(form) }}
+
+<div class="border p-4">
+    <div class="row g-3">
+
+        <div class="col-md-6">
+            {{ form_row(form.name) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.brand) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.price) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.vatRate) }}
+        </div>
+
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        <button class="btn btn-primary">
+            {{ button_label|default('Enregistrer') }}
+        </button>
+
+        <a href="{{ path('app_catalog_index') }}" class="btn btn-outline-secondary">
+            Retour
+        </a>
+    </div>
+</div>
+
+{{ form_end(form) }}
