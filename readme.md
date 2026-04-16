@@ -1,123 +1,166 @@
 # MiniFacturier
 
-## Présentation
+## Présentation du projet
 
-MiniFacturier est une application web développée avec Symfony permettant la gestion complète de facturation.  
-Elle permet de gérer les clients, les vendeurs, ainsi que la création et le suivi de factures composées de plusieurs produits.
+MiniFacturier est une application web développée avec Symfony permettant de gérer :
 
-Ce projet repose sur une architecture MVC et met en œuvre une base de données relationnelle optimisée via Doctrine ORM.
+* les clients
+* les vendeurs
+* les factures
+* un catalogue de produits
 
----
-
-## Fonctionnalités principales
-
-- Gestion des clients (CRUD)  
-- Gestion des vendeurs (CRUD)  
-- Création et gestion de factures  
-- Ajout de plusieurs produits par facture  
-- Calcul automatique du total  
-- Statistiques :
-  - chiffre d’affaires par vendeur  
-  - nombre de clients  
-  - quantité vendue par produit  
-- Catalogue des produits  
+L’objectif est de proposer une interface simple et efficace pour une activité commerciale.
 
 ---
 
-## Architecture technique
+## Objectifs pédagogiques
 
-Le projet est structuré selon les bonnes pratiques Symfony :
+Ce projet a été réalisé dans le cadre de la préparation aux certifications CCP1 et CCP2.
 
-- Controllers : gestion des routes et logique applicative  
-- Entities : modélisation des données  
-- Repositories : accès aux données  
-- Forms : gestion des formulaires  
-- Templates : rendu avec Twig  
+Il permet de mettre en pratique :
 
----
-
-## Modélisation de la base de données
-
-La base de données est normalisée afin d’assurer cohérence et évolutivité.
-
-### Relations principales
-
-Customer (1) → (N) Invoice  
-Seller   (1) → (N) Invoice  
-Invoice  (1) → (N) InvoiceItem  
-
-### Organisation
-
-- Une facture est liée à un client et un vendeur  
-- Une facture contient plusieurs lignes de produits (`invoice_item`)  
-- Chaque ligne correspond à un produit avec quantité et prix  
-
-Cette structure permet :
-
-- d’ajouter plusieurs produits à une facture  
-- de calculer dynamiquement le total  
-- d’assurer la cohérence des données  
+* la création d’une application web complète
+* la gestion des bases de données
+* la sécurisation des accès (rôles)
+* la mise en place d’un back-office professionnel
 
 ---
 
 ## Technologies utilisées
 
-- PHP 8  
-- Symfony  
-- Doctrine ORM  
-- MySQL  
-- Twig  
-- Bootstrap  
-- Bootstrap Icons  
-- Font Awesome  
-- KnpPaginatorBundle:pour avoir de la pagination pour les listes templates/../index.html.twig
+* PHP 8
+* Symfony
+* Doctrine ORM
+* Twig
+* Bootstrap 5
+* MySQL
+* KnpPaginatorBundle
 
 ---
 
-## Installation
+## Fonctionnalités principales
 
-### Prérequis
+### Gestion des utilisateurs
 
-- PHP 8+  
-- Composer  
-- MySQL  
-- Environnement local (Laragon recommandé)  
+* Authentification sécurisée
+* Gestion des rôles :
 
-### Étapes
-
-composer install  
-
-php bin/console doctrine:database:create  
-
-php bin/console doctrine:migrations:migrate  
-
-symfony server:start  
-
-Accès :
-
-http://minifacturier.test  
+  * Administrateur
+  * Vendeur
 
 ---
 
-## Bonnes pratiques mises en œuvre
+### Gestion des entités
 
-- Architecture MVC  
-- Organisation du code avec une séparation claire entre logique, données et affichage
-- Utilisation de Doctrine ORM  
-- Validation des données  
-- Code structuré et maintenable  
+#### Clients
+
+* Création, modification et suppression
+* Liste paginée
+
+#### Vendeurs
+
+* CRUD complet
+* Association avec un utilisateur
+
+#### Factures
+
+* Création de factures
+* Calcul automatique HT / TVA / TTC
+* Association client et vendeur
+
+#### Produits (Catalogue)
+
+* CRUD complet (admin uniquement)
+* Catalogue visible par tous les utilisateurs
 
 ---
 
-## Axes d’amélioration
+## Catalogue produit
 
-- Mise en place d’une authentification sécurisée  
-- Export PDF des factures  
-- Amélioration de l’ergonomie de l’interface  
-- Mise en place de tests pour améliorer la fiabilité de l’application  
+Le catalogue est une partie centrale de l’application.
+
+### Fonctionnalités :
+
+* Pagination (10 produits par page)
+* Recherche par nom (multi-mots, insensible à la casse)
+* Filtre par marque
+* Combinaison recherche + filtre
+* Actions réservées à l’administrateur (modifier, supprimer)
 
 ---
 
-## Auteur
+## Statistiques
 
-Projet réalisé dans le cadre d’une formation développeur web.
+### Administrateur
+
+* Nombre de vendeurs
+* Nombre de clients
+* Nombre de factures
+* Chiffre d’affaires global
+* Produit le plus vendu
+* Produit le moins vendu
+* Tableau des ventes par produit
+
+### Vendeur
+
+* Nombre de factures
+* Total des ventes
+* Nombre de produits vendus
+* Répartition des ventes par produit
+
+---
+
+## Interface utilisateur
+
+* Interface responsive avec Bootstrap
+* Navigation claire et structurée
+* Système de composants réutilisables :
+
+  * boutons CRUD (voir, modifier, supprimer)
+  * boutons de navigation (précédent, suivant)
+* Uniformisation du design sur l’ensemble du projet
+
+---
+
+## Sécurité
+
+* Gestion des rôles avec `is_granted`
+* Protection des routes sensibles
+* Accès restreint aux fonctionnalités administrateur
+
+---
+
+## Organisation du code
+
+* Architecture MVC avec Symfony
+* Utilisation des Repository pour les requêtes complexes
+* Séparation des responsabilités :
+
+  * affichage (Twig)
+  * logique métier (Controller)
+  * accès aux données (Repository)
+
+---
+
+## Améliorations possibles
+
+* Tri des produits (prix, nom)
+* Export PDF des factures
+* Ajout de graphiques statistiques
+* Filtres avancés
+* API REST
+
+---
+
+## Conclusion
+
+Ce projet met en œuvre les compétences attendues pour les certifications CCP1 et CCP2 :
+
+* conception d’une application web complète
+* gestion des données
+* sécurisation des accès
+* amélioration de l’expérience utilisateur
+
+Il constitue une base solide pour un projet professionnel.
+
+---
