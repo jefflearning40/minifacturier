@@ -144,23 +144,12 @@ Le catalogue est une partie centrale de l’application.
 
 ## Améliorations possibles
 
-* Tri des produits (prix, nom)
-* Export PDF des factures
-* Ajout de graphiques statistiques
-* Filtres avancés
-* API REST
+* Tri des produits (prix, nom) pour afficher selon le prix ou le nom du produit
+* Export PDF des factures pour pouvoir les enregistrer, les imprimer ou les envoyer par mail
+* Ajout de graphiques statistiques pour le rendu visible et le confort visuel et l'interpretation
+  plus rapide     
+* Filtres avancés afin de faciliter encore plus la recherche et reduire le contenu affiché un
+  resultat pluys précis.
+* API REST dans le but de rendre ces données exportables dans des applications externes
 
----
 
-## Conclusion
-
-Ce projet met en œuvre les compétences attendues pour les certifications CCP1 et CCP2 :
-
-* conception d’une application web complète
-* gestion des données
-* sécurisation des accès
-* amélioration de l’expérience utilisateur
-
-Il constitue une base solide pour un projet professionnel.
-
----
