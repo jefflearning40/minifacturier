@@ -34,15 +34,20 @@
         </table>
     </div>
 
-    <div class="d-flex gap-2">
-        <a href="{{ path('app_catalog_index') }}" class="btn btn-outline-secondary">
-            Retour
-        </a>
+<div class="d-flex justify-content-between align-items-center mt-4">
 
-        <a href="{{ path('app_product_edit', {id: product.id}) }}" class="btn btn-outline-dark">
-            Modifier
-        </a>
-    </div>
+    {{ include('components/buttons/_linkprev.html.twig', {
+        route: 'app_catalog_index',
+        label: 'Retour catalogue'
+    }) }}
+
+    {{ include('components/buttons/_linknext.html.twig', {
+        route: 'app_product_edit',
+        params: {id: product.id},
+        label: 'Modifier'
+    }) }}
+
+</div>
 
 </div>
 {% endblock %}
