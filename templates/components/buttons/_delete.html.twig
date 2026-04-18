@@ -1,4 +1,42 @@
-<form method="post" action="{{ path(route, {'id': id}) }}" onsubmit="return confirm('Supprimer cet élément ?');" style="display:inline;">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
-    <button class="btn btn-danger btn-sm">Supprimer</button>
-</form>
+{% set modalId = 'deleteModal_' ~ id %}
+
+<button
+    type="button"
+    class="btn btn-sm btn-danger"
+    data-bs-toggle="modal"
+    data-bs-target="#{{ modalId }}"
+>
+    <i class="bi bi-trash3-fill"></i>
+</button>
+
+<div class="modal fade" id="{{ modalId }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                Cette action est définitive. Continuer ?
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    Annuler
+                </button>
+
+                <form method="post" action="{{ path(route, {'id': id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+                    <button class="btn btn-danger">
+                        Supprimer
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
