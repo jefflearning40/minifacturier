@@ -14,13 +14,13 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * 🔎 Recherche + filtre par marque (compatible pagination)
+     *  Recherche + filtre par marque (compatible pagination)
      */
     public function createSearchByNameQueryBuilder(?string $search, ?string $brand)
     {
         $qb = $this->createQueryBuilder('p');
 
-        // 🔎 Recherche multi-mots
+        //  Recherche multi-mots
         if ($search) {
             $words = preg_split('/\s+/', trim($search));
 
@@ -32,20 +32,20 @@ class ProductRepository extends ServiceEntityRepository
             }
         }
 
-        // 🏷️ Filtre par marque
+        //  Filtre par marque
         if ($brand) {
             $qb->andWhere('p.brand = :brand')
             ->setParameter('brand', $brand);
         }
 
-        // 🔽 Tri par défaut
+        //  Tri par défaut
         return $qb
             ->orderBy('p.name', 'ASC')
             ->addOrderBy('p.brand', 'ASC');
     }
 
     /**
-     * 📋 Liste des marques (pour le select)
+     *  Liste des marques (pour le select)
      */
     public function findAllBrands(): array
     {

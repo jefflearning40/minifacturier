@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
-// use App\Repository\ProductRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,20 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/product')]
 final class ProductController extends AbstractController
 {
-    /*
-    #[Route('/', name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-        return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findBy([], [
-                'name' => 'ASC',
-                'brand' => 'ASC',
-            ]),
-        ]);
-    }
-    */
+    
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
