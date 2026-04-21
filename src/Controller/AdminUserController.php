@@ -43,7 +43,7 @@ class AdminUserController extends AbstractController
 
             $seller = $data['seller'];
 
-            // 🔥 liaison User ↔ Seller
+            
             $seller->setUser($user);
 
             $em->persist($user);
