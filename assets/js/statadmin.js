@@ -1,0 +1,1 @@
+window.sellerNames = {{ invoiceCountBySeller|map(s => s.firstName ~ ' ' ~ s.lastName)|json_encode|raw }}; window.sellerInvoices = {{ invoiceCountBySeller|map(s => s.totalInvoices)|json_encode|raw }};

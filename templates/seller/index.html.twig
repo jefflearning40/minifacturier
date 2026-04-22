@@ -35,6 +35,12 @@
                     <td>
                         {{ seller.firstNameSeller }}
                         {{ seller.lastNameSeller|upper }}
+
+                        {% if seller.invoices|length == 0 %}
+                            <span class="ms-2 text-danger" title="Aucune vente réalisée">●</span>
+                        {% else %}
+                            <span class="ms-2 text-success" title="Ventes réalisées">●</span>
+                        {% endif %}
                     </td>
 
                     <td>{{ seller.phoneSeller }}</td>

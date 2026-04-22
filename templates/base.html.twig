@@ -13,17 +13,17 @@
     {% block stylesheets %}{% endblock %}
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column vh-100">
 
     {% include 'components/navbar.html.twig' %}
 
-    <main class="container flex-grow-1 py-3 mt-5 pt-3">
+    <main class="container flex-grow-1 overflow-auto py-3 mt-5 pt-3">
         {% block body %}{% endblock %}
     </main>
 
     {% include 'components/footer.html.twig' %}
 
-    {# ===== MODAL suppression du client impossible ===== #}
+    {# ===== MODAL flash ===== #}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="modal fade" id="flashModal" tabindex="-1" aria-hidden="true">
@@ -66,16 +66,8 @@
                 </div>
             </div>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const flashModalElement = document.getElementById('flashModal');
-
-                    if (flashModalElement) {
-                        const flashModal = new bootstrap.Modal(flashModalElement);
-                        flashModal.show();
-                    }
-                });
-            </script>
+        <script src="{{ asset('js/base.js') }}"></script>
+        <script src="{{ asset('js/stats.js') }}"></script>
         {% endfor %}
     {% endfor %}
 

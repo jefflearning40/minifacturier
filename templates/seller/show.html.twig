@@ -32,7 +32,60 @@
         </div>
     </div>
 
-    
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h2 class="h5 mb-0">Factures réalisées par ce vendeur</h2>
+        </div>
+
+        <div class="card-body">
+            {% if seller.invoices|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Id</th>
+                                <th>Numéro</th>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th class="text-end">Total HT</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for invoice in seller.invoices %}
+                                <tr>
+                                    <td>{{ invoice.id }}</td>
+                                    <td>{{ invoice.numberInvoice }}</td>
+                                    <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
+                                    <td>
+                                        {% if invoice.customer %}
+                                            {{ invoice.customer.firstNameCustomer }} {{ invoice.customer.lastNameCustomer|upper }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end">
+                                        {{ invoice.grandTotal|number_format(2, ',', ' ') }} €
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ path('app_invoice_show', {
+                                            id: invoice.id,
+                                            from: 'seller',
+                                            sellerId: seller.id
+                                        }) }}" class="btn btn-sm btn-outline-primary">
+                                            Voir
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted mb-0">Aucune facture réalisée par ce vendeur.</p>
+            {% endif %}
+        </div>
+    </div>
 
 </div>
 {% endblock %}
