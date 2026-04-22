@@ -30,7 +30,7 @@ final class InvoiceController extends AbstractController
         $invoices = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            20
         );
 
         return $this->render('invoice/index.html.twig', [

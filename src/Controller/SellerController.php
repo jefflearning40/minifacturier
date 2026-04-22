@@ -30,7 +30,7 @@ final class SellerController extends AbstractController
         $sellers = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            20
         );
 
         return $this->render('seller/index.html.twig', [

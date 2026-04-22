@@ -26,7 +26,7 @@ final class CatalogController extends AbstractController
         $products = $paginator->paginate(
             $queryBuilder,
             $request->query->getInt('page', 1),
-            10
+            20
         );
 
         $brands = $productRepository->findAllBrands();

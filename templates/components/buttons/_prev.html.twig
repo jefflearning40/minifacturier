@@ -1,10 +1,8 @@
-{% if pagination.currentPageNumber > 1 %}
-    <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': pagination.currentPageNumber - 1})) }}"
-    class="btn btn-outline-dark d-flex align-items-center gap-2">
-        Précédent
-    </a>
-{% else %}
-    <button class="btn btn-outline-dark d-flex align-items-center gap-2" disabled>
-        Précédent
-    </button>
-{% endif %}
+{% set prevPage = pagination.currentPageNumber > 1
+    ? pagination.currentPageNumber - 1
+    : pagination.pageCount %}
+
+<a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'page': prevPage})) }}"
+   class="btn btn-outline-dark d-flex align-items-center gap-2">
+    ← Précédent
+</a>

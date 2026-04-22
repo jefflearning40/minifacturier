@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Customer;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +31,7 @@ final class CustomerController extends AbstractController
         $customers = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10
+            20
         );
 
         return $this->render('customer/index.html.twig', [
@@ -50,6 +51,8 @@ final class CustomerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($customer);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Client créé avec succès.');
 
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -81,6 +84,8 @@ final class CustomerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'Client modifié avec succès.');
+
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -96,8 +101,16 @@ final class CustomerController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_SELLER');
 
         if ($this->isCsrfTokenValid('delete' . $customer->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($customer);
-            $entityManager->flush();
+            try {
+                $entityManager->remove($customer);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Client supprimé avec succès.');
+            } catch (ForeignKeyConstraintViolationException $e) {
+                $this->addFlash('danger', 'Suppression impossible : ce client est lié à une ou plusieurs factures.');
+            }
+        } else {
+            $this->addFlash('danger', 'Jeton de sécurité invalide. Suppression refusée.');
         }
 
         return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);

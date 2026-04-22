@@ -16,55 +16,57 @@
         #}
     </div>
 
-    <table class="table table-striped table-hover table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>Id</th>
-                <th>Nom complet</th>
-                <th>Téléphone</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
+    <div style="max-height: 450px; overflow-y: auto;" class="border">
+        <table class="table table-striped table-hover table-bordered mb-0">
+            <thead class="table-dark sticky-top">
+                <tr>
+                    <th>Id</th>
+                    <th>Nom complet</th>
+                    <th>Téléphone</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
 
-        <tbody>
-        {% for seller in sellers %}
-            <tr>
-                <td>{{ seller.id }}</td>
+            <tbody>
+            {% for seller in sellers %}
+                <tr>
+                    <td>{{ seller.id }}</td>
 
-                <td>
-                    {{ seller.firstNameSeller }}
-                    {{ seller.lastNameSeller|upper }}
-                </td>
+                    <td>
+                        {{ seller.firstNameSeller }}
+                        {{ seller.lastNameSeller|upper }}
+                    </td>
 
-                <td>{{ seller.phoneSeller }}</td>
+                    <td>{{ seller.phoneSeller }}</td>
 
-                <td class="text-center">
-                    {{ include('components/buttons/_show.html.twig', {
-                        route: 'app_seller_show',
-                        id: seller.id
-                    }) }}
+                    <td class="text-center">
+                        {{ include('components/buttons/_show.html.twig', {
+                            route: 'app_seller_show',
+                            id: seller.id
+                        }) }}
 
-                    {{ include('components/buttons/_edit.html.twig', {
-                        route: 'app_seller_edit',
-                        id: seller.id
-                    }) }}
+                        {{ include('components/buttons/_edit.html.twig', {
+                            route: 'app_seller_edit',
+                            id: seller.id
+                        }) }}
 
-                    {{ include('components/buttons/_delete.html.twig', {
-                        route: 'app_seller_delete',
-                        id: seller.id
-                    }) }}
-                </td>
-            </tr>
+                        {{ include('components/buttons/_delete.html.twig', {
+                            route: 'app_seller_delete',
+                            id: seller.id
+                        }) }}
+                    </td>
+                </tr>
 
-        {% else %}
-            <tr>
-                <td colspan="4" class="text-center">
-                    Aucun vendeur trouvé
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">
+                        Aucun vendeur trouvé
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <div class="d-flex justify-content-between align-items-center mt-4">
 

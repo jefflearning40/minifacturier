@@ -8,66 +8,77 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3">Liste des clients</h1>
-
-        {#
-        <a href="{{ path('app_customer_new') }}" class="btn btn-success">
-            + Nouveau client
-        </a>
-        #}
     </div>
 
-    <table class="table table-striped table-hover table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>Id</th>
-                <th>Nom complet</th>
-                <th>Adresse mail</th>
-                <th>Téléphone</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
+    {# zone scrollable du tableau #}
+    <div style="max-height: 450px; overflow-y: auto;" class="border">
+        <table class="table table-striped table-hover table-bordered mb-0">
+            <thead class="table-dark sticky-top">
+                <tr>
+                    <th>Id</th>
+                    <th>Nom complet</th>
+                    <th>Adresse mail</th>
+                    <th>Téléphone</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
 
-        <tbody>
-        {% for customer in customers %}
-            <tr>
-                <td>{{ customer.id }}</td>
+            <tbody>
+            {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.id }}</td>
 
-                <td>
-                    {{ customer.firstNameCustomer }}
-                    {{ customer.lastNameCustomer|upper }}
-                </td>
+                    <td>
+                        {{ customer.firstNameCustomer }}
+                        {{ customer.lastNameCustomer|upper }}
 
-                <td>{{ customer.addressCustomer }}</td>
-                <td>{{ customer.phoneCustomer }}</td>
+                        {% if customer.invoices|length > 0 %}
+                            <span class="badge bg-secondary ms-2">Facturé</span>
+                        {% endif %}
+                    </td>
 
-                <td class="text-center">
-                    {{ include('components/buttons/_show.html.twig', {
-                        route: 'app_customer_show',
-                        id: customer.id
-                    }) }}
+                    <td>{{ customer.addressCustomer }}</td>
+                    <td>{{ customer.phoneCustomer }}</td>
 
-                    {{ include('components/buttons/_edit.html.twig', {
-                        route: 'app_customer_edit',
-                        id: customer.id
-                    }) }}
+                    <td class="text-center">
+                        {{ include('components/buttons/_show.html.twig', {
+                            route: 'app_customer_show',
+                            id: customer.id
+                        }) }}
 
-                    {{ include('components/buttons/_delete.html.twig', {
-                        route: 'app_customer_delete',
-                        id: customer.id
-                    }) }}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5" class="text-center">
-                    Aucun client trouvé
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                        {{ include('components/buttons/_edit.html.twig', {
+                            route: 'app_customer_edit',
+                            id: customer.id
+                        }) }}
 
-    {# boutons de navigation dans les pages #}
+                        {% if customer.invoices|length > 0 %}
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-secondary"
+                                disabled
+                                title="Suppression impossible : client lié à une facture"
+                            >
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        {% else %}
+                            {{ include('components/buttons/_delete.html.twig', {
+                                route: 'app_customer_delete',
+                                id: customer.id
+                            }) }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Aucun client trouvé
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mt-4">
 
         {{ include('components/buttons/_prev.html.twig', {
@@ -84,7 +95,6 @@
 
     </div>
 
-    {# Total clients #}
     <div class="text-center text-muted mt-2">
         {{ customers.getTotalItemCount }} clients au total
     </div>

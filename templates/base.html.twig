@@ -23,6 +23,62 @@
 
     {% include 'components/footer.html.twig' %}
 
+    {# ===== MODAL suppression du client impossible ===== #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="modal fade" id="flashModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <div class="modal-header
+                            {% if label == 'success' %}
+                                bg-success text-white
+                            {% elseif label == 'danger' %}
+                                bg-danger text-white
+                            {% else %}
+                                bg-secondary text-white
+                            {% endif %}
+                        ">
+                            <h5 class="modal-title">
+                                {% if label == 'success' %}
+                                    Succès
+                                {% elseif label == 'danger' %}
+                                    Erreur
+                                {% else %}
+                                    Information
+                                {% endif %}
+                            </h5>
+
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            {{ message }}
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Fermer
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const flashModalElement = document.getElementById('flashModal');
+
+                    if (flashModalElement) {
+                        const flashModal = new bootstrap.Modal(flashModalElement);
+                        flashModal.show();
+                    }
+                });
+            </script>
+        {% endfor %}
+    {% endfor %}
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     {% block javascripts %}{% endblock %}
 

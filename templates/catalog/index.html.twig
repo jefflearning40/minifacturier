@@ -76,62 +76,60 @@
         </p>
     {% endif %}
 
-    <div class="border p-4">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle mb-0">
-                <thead class="table-light">
+    <div style="max-height: 450px; overflow-y: auto;" class="border">
+        <table class="table table-bordered table-hover align-middle mb-0">
+            <thead class="table-light sticky-top">
+                <tr>
+                    <th>Nom</th>
+                    <th>Marque</th>
+                    <th class="text-end">Prix HT</th>
+                    <th class="text-end">TVA (%)</th>
+                    <th class="text-end">Prix TTC</th>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th class="text-center">Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
                     <tr>
-                        <th>Nom</th>
-                        <th>Marque</th>
-                        <th class="text-end">Prix HT</th>
-                        <th class="text-end">TVA (%)</th>
-                        <th class="text-end">Prix TTC</th>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.brand }}</td>
+                        <td class="text-end">{{ product.price|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-end">{{ product.vatRate|number_format(2, ',', ' ') }}</td>
+                        <td class="text-end">
+                            {{ (product.price * (1 + product.vatRate / 100))|number_format(2, ',', ' ') }} €
+                        </td>
 
                         {% if is_granted('ROLE_ADMIN') %}
-                            <th class="text-center">Actions</th>
+                            <td class="text-center">
+                                {{ include('components/buttons/_show.html.twig', {
+                                    route: 'app_product_show',
+                                    id: product.id
+                                }) }}
+
+                                {{ include('components/buttons/_edit.html.twig', {
+                                    route: 'app_product_edit',
+                                    id: product.id
+                                }) }}
+
+                                {{ include('components/buttons/_delete.html.twig', {
+                                    route: 'app_product_delete',
+                                    id: product.id
+                                }) }}
+                            </td>
                         {% endif %}
                     </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
-                        <tr>
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.brand }}</td>
-                            <td class="text-end">{{ product.price|number_format(2, ',', ' ') }} €</td>
-                            <td class="text-end">{{ product.vatRate|number_format(2, ',', ' ') }}</td>
-                            <td class="text-end">
-                                {{ (product.price * (1 + product.vatRate / 100))|number_format(2, ',', ' ') }} €
-                            </td>
-
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <td class="text-center">
-                                    {{ include('components/buttons/_show.html.twig', {
-                                        route: 'app_product_show',
-                                        id: product.id
-                                    }) }}
-
-                                    {{ include('components/buttons/_edit.html.twig', {
-                                        route: 'app_product_edit',
-                                        id: product.id
-                                    }) }}
-
-                                    {{ include('components/buttons/_delete.html.twig', {
-                                        route: 'app_product_delete',
-                                        id: product.id
-                                    }) }}
-                                </td>
-                            {% endif %}
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="{% if is_granted('ROLE_ADMIN') %}6{% else %}5{% endif %}" class="text-center text-muted">
-                                Aucun produit disponible.
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                {% else %}
+                    <tr>
+                        <td colspan="{% if is_granted('ROLE_ADMIN') %}6{% else %}5{% endif %}" class="text-center text-muted">
+                            Aucun produit disponible.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <div class="d-flex justify-content-between align-items-center mt-4">
