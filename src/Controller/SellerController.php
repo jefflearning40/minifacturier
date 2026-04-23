@@ -51,6 +51,8 @@ final class SellerController extends AbstractController
             $entityManager->persist($seller);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Vendeur créé avec succès.');
+
             return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -81,6 +83,8 @@ final class SellerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'Vendeur modifié avec succès.');
+
             return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -95,10 +99,20 @@ final class SellerController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        if ($this->isCsrfTokenValid('delete' . $seller->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($seller);
-            $entityManager->flush();
+        if (!$this->isCsrfTokenValid('delete' . $seller->getId(), $request->getPayload()->getString('_token'))) {
+            $this->addFlash('danger', 'Jeton de sécurité invalide. Suppression refusée.');
+            return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
         }
+
+        if ($seller->getInvoices()->count() > 0) {
+            $this->addFlash('danger', 'Suppression impossible : ce vendeur est lié à une ou plusieurs factures.');
+            return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $entityManager->remove($seller);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Vendeur supprimé avec succès.');
 
         return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
     }

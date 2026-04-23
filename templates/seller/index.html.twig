@@ -36,10 +36,14 @@
                         {{ seller.firstNameSeller }}
                         {{ seller.lastNameSeller|upper }}
 
-                        {% if seller.invoices|length == 0 %}
-                            <span class="ms-2 text-danger" title="Aucune vente réalisée">●</span>
+                        {% if seller.invoices|length > 0 %}
+                            <span class="badge bg-success ms-2" title="Vendeur actif">
+                                Actif
+                            </span>
                         {% else %}
-                            <span class="ms-2 text-success" title="Ventes réalisées">●</span>
+                            <span class="badge bg-danger ms-2" title="Aucune vente réalisée">
+                                Inactif
+                            </span>
                         {% endif %}
                     </td>
 
@@ -56,10 +60,21 @@
                             id: seller.id
                         }) }}
 
-                        {{ include('components/buttons/_delete.html.twig', {
-                            route: 'app_seller_delete',
-                            id: seller.id
-                        }) }}
+                        {% if seller.invoices|length > 0 %}
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-secondary"
+                                disabled
+                                title="Suppression impossible : vendeur lié à une facture"
+                            >
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        {% else %}
+                            {{ include('components/buttons/_delete.html.twig', {
+                                route: 'app_seller_delete',
+                                id: seller.id
+                            }) }}
+                        {% endif %}
                     </td>
                 </tr>
 

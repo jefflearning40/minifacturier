@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Customer;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
-use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -100,18 +99,20 @@ final class CustomerController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_SELLER');
 
-        if ($this->isCsrfTokenValid('delete' . $customer->getId(), $request->getPayload()->getString('_token'))) {
-            try {
-                $entityManager->remove($customer);
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Client supprimé avec succès.');
-            } catch (ForeignKeyConstraintViolationException $e) {
-                $this->addFlash('danger', 'Suppression impossible : ce client est lié à une ou plusieurs factures.');
-            }
-        } else {
+        if (!$this->isCsrfTokenValid('delete' . $customer->getId(), $request->getPayload()->getString('_token'))) {
             $this->addFlash('danger', 'Jeton de sécurité invalide. Suppression refusée.');
+            return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
+
+        if ($customer->getInvoices()->count() > 0) {
+            $this->addFlash('danger', 'Suppression impossible : ce client est lié à une ou plusieurs factures.');
+            return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $entityManager->remove($customer);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Client supprimé avec succès.');
 
         return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
     }
