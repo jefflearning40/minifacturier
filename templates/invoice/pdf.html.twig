@@ -11,14 +11,6 @@
 
 <body>
 
-<div class="no-print d-flex justify-content-between mb-4">
-    {{ include('components/buttons/_back_invoice.html.twig', {
-        id: invoice.id
-    }) }}
-
-    {{ include('components/buttons/_print_invoice.html.twig') }}
-</div>
-
 <div id="print-area" class="page">
     {{ include('components/facture/_facture_info.html.twig', {
         invoice: invoice
