@@ -7,6 +7,7 @@ use App\Form\InvoiceType;
 use App\Repository\InvoiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -132,10 +133,14 @@ final class InvoiceController extends AbstractController
     }
 
     #[Route('/{id}/pdf', name: 'app_invoice_pdf', methods: ['GET'])]
-    public function pdf(Invoice $invoice): Response
+    public function pdf(Invoice $invoice, GotenbergPdfInterface $gotenberg): Response
     {
-        return $this->render('invoice/pdf.html.twig', [
-            'invoice' => $invoice,
-        ]);
+        return $gotenberg
+            ->html()
+            ->content('invoice/pdf.html.twig', [
+                'invoice' => $invoice,
+            ])
+            ->generate()
+            ->stream();
     }
 }
