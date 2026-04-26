@@ -12,10 +12,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[Route('/invoice')]
 final class InvoiceController extends AbstractController
 {
+    #[Route('/test-mail', name: 'app_test_mail', methods: ['GET'])]
+    public function testMail(MailerInterface $mailer): Response
+    {
+        $email = (new Email())
+            ->from('test@minifacturier.com')
+            ->to('client@test.com')
+            ->subject('Test Mail')
+            ->text('Ceci est un test avec Mailpit');
+
+        $mailer->send($email);
+
+        return new Response('Mail envoyé vers Mailpit');
+    }
+
     #[Route(name: 'app_invoice_index', methods: ['GET'])]
     public function index(
         Request $request,
@@ -66,7 +82,7 @@ final class InvoiceController extends AbstractController
             $entityManager->persist($invoice);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_invoice_index');
         }
 
         return $this->render('invoice/new.html.twig', [
@@ -110,7 +126,7 @@ final class InvoiceController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_invoice_index');
         }
 
         return $this->render('invoice/edit.html.twig', [
@@ -129,7 +145,7 @@ final class InvoiceController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_invoice_index');
     }
 
     #[Route('/{id}/pdf', name: 'app_invoice_pdf', methods: ['GET'])]
