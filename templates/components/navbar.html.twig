@@ -10,9 +10,6 @@
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#mainNavbar"
-            aria-controls="mainNavbar"
-            aria-expanded="false"
-            aria-label="Afficher le menu"
         >
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,162 +19,106 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a
-                        class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}"
-                        href="{{ path('app_home') }}"
-                    >
-                        <i class="fa-solid fa-house me-1"></i>
-                        Accueil
+                    <a class="nav-link" href="{{ path('app_home') }}">
+                        <i class="fa-solid fa-house me-1"></i> Accueil
                     </a>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a
-                        class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') starts with 'app_customer_' %}active{% endif %}"
-                        href="#"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                    >
-                        <i class="fa-solid fa-user-group me-1"></i>
-                        Clients
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user-group me-1"></i> Clients
                     </a>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="{{ path('app_customer_index') }}">
-                                <i class="fa-solid fa-list me-2"></i>
-                                Liste des clients
-                            </a>
-                        </li>
+                        <li><a class="dropdown-item" href="{{ path('app_customer_index') }}">Liste des clients</a></li>
 
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
-                            <li>
-                                <a class="dropdown-item" href="{{ path('app_customer_new') }}">
-                                    <i class="fa-solid fa-plus me-2"></i>
-                                    Ajouter un client
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ path('app_customer_new') }}">Ajouter un client</a></li>
                         {% endif %}
                     </ul>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a
-                        class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') starts with 'app_invoice_' %}active{% endif %}"
-                        href="#"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                    >
-                        <i class="fa-solid fa-file-invoice-dollar me-1"></i>
-                        Factures
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-file-invoice-dollar me-1"></i> Factures
                     </a>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="{{ path('app_invoice_index') }}">
-                                <i class="fa-solid fa-list me-2"></i>
-                                Liste des factures
-                            </a>
-                        </li>
+                        <li><a class="dropdown-item" href="{{ path('app_invoice_index') }}">Liste des factures</a></li>
 
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
-                            <li>
-                                <a class="dropdown-item" href="{{ path('app_invoice_new') }}">
-                                    <i class="fa-solid fa-plus me-2"></i>
-                                    Ajouter une facture
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ path('app_invoice_new') }}">Ajouter une facture</a></li>
                         {% endif %}
                     </ul>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a
-                        class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') starts with 'app_seller_' or app.request.attributes.get('_route') starts with 'app_admin_create_seller_user' %}active{% endif %}"
-                        href="#"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                    >
-                        <i class="fa-solid fa-user-tie me-1"></i>
-                        Vendeurs
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user-tie me-1"></i> Vendeurs
                     </a>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="{{ path('app_seller_index') }}">
-                                <i class="fa-solid fa-list me-2"></i>
-                                Liste des vendeurs
-                            </a>
-                        </li>
+                        <li><a class="dropdown-item" href="{{ path('app_seller_index') }}">Liste des vendeurs</a></li>
 
                         {% if is_granted('ROLE_ADMIN') %}
-                            <li>
-                                <a class="dropdown-item" href="{{ path('app_seller_new') }}">
-                                    <i class="fa-solid fa-plus me-2"></i>
-                                    Ajouter un vendeur
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ path('app_admin_create_seller_user') }}">
-                                    <i class="fa-solid fa-user-plus me-2"></i>
-                                    Créer compte vendeur
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ path('app_seller_new') }}">Ajouter un vendeur</a></li>
                         {% endif %}
                     </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a
-                        class="nav-link {% if app.request.attributes.get('_route') starts with 'app_catalog_' %}active{% endif %}"
-                        href="{{ path('app_catalog_index') }}"
-                    >
-                        <i class="fa-solid fa-book me-1"></i>
-                        Catalogue
+                    <a class="nav-link" href="{{ path('app_catalog_index') }}">
+                        <i class="fa-solid fa-book me-1"></i> Catalogue
                     </a>
                 </li>
 
-                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
-                    <li class="nav-item dropdown">
-                        <a
-                            class="nav-link dropdown-toggle {% if app.request.attributes.get('_route') starts with 'app_statistics_' %}active{% endif %}"
-                            href="#"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                        >
-                            <i class="fa-solid fa-chart-line me-1"></i>
+                {# ===== MAILPIT ===== #}
+            {% if is_granted('ROLE_ADMIN') %}
+    <li class="nav-item ms-lg-4">
+        <a
+            class="nav-link d-flex align-items-center"
+            href="#"
+            data-bs-toggle="modal"
+            data-bs-target="#mailpitModal"
+        >
+            <i class="fa-solid fa-envelope me-2"></i>
+            Mailpit
+        </a>
+    </li>
+{% endif %}
 
+                {# ===== ADMIN ===== #}
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
+                    <li class="nav-item dropdown ms-lg-3">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-chart-line me-1"></i>
                             {% if is_granted('ROLE_ADMIN') %}
                                 Admin
-                            {% elseif is_granted('ROLE_SELLER') %}
+                            {% else %}
                                 Mes stats
                             {% endif %}
                         </a>
 
                         <ul class="dropdown-menu">
-
                             {% if is_granted('ROLE_ADMIN') %}
                                 <li>
                                     <a class="dropdown-item" href="{{ path('app_statistics_admin') }}">
-                                        <i class="fa-solid fa-chart-pie me-2"></i>
                                         Tableau admin
-                                    </a>
-                                </li>
-
-                            {% elseif is_granted('ROLE_SELLER') %}
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_statistics_seller') }}">
-                                        <i class="fa-solid fa-chart-column me-2"></i>
-                                        Mes statistiques
                                     </a>
                                 </li>
                             {% endif %}
 
+                            {% if is_granted('ROLE_SELLER') %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_statistics_seller') }}">
+                                        Mes statistiques
+                                    </a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </li>
                 {% endif %}
 
             </ul>
 
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+            <ul class="navbar-nav ms-auto">
 
                 {% if app.user %}
                     <li class="nav-item">
@@ -200,11 +141,7 @@
 
                 {% else %}
                     <li class="nav-item">
-                        <a
-                            class="nav-link {% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}"
-                            href="{{ path('app_login') }}"
-                        >
-                            <i class="fa-solid fa-right-to-bracket me-1"></i>
+                        <a class="nav-link" href="{{ path('app_login') }}">
                             Se connecter
                         </a>
                     </li>

@@ -8,12 +8,14 @@ use App\Repository\InvoiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
+use Sensiolabs\GotenbergBundle\Processor\FileProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/invoice')]
 final class InvoiceController extends AbstractController
@@ -65,11 +67,20 @@ final class InvoiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($invoice->getInvoiceItems()->isEmpty()) {
+                $this->addFlash('danger', 'Vous devez ajouter au moins une ligne de facture.');
+
+                return $this->redirectToRoute('app_invoice_new');
+            }
+
             foreach ($invoice->getInvoiceItems() as $item) {
                 $product = $item->getProduct();
+                $quantity = $item->getQuantity();
 
-                if (!$product) {
-                    continue;
+                if (!$product || $quantity === null || $quantity < 1) {
+                    $this->addFlash('danger', 'Chaque ligne doit contenir un produit et une quantité minimum de 1.');
+
+                    return $this->redirectToRoute('app_invoice_new');
                 }
 
                 $item->setProductName($product->getName());
@@ -88,6 +99,74 @@ final class InvoiceController extends AbstractController
         return $this->render('invoice/new.html.twig', [
             'invoice' => $invoice,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}/send-mail', name: 'app_invoice_send_mail', methods: ['GET'])]
+    public function sendMail(
+        Invoice $invoice,
+        GotenbergPdfInterface $gotenberg,
+        MailerInterface $mailer
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_SELLER');
+
+        $customer = $invoice->getCustomer();
+        $clientEmail = $customer?->getAddressCustomer();
+
+        if (!$clientEmail || !filter_var($clientEmail, FILTER_VALIDATE_EMAIL)) {
+            $this->addFlash('danger', 'Adresse email client invalide ou manquante.');
+
+            return $this->redirectToRoute('app_invoice_show', [
+                'id' => $invoice->getId(),
+            ]);
+        }
+
+        $filesystem = new Filesystem();
+        $pdfDirectory = $this->getParameter('kernel.project_dir') . '/var/pdf';
+
+        if (!$filesystem->exists($pdfDirectory)) {
+            $filesystem->mkdir($pdfDirectory);
+        }
+
+        $pdfResult = $gotenberg
+            ->html()
+            ->content('invoice/pdf.html.twig', [
+                'invoice' => $invoice,
+            ])
+            ->processor(new FileProcessor($filesystem, $pdfDirectory))
+            ->generate();
+
+        $pdfResult->process();
+
+        $pdfPath = $pdfDirectory . '/' . $pdfResult->getFilename();
+
+        if (!file_exists($pdfPath)) {
+            $this->addFlash('danger', 'Le PDF n’a pas pu être généré.');
+
+            return $this->redirectToRoute('app_invoice_show', [
+                'id' => $invoice->getId(),
+            ]);
+        }
+
+        $pdfContent = file_get_contents($pdfPath);
+
+        $email = (new Email())
+            ->from('facture@minifacturier.com')
+            ->to($clientEmail)
+            ->subject('Votre facture ' . $invoice->getNumberInvoice())
+            ->text('Bonjour, veuillez trouver votre facture en pièce jointe.')
+            ->attach(
+                $pdfContent,
+                'facture-' . $invoice->getNumberInvoice() . '.pdf',
+                'application/pdf'
+            );
+
+        $mailer->send($email);
+
+        $this->addFlash('success', 'Facture envoyée avec succès dans Mailpit.');
+
+        return $this->redirectToRoute('app_invoice_show', [
+            'id' => $invoice->getId(),
         ]);
     }
 
@@ -110,11 +189,24 @@ final class InvoiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($invoice->getInvoiceItems()->isEmpty()) {
+                $this->addFlash('danger', 'Vous devez ajouter au moins une ligne de facture.');
+
+                return $this->redirectToRoute('app_invoice_edit', [
+                    'id' => $invoice->getId(),
+                ]);
+            }
+
             foreach ($invoice->getInvoiceItems() as $item) {
                 $product = $item->getProduct();
+                $quantity = $item->getQuantity();
 
-                if (!$product) {
-                    continue;
+                if (!$product || $quantity === null || $quantity < 1) {
+                    $this->addFlash('danger', 'Chaque ligne doit contenir un produit et une quantité minimum de 1.');
+
+                    return $this->redirectToRoute('app_invoice_edit', [
+                        'id' => $invoice->getId(),
+                    ]);
                 }
 
                 $item->setProductName($product->getName());

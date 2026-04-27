@@ -1,100 +1,192 @@
-#encodage UTF-8 pour affichage des termes boutons et commentaires status
+# =========================================================
+# ENCODAGE UTF-8
+# =========================================================
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-# On charge les bibliothèques Windows Forms
+
+# =========================================================
+# IMPORT DES LIBRAIRIES POUR L'INTERFACE GRAPHIQUE
+# =========================================================
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-# Chemin du projet
+# =========================================================
+# CHEMIN DU PROJET
+# =========================================================
 $projectPath = "C:\laragon\www\minifacturier"
 
-# Création de la fenêtre principale
+# =========================================================
+# FONCTION TEST PORT
+# =========================================================
+function Test-Port {
+    param ($port)
+
+    try {
+        $client = New-Object System.Net.Sockets.TcpClient
+        $client.Connect("127.0.0.1", $port)
+        $client.Close()
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+# =========================================================
+# CRÉATION DE LA FENÊTRE PRINCIPALE
+# =========================================================
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "MiniFacturier"
-$form.Width = 320
-$form.Height = 220
+$form.Width = 340
+$form.Height = 260
 $form.StartPosition = "CenterScreen"
 
-# Texte de statut
+# =========================================================
+# ICÔNE PERSONNALISÉE
+# =========================================================
+$iconPath = "C:\laragon\www\minifacturier\documentation\minifacturier.ico"
+
+if (Test-Path $iconPath) {
+    $form.Icon = New-Object System.Drawing.Icon($iconPath)
+}
+
+# =========================================================
+# MESSAGE LARAGON
+# =========================================================
+$infoLabel = New-Object System.Windows.Forms.Label
+$infoLabel.Width = 300
+$infoLabel.Height = 40
+$infoLabel.Left = 20
+$infoLabel.Top = 10
+$infoLabel.TextAlign = "MiddleCenter"
+$infoLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
+$infoLabel.ForeColor = [System.Drawing.Color]::White
+
+if (Test-Port 80 -or Test-Port 3306) {
+    $infoLabel.Text = "LARAGON READY"
+    $infoLabel.BackColor = [System.Drawing.Color]::Green
+} else {
+    $infoLabel.Text = "LANCER LARAGON MANUELLEMENT"
+    $infoLabel.BackColor = [System.Drawing.Color]::Crimson
+}
+
+# =========================================================
+# LABEL STATUT
+# =========================================================
 $statusLabel = New-Object System.Windows.Forms.Label
 $statusLabel.Text = "Statut : CLOSED"
 $statusLabel.Width = 260
 $statusLabel.Height = 30
-$statusLabel.Left = 30
-$statusLabel.Top = 130
+$statusLabel.Left = 40
+$statusLabel.Top = 180
 $statusLabel.TextAlign = "MiddleCenter"
 $statusLabel.ForeColor = [System.Drawing.Color]::Red
 
-# Bouton ON
+# =========================================================
+# BOUTON ON
+# =========================================================
 $buttonOn = New-Object System.Windows.Forms.Button
 $buttonOn.Text = "ON"
 $buttonOn.Width = 220
 $buttonOn.Height = 40
-$buttonOn.Left = 45
-$buttonOn.Top = 25
+$buttonOn.Left = 50
+$buttonOn.Top = 60
 
 $buttonOn.Add_Click({
 
     $statusLabel.Text = "Statut : STARTING..."
     $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    $form.Refresh()
 
-    # Lance Docker Desktop si besoin
-    #Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe" -ErrorAction SilentlyContinue
-
-    # Attend que Docker soit prêt
+    # ATTENTE DOCKER
     do {
         Start-Sleep -Seconds 2
         $dockerReady = docker info 2>$null
     } until ($dockerReady)
 
-    # Vérifie si Gotenberg tourne déjà
-    $gotenbergRunning = docker ps -q --filter ancestor=gotenberg/gotenberg:8
+    # GOTENBERG
+    $gotenbergRunning = docker ps -q --filter name=gotenberg
 
     if (-not $gotenbergRunning) {
-        Start-Process powershell -WindowStyle Hidden -ArgumentList "-Command", "cd $projectPath; docker run --rm -p 3000:3000 gotenberg/gotenberg:8"
+        $gotenbergExists = docker ps -aq --filter name=gotenberg
+
+        if ($gotenbergExists) {
+            docker start gotenberg
+        } else {
+            docker run -d --name gotenberg -p 3000:3000 gotenberg/gotenberg:8
+        }
     }
 
-    # Lance Symfony
-    Start-Process powershell -WindowStyle Hidden -ArgumentList "-Command", "cd $projectPath; symfony server:start"
+    # MAILPIT
+    $mailpitRunning = docker ps -q --filter name=mailpit
 
-    # Petite pause pour laisser Symfony démarrer
+    if (-not $mailpitRunning) {
+        $mailpitExists = docker ps -aq --filter name=mailpit
+
+        if ($mailpitExists) {
+            docker start mailpit
+        } else {
+            docker run -d --name mailpit -p 8026:8025 -p 1025:1025 axllent/mailpit
+        }
+    }
+
+    # SYMFONY
+    Start-Process powershell -WindowStyle Hidden `
+    -ArgumentList "-Command", "cd '$projectPath'; symfony server:start"
+
     Start-Sleep -Seconds 3
 
-    # Ouvre le navigateur
+    # OUVERTURE APP UNIQUEMENT
     Start-Process "http://127.0.0.1:8000"
 
-    $statusLabel.Text = "Statut :APP LAUNCHED"
+    $statusLabel.Text = "Statut : APP LAUNCHED"
     $statusLabel.ForeColor = [System.Drawing.Color]::Green
+    $form.Refresh()
 })
 
-# Bouton OFF
+# =========================================================
+# BOUTON OFF
+# =========================================================
 $buttonOff = New-Object System.Windows.Forms.Button
 $buttonOff.Text = "OFF"
 $buttonOff.Width = 220
 $buttonOff.Height = 40
-$buttonOff.Left = 45
-$buttonOff.Top = 80
+$buttonOff.Left = 50
+$buttonOff.Top = 110
 
 $buttonOff.Add_Click({
 
-    $statusLabel.Text = "Statut :APP CLOSED"
+    $statusLabel.Text = "Statut : CLOSING..."
     $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    $form.Refresh()
 
-    # Arrête Symfony
-    Start-Process powershell -WindowStyle Hidden -ArgumentList "-Command", "cd $projectPath; symfony server:stop"
+    for ($i = 1; $i -le 3; $i++) {
+        $points = "." * $i
+        $statusLabel.Text = "Statut : CLOSING$points"
+        $form.Refresh()
+        Start-Sleep -Milliseconds 500
+    }
 
-    # Arrête Gotenberg
-    Start-Process powershell -WindowStyle Hidden -ArgumentList "-Command", "docker ps -q --filter ancestor=gotenberg/gotenberg:8 | ForEach-Object { docker stop $_ }"
+    Start-Process powershell -WindowStyle Hidden `
+    -ArgumentList "-Command", "cd '$projectPath'; symfony server:stop"
+
+    docker stop gotenberg
+    docker stop mailpit
 
     Start-Sleep -Seconds 2
 
-    $statusLabel.Text = "Statut :APP CLOSED"
+    $statusLabel.Text = "Statut : APP CLOSED"
     $statusLabel.ForeColor = [System.Drawing.Color]::Red
+    $form.Refresh()
+
+    Start-Sleep -Seconds 2
+    $form.Close()
 })
 
-# Ajout des éléments
+# =========================================================
+# AJOUT ELEMENTS
+# =========================================================
+$form.Controls.Add($infoLabel)
 $form.Controls.Add($buttonOn)
 $form.Controls.Add($buttonOff)
 $form.Controls.Add($statusLabel)
 
-# Affiche la fenêtre
 $form.ShowDialog()

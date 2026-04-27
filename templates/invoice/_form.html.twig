@@ -41,6 +41,10 @@
                 </div>
             </div>
 
+            <div class="alert alert-warning d-none" id="invoice-alert">
+                Veuillez sélectionner un produit et renseigner une quantité minimum de 1.
+            </div>
+
             <div class="border rounded overflow-hidden mb-4">
                 <div class="table-responsive">
                     <table class="table align-middle mb-0">
@@ -129,7 +133,7 @@
             </div>
 
             <div class="d-flex justify-content-end gap-2 mt-4">
-                <button class="btn btn-primary px-4">
+                <button class="btn btn-primary px-4" id="invoice-submit" disabled>
                     {{ button_label|default('Enregistrer') }}
                 </button>
             </div>
@@ -140,3 +144,40 @@
 
 {{ form_end(form) }}
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('invoice-submit');
+    const alertBox = document.getElementById('invoice-alert');
+    const wrapper = document.getElementById('invoice-items-wrapper');
+
+    function validateInvoiceForm() {
+        const rows = wrapper.querySelectorAll('.invoice-item');
+        let valid = rows.length > 0;
+
+        rows.forEach(row => {
+            const product = row.querySelector('select');
+            const quantity = row.querySelector('input[name*="[quantity]"]');
+
+            if (!product || !quantity) {
+                valid = false;
+                return;
+            }
+
+            if (!product.value || quantity.value === '' || parseInt(quantity.value, 10) < 1) {
+                valid = false;
+            }
+        });
+
+        button.disabled = !valid;
+        alertBox.classList.toggle('d-none', valid);
+    }
+
+    document.addEventListener('input', validateInvoiceForm);
+    document.addEventListener('change', validateInvoiceForm);
+    document.addEventListener('click', function () {
+        setTimeout(validateInvoiceForm, 100);
+    });
+
+    validateInvoiceForm();
+});
+</script>
