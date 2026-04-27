@@ -31,6 +31,19 @@ function Test-Port {
 }
 
 # =========================================================
+# FONCTION UPDATE LARAGON
+# =========================================================
+function Update-LaragonStatus {
+    if (Test-Port 80 -or Test-Port 3306) {
+        $infoLabel.Text = "LARAGON READY"
+        $infoLabel.BackColor = [System.Drawing.Color]::Green
+    } else {
+        $infoLabel.Text = "LANCER LARAGON MANUELLEMENT"
+        $infoLabel.BackColor = [System.Drawing.Color]::Crimson
+    }
+}
+
+# =========================================================
 # CRÉATION DE LA FENÊTRE PRINCIPALE
 # =========================================================
 $form = New-Object System.Windows.Forms.Form
@@ -60,13 +73,17 @@ $infoLabel.TextAlign = "MiddleCenter"
 $infoLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
 $infoLabel.ForeColor = [System.Drawing.Color]::White
 
-if (Test-Port 80 -or Test-Port 3306) {
-    $infoLabel.Text = "LARAGON READY"
-    $infoLabel.BackColor = [System.Drawing.Color]::Green
-} else {
-    $infoLabel.Text = "LANCER LARAGON MANUELLEMENT"
-    $infoLabel.BackColor = [System.Drawing.Color]::Crimson
-}
+Update-LaragonStatus
+
+# =========================================================
+# TIMER AUTO UPDATE LARAGON
+# =========================================================
+$laragonTimer = New-Object System.Windows.Forms.Timer
+$laragonTimer.Interval = 1000
+$laragonTimer.Add_Tick({
+    Update-LaragonStatus
+})
+$laragonTimer.Start()
 
 # =========================================================
 # LABEL STATUT
@@ -91,6 +108,16 @@ $buttonOn.Left = 50
 $buttonOn.Top = 60
 
 $buttonOn.Add_Click({
+
+    if (-not (Test-Port 80 -or Test-Port 3306)) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Laragon n'est pas lancé. Lance Laragon avant de démarrer l'application.",
+            "Laragon requis",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Warning
+        )
+        return
+    }
 
     $statusLabel.Text = "Statut : STARTING..."
     $statusLabel.ForeColor = [System.Drawing.Color]::Orange
@@ -188,5 +215,12 @@ $form.Controls.Add($infoLabel)
 $form.Controls.Add($buttonOn)
 $form.Controls.Add($buttonOff)
 $form.Controls.Add($statusLabel)
+
+# =========================================================
+# ARRÊT PROPRE DU TIMER À LA FERMETURE
+# =========================================================
+$form.Add_FormClosed({
+    $laragonTimer.Stop()
+})
 
 $form.ShowDialog()
