@@ -4,35 +4,60 @@
         <div class="row text-center text-md-start">
 
             <div class="col-md-4 mb-3">
-                <h5>MiniFacturier</h5>
-                <p class="mb-0">
-                    Gestion de clients, vendeurs et factures.
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                    MiniFacturier
+                </h5>
+                <p class="text-white-50 mb-0">
+                    Application de gestion de factures avec génération PDF et envoi d'emails.
                 </p>
             </div>
 
             <div class="col-md-4 mb-3">
-                <h5>Navigation</h5>
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-circle-info me-2"></i>
+                    Informations
+                </h5>
                 <ul class="list-unstyled mb-0">
-                    <li><a href="{{ path('app_home') }}" class="text-white text-decoration-none">Accueil</a></li>
-                    <li><a href="{{ path('app_customer_index') }}" class="text-white text-decoration-none">Clients</a></li>
-                    <li><a href="{{ path('app_seller_index') }}" class="text-white text-decoration-none">Vendeurs</a></li>
-                    <li><a href="{{ path('app_invoice_index') }}" class="text-white text-decoration-none">Factures</a></li>
+                    <li>
+                        <a href="{{ path('app_legal_mentions') }}" class="text-white-50 text-decoration-none">
+                            Mentions légales
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_rgpd') }}" class="text-white-50 text-decoration-none">
+                            Politique RGPD
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_contact') }}" class="text-white-50 text-decoration-none">
+                            Contact
+                        </a>
+                    </li>
                 </ul>
             </div>
 
             <div class="col-md-4 mb-3">
-                <h5>Infos</h5>
-                <p class="mb-0">
-                    Application Symfony - Projet d'examen
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-gears me-2"></i>
+                    Technologies
+                </h5>
+                <p class="text-white-50 mb-1">
+                    Laragon. HEIDISQL . MariaDB . Symfony · Twig · Doctrine · Bootstrap
+                </p>
+                <p class="text-white-50 mb-0">
+                    Gotenberg · Mailpit · Docker . powerShell
                 </p>
             </div>
 
         </div>
 
-        <hr class="border-light">
+        <hr class="border-secondary">
 
-        <div class="text-center">
-            <small>© {{ "now"|date("Y") }} MiniFacturier</small>
+        <div class="text-center text-white-50">
+            <small>
+                © {{ "now"|date("Y") }} MiniFacturier — Projet d'examen
+            </small>
         </div>
 
     </div>

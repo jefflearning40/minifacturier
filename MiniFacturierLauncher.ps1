@@ -31,6 +31,24 @@ function Test-Port {
 }
 
 # =========================================================
+# FONCTION TEST DOCKER AVEC TIMEOUT
+# =========================================================
+function Test-DockerReady {
+    $timeout = 10
+
+    for ($i = 0; $i -lt $timeout; $i++) {
+        try {
+            docker info > $null 2>&1
+            return $true
+        } catch {
+            Start-Sleep -Seconds 1
+        }
+    }
+
+    return $false
+}
+
+# =========================================================
 # FONCTION UPDATE LARAGON
 # =========================================================
 function Update-LaragonStatus {
@@ -119,17 +137,29 @@ $buttonOn.Add_Click({
         return
     }
 
-    $statusLabel.Text = "Statut : STARTING..."
+    $statusLabel.Text = "Statut : CHECKING DOCKER..."
     $statusLabel.ForeColor = [System.Drawing.Color]::Orange
     $form.Refresh()
 
-    # ATTENTE DOCKER
-    do {
-        Start-Sleep -Seconds 2
-        $dockerReady = docker info 2>$null
-    } until ($dockerReady)
+    if (-not (Test-DockerReady)) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Docker Desktop n'est pas lancé ou son moteur Linux n'est pas prêt.",
+            "Docker requis",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Error
+        )
+
+        $statusLabel.Text = "Statut : DOCKER NOT READY"
+        $statusLabel.ForeColor = [System.Drawing.Color]::Red
+        $form.Refresh()
+        return
+    }
 
     # GOTENBERG
+    $statusLabel.Text = "Statut : STARTING GOTENBERG..."
+    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    $form.Refresh()
+
     $gotenbergRunning = docker ps -q --filter name=gotenberg
 
     if (-not $gotenbergRunning) {
@@ -142,7 +172,34 @@ $buttonOn.Add_Click({
         }
     }
 
+    $gotenbergReady = $false
+    for ($i = 0; $i -lt 15; $i++) {
+        if (Test-Port 3000) {
+            $gotenbergReady = $true
+            break
+        }
+        Start-Sleep -Seconds 1
+    }
+
+    if (-not $gotenbergReady) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Gotenberg n'a pas démarré correctement sur le port 3000.",
+            "Erreur Gotenberg",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Error
+        )
+
+        $statusLabel.Text = "Statut : GOTENBERG ERROR"
+        $statusLabel.ForeColor = [System.Drawing.Color]::Red
+        $form.Refresh()
+        return
+    }
+
     # MAILPIT
+    $statusLabel.Text = "Statut : STARTING MAILPIT..."
+    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    $form.Refresh()
+
     $mailpitRunning = docker ps -q --filter name=mailpit
 
     if (-not $mailpitRunning) {
@@ -155,13 +212,39 @@ $buttonOn.Add_Click({
         }
     }
 
+    $mailpitReady = $false
+    for ($i = 0; $i -lt 15; $i++) {
+        if (Test-Port 1025) {
+            $mailpitReady = $true
+            break
+        }
+        Start-Sleep -Seconds 1
+    }
+
+    if (-not $mailpitReady) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Mailpit n'a pas démarré correctement sur le port 1025.",
+            "Erreur Mailpit",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Error
+        )
+
+        $statusLabel.Text = "Statut : MAILPIT ERROR"
+        $statusLabel.ForeColor = [System.Drawing.Color]::Red
+        $form.Refresh()
+        return
+    }
+
     # SYMFONY
+    $statusLabel.Text = "Statut : STARTING SYMFONY..."
+    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    $form.Refresh()
+
     Start-Process powershell -WindowStyle Hidden `
     -ArgumentList "-Command", "cd '$projectPath'; symfony server:start"
 
     Start-Sleep -Seconds 3
 
-    # OUVERTURE APP UNIQUEMENT
     Start-Process "http://127.0.0.1:8000"
 
     $statusLabel.Text = "Statut : APP LAUNCHED"
@@ -195,8 +278,8 @@ $buttonOff.Add_Click({
     Start-Process powershell -WindowStyle Hidden `
     -ArgumentList "-Command", "cd '$projectPath'; symfony server:stop"
 
-    docker stop gotenberg
-    docker stop mailpit
+    docker stop gotenberg 2>$null
+    docker stop mailpit 2>$null
 
     Start-Sleep -Seconds 2
 

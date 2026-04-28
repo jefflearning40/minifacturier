@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique RGPD{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Politique de confidentialité</h1>
+
+    <p>
+        L'application MiniFacturier collecte certaines données personnelles
+        dans le cadre de son fonctionnement.
+    </p>
+
+    <h2 class="mt-4">Données collectées</h2>
+    <p>
+        Les données susceptibles d’être collectées sont :
+        nom, prénom, adresse email et informations liées aux factures.
+    </p>
+
+    <h2 class="mt-4">Finalité</h2>
+    <p>
+        Ces données sont utilisées uniquement pour :
+        la gestion des factures et la communication via le formulaire de contact.
+    </p>
+
+    <h2 class="mt-4">Sécurité</h2>
+    <p>
+        Les données sont protégées et accessibles uniquement aux utilisateurs autorisés
+        (administrateurs et vendeurs).
+        Aucune donnée n’est transmise à des tiers.
+    </p>
+
+    <h2 class="mt-4">Droits des utilisateurs</h2>
+    <p>
+        Conformément au RGPD, vous disposez d’un droit d’accès, de modification
+        et de suppression de vos données personnelles.
+    </p>
+
+    <h2 class="mt-4">Contact</h2>
+    <p>
+        Pour toute demande concernant vos données :
+        contact@minifacturier.com ou sur la page contact via le lien Contact dans informatins
+    </p>
+</div>
+{% endblock %}
