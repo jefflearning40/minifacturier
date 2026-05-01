@@ -1,24 +1,28 @@
 # =========================================================
 # ENCODAGE UTF-8
 # =========================================================
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+try {
+    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+} catch {}
 
-# =========================================================
-# IMPORT DES LIBRAIRIES POUR L'INTERFACE GRAPHIQUE
-# =========================================================
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # =========================================================
-# CHEMIN DU PROJET
+# CHEMINS PRINCIPAUX
 # =========================================================
 $projectPath = "C:\laragon\www\minifacturier"
+$chromePath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+$appUrl = "http://127.0.0.1:8000/login"
+
+$chromeUserDataDir = "$env:TEMP\MiniFacturier_Chrome_Profile"
+$script:isLaunching = $false
 
 # =========================================================
-# FONCTION TEST PORT
+# TEST PORT LOCAL
 # =========================================================
 function Test-Port {
-    param ($port)
+    param ([int]$port)
 
     try {
         $client = New-Object System.Net.Sockets.TcpClient
@@ -31,70 +35,501 @@ function Test-Port {
 }
 
 # =========================================================
-# FONCTION TEST DOCKER AVEC TIMEOUT
+# TEST LARAGON
 # =========================================================
-function Test-DockerReady {
-    $timeout = 10
+function Test-LaragonReady {
+    return (Test-Port 80) -or (Test-Port 3306)
+}
 
-    for ($i = 0; $i -lt $timeout; $i++) {
-        try {
-            docker info > $null 2>&1
-            return $true
-        } catch {
-            Start-Sleep -Seconds 1
+# =========================================================
+# PROGRESSION
+# =========================================================
+function Set-Progress {
+    param (
+        [int]$value,
+        [string]$message
+    )
+
+    if ($value -lt 0) { $value = 0 }
+    if ($value -gt 100) { $value = 100 }
+
+    $progressBar.Value = $value
+    $progressLabel.Text = "$value% - $message"
+    $form.Refresh()
+}
+
+# =========================================================
+# STATUT LARAGON
+# =========================================================
+function Update-LaragonStatus {
+    if (Test-LaragonReady) {
+        $laragonLabel.Text = "LARAGON READY"
+        $laragonLabel.BackColor = [System.Drawing.Color]::Green
+        $laragonLabel.ForeColor = [System.Drawing.Color]::White
+
+        if (-not $script:isLaunching) {
+            $buttonOn.Enabled = $true
         }
+    } else {
+        $laragonLabel.Text = "OPEN LARAGON"
+        $laragonLabel.BackColor = [System.Drawing.Color]::Crimson
+        $laragonLabel.ForeColor = [System.Drawing.Color]::White
+        $buttonOn.Enabled = $false
+    }
+
+    $form.Refresh()
+}
+
+# =========================================================
+# DOCKER
+# =========================================================
+function Start-DockerDesktopSilent {
+    $statusLabel.Text = "Status: STARTING DOCKER..."
+    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    Set-Progress 5 "Starting Docker Desktop"
+
+    docker desktop start > $null 2>&1
+}
+
+function Wait-Docker {
+    param ([int]$timeout = 90)
+
+    for ($i = 1; $i -le $timeout; $i++) {
+        $statusLabel.Text = "Status: CHECKING DOCKER... $i/$timeout"
+        $percent = 10 + [math]::Round(($i / $timeout) * 20)
+        Set-Progress $percent "Checking Docker"
+
+        docker info > $null 2>&1
+
+        if ($LASTEXITCODE -eq 0) {
+            Set-Progress 30 "Docker ready"
+            return $true
+        }
+
+        Start-Sleep -Seconds 1
     }
 
     return $false
 }
 
 # =========================================================
-# FONCTION UPDATE LARAGON
+# GOTENBERG HEALTH
 # =========================================================
-function Update-LaragonStatus {
-    if (Test-Port 80 -or Test-Port 3306) {
-        $infoLabel.Text = "LARAGON READY"
-        $infoLabel.BackColor = [System.Drawing.Color]::Green
-    } else {
-        $infoLabel.Text = "LANCER LARAGON MANUELLEMENT"
-        $infoLabel.BackColor = [System.Drawing.Color]::Crimson
+function Test-GotenbergHealth {
+    try {
+        $response = Invoke-WebRequest "http://127.0.0.1:3000/health" -UseBasicParsing -TimeoutSec 3
+        return ($response.StatusCode -eq 200)
+    } catch {
+        return $false
     }
 }
 
+function Wait-Gotenberg {
+    param ([int]$timeout = 40)
+
+    for ($i = 1; $i -le $timeout; $i++) {
+        $percent = 35 + [math]::Round(($i / $timeout) * 20)
+        Set-Progress $percent "Checking Gotenberg"
+
+        if (Test-GotenbergHealth) {
+            Set-Progress 55 "Gotenberg ready"
+            return $true
+        }
+
+        Start-Sleep -Seconds 1
+    }
+
+    return $false
+}
+
+function Start-GotenbergSafe {
+    $statusLabel.Text = "Status: STARTING GOTENBERG..."
+    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    Set-Progress 35 "Starting Gotenberg"
+
+    $running = docker ps -q --filter "name=^/gotenberg$"
+
+    if ($running) {
+        return $true
+    }
+
+    $exists = docker ps -aq --filter "name=^/gotenberg$"
+
+    if ($exists) {
+        docker start gotenberg > $null 2>&1
+        Start-Sleep -Seconds 3
+
+        $stillRunning = docker ps -q --filter "name=^/gotenberg$"
+
+        if (-not $stillRunning) {
+            docker rm gotenberg > $null 2>&1
+            docker run -d --restart unless-stopped --name gotenberg -p 3000:3000 gotenberg/gotenberg:8 > $null 2>&1
+        }
+    } else {
+        docker run -d --restart unless-stopped --name gotenberg -p 3000:3000 gotenberg/gotenberg:8 > $null 2>&1
+    }
+
+    Start-Sleep -Seconds 2
+    return $true
+}
+
 # =========================================================
-# CRÉATION DE LA FENÊTRE PRINCIPALE
+# MAILPIT
+# =========================================================
+function Wait-Mailpit {
+    param ([int]$timeout = 40)
+
+    for ($i = 1; $i -le $timeout; $i++) {
+        $percent = 60 + [math]::Round(($i / $timeout) * 20)
+        Set-Progress $percent "Checking Mailpit"
+
+        if (Test-Port 8025) {
+            Set-Progress 80 "Mailpit ready"
+            return $true
+        }
+
+        Start-Sleep -Seconds 1
+    }
+
+    return $false
+}
+
+function Start-MailpitSafe {
+    $statusLabel.Text = "Status: STARTING MAILPIT..."
+    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    Set-Progress 60 "Starting Mailpit"
+
+    $running = docker ps -q --filter "name=^/mailpit$"
+
+    if ($running) {
+        return $true
+    }
+
+    $exists = docker ps -aq --filter "name=^/mailpit$"
+
+    if ($exists) {
+        docker start mailpit > $null 2>&1
+        Start-Sleep -Seconds 3
+
+        $stillRunning = docker ps -q --filter "name=^/mailpit$"
+
+        if (-not $stillRunning) {
+            docker rm mailpit > $null 2>&1
+            docker run -d --restart unless-stopped --name mailpit -p 8025:8025 -p 1025:1025 axllent/mailpit > $null 2>&1
+        }
+    } else {
+        docker run -d --restart unless-stopped --name mailpit -p 8025:8025 -p 1025:1025 axllent/mailpit > $null 2>&1
+    }
+
+    Start-Sleep -Seconds 2
+    return $true
+}
+
+# =========================================================
+# SYMFONY
+# =========================================================
+function Start-SymfonySafe {
+    $statusLabel.Text = "Status: STARTING SYMFONY..."
+    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+    Set-Progress 90 "Starting Symfony"
+
+    Start-Process powershell -WindowStyle Hidden `
+        -ArgumentList "-Command", "cd '$projectPath'; symfony server:start --no-tls"
+
+    for ($i = 1; $i -le 20; $i++) {
+        Set-Progress (90 + [math]::Round(($i / 20) * 5)) "Checking Symfony"
+
+        if (Test-Port 8000) {
+            return $true
+        }
+
+        Start-Sleep -Seconds 1
+    }
+
+    return $false
+}
+
+function Stop-SymfonySafe {
+    Start-Process powershell -WindowStyle Hidden `
+        -ArgumentList "-Command", "cd '$projectPath'; symfony server:stop"
+}
+
+# =========================================================
+# CHROME APP
+# =========================================================
+function Open-AppBrowser {
+    if (-not (Test-Path $chromePath)) {
+        $chromePathAlt = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+
+        if (Test-Path $chromePathAlt) {
+            $script:chromePath = $chromePathAlt
+        } else {
+            Start-Process $appUrl
+            return
+        }
+    }
+
+    if (Test-Path $chromeUserDataDir) {
+        Remove-Item $chromeUserDataDir -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
+    New-Item -ItemType Directory -Path $chromeUserDataDir -Force | Out-Null
+
+    Start-Process $chromePath `
+        -ArgumentList "--user-data-dir=`"$chromeUserDataDir`"", "--app=$appUrl", "--start-maximized", "--no-first-run", "--disable-extensions" `
+        -PassThru | Out-Null
+}
+
+function Close-AppBrowser {
+    try {
+        Get-CimInstance Win32_Process |
+            Where-Object {
+                $_.Name -eq "chrome.exe" -and
+                $_.CommandLine -like "*MiniFacturier_Chrome_Profile*"
+            } |
+            ForEach-Object {
+                Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
+            }
+
+        Start-Sleep -Seconds 1
+
+        if (Test-Path $chromeUserDataDir) {
+            Remove-Item $chromeUserDataDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    } catch {}
+}
+
+# =========================================================
+# FENÊTRE
 # =========================================================
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "MiniFacturier"
 $form.Width = 340
-$form.Height = 260
+$form.Height = 325
 $form.StartPosition = "CenterScreen"
+$form.FormBorderStyle = "FixedDialog"
+$form.MaximizeBox = $false
+
+$laragonLabel = New-Object System.Windows.Forms.Label
+$laragonLabel.Text = "OPEN LARAGON"
+$laragonLabel.Width = 280
+$laragonLabel.Height = 35
+$laragonLabel.Left = 30
+$laragonLabel.Top = 15
+$laragonLabel.TextAlign = "MiddleCenter"
+$laragonLabel.ForeColor = [System.Drawing.Color]::White
+$laragonLabel.BackColor = [System.Drawing.Color]::Crimson
+$laragonLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
+
+$buttonOn = New-Object System.Windows.Forms.Button
+$buttonOn.Text = "ON"
+$buttonOn.Width = 220
+$buttonOn.Height = 40
+$buttonOn.Left = 55
+$buttonOn.Top = 65
+$buttonOn.Enabled = $false
+$buttonOn.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
+
+$buttonOff = New-Object System.Windows.Forms.Button
+$buttonOff.Text = "OFF"
+$buttonOff.Width = 220
+$buttonOff.Height = 40
+$buttonOff.Left = 55
+$buttonOff.Top = 120
+$buttonOff.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
+
+$statusLabel = New-Object System.Windows.Forms.Label
+$statusLabel.Text = "Status: CLOSED"
+$statusLabel.Width = 280
+$statusLabel.Height = 30
+$statusLabel.Left = 30
+$statusLabel.Top = 170
+$statusLabel.TextAlign = "MiddleCenter"
+$statusLabel.ForeColor = [System.Drawing.Color]::Red
+$statusLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
+
+$progressBar = New-Object System.Windows.Forms.ProgressBar
+$progressBar.Width = 280
+$progressBar.Height = 22
+$progressBar.Left = 30
+$progressBar.Top = 215
+$progressBar.Minimum = 0
+$progressBar.Maximum = 100
+$progressBar.Value = 0
+
+$progressLabel = New-Object System.Windows.Forms.Label
+$progressLabel.Text = "0% - Waiting"
+$progressLabel.Width = 280
+$progressLabel.Height = 25
+$progressLabel.Left = 30
+$progressLabel.Top = 242
+$progressLabel.TextAlign = "MiddleCenter"
+$progressLabel.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 
 # =========================================================
-# ICÔNE PERSONNALISÉE
+# BOUTON ON
 # =========================================================
-$iconPath = "C:\laragon\www\minifacturier\documentation\minifacturier.ico"
+$buttonOn.Add_Click({
 
-if (Test-Path $iconPath) {
-    $form.Icon = New-Object System.Drawing.Icon($iconPath)
-}
+    $script:isLaunching = $true
+    $buttonOn.Enabled = $false
+    $buttonOff.Enabled = $false
+
+    if (-not (Test-LaragonReady)) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Laragon is not running. Please open Laragon before launching the application.",
+            "Laragon required",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Warning
+        )
+
+        $statusLabel.Text = "Status: LARAGON NOT READY"
+        $statusLabel.ForeColor = [System.Drawing.Color]::Red
+        Set-Progress 0 "Laragon not ready"
+
+        $script:isLaunching = $false
+        Update-LaragonStatus
+        $buttonOff.Enabled = $true
+        return
+    }
+
+    Start-DockerDesktopSilent
+
+    if (-not (Wait-Docker 90)) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Docker Desktop is not ready. Please start Docker Desktop manually and try again.",
+            "Docker required",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Error
+        )
+
+        $statusLabel.Text = "Status: DOCKER NOT READY"
+        $statusLabel.ForeColor = [System.Drawing.Color]::Red
+        Set-Progress 0 "Docker not ready"
+
+        $script:isLaunching = $false
+        Update-LaragonStatus
+        $buttonOff.Enabled = $true
+        return
+    }
+
+    Start-GotenbergSafe
+
+    if (-not (Wait-Gotenberg 40)) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Gotenberg did not start correctly. Test manually: curl.exe http://127.0.0.1:3000/health",
+            "Gotenberg error",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Error
+        )
+
+        $statusLabel.Text = "Status: GOTENBERG ERROR"
+        $statusLabel.ForeColor = [System.Drawing.Color]::Red
+        Set-Progress 0 "Gotenberg error"
+
+        $script:isLaunching = $false
+        Update-LaragonStatus
+        $buttonOff.Enabled = $true
+        return
+    }
+
+    Start-MailpitSafe
+
+    if (-not (Wait-Mailpit 40)) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Mailpit did not start correctly on port 8025.",
+            "Mailpit error",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Error
+        )
+
+        $statusLabel.Text = "Status: MAILPIT ERROR"
+        $statusLabel.ForeColor = [System.Drawing.Color]::Red
+        Set-Progress 0 "Mailpit error"
+
+        $script:isLaunching = $false
+        Update-LaragonStatus
+        $buttonOff.Enabled = $true
+        return
+    }
+
+    if (-not (Start-SymfonySafe)) {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Symfony server did not start correctly on port 8000.",
+            "Symfony error",
+            [System.Windows.Forms.MessageBoxButtons]::OK,
+            [System.Windows.Forms.MessageBoxIcon]::Error
+        )
+
+        $statusLabel.Text = "Status: SYMFONY ERROR"
+        $statusLabel.ForeColor = [System.Drawing.Color]::Red
+        Set-Progress 0 "Symfony error"
+
+        $script:isLaunching = $false
+        Update-LaragonStatus
+        $buttonOff.Enabled = $true
+        return
+    }
+
+    Set-Progress 98 "Opening application"
+
+    Open-AppBrowser
+
+    $statusLabel.Text = "Status: APP LAUNCHED"
+    $statusLabel.ForeColor = [System.Drawing.Color]::Green
+    Set-Progress 100 "Application launched"
+
+    $script:isLaunching = $false
+    Update-LaragonStatus
+    $buttonOff.Enabled = $true
+})
 
 # =========================================================
-# MESSAGE LARAGON
+# BOUTON OFF
 # =========================================================
-$infoLabel = New-Object System.Windows.Forms.Label
-$infoLabel.Width = 300
-$infoLabel.Height = 40
-$infoLabel.Left = 20
-$infoLabel.Top = 10
-$infoLabel.TextAlign = "MiddleCenter"
-$infoLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-$infoLabel.ForeColor = [System.Drawing.Color]::White
+$buttonOff.Add_Click({
 
-Update-LaragonStatus
+    $script:isLaunching = $true
+    $buttonOn.Enabled = $false
+    $buttonOff.Enabled = $false
+
+    $statusLabel.Text = "Status: CLOSING..."
+    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
+
+    Set-Progress 80 "Closing browser"
+    Close-AppBrowser
+
+    Set-Progress 65 "Stopping Symfony"
+    Stop-SymfonySafe
+
+    Set-Progress 45 "Stopping Gotenberg"
+    docker stop gotenberg > $null 2>&1
+
+    Set-Progress 25 "Stopping Mailpit"
+    docker stop mailpit > $null 2>&1
+
+    Start-Sleep -Seconds 2
+
+    $statusLabel.Text = "Status: APP CLOSED"
+    $statusLabel.ForeColor = [System.Drawing.Color]::Red
+    Set-Progress 0 "Application closed"
+
+    $laragonTimer.Stop()
+    $form.Close()
+})
 
 # =========================================================
-# TIMER AUTO UPDATE LARAGON
+# AJOUT DES CONTRÔLES
+# =========================================================
+$form.Controls.Add($laragonLabel)
+$form.Controls.Add($buttonOn)
+$form.Controls.Add($buttonOff)
+$form.Controls.Add($statusLabel)
+$form.Controls.Add($progressBar)
+$form.Controls.Add($progressLabel)
+
+# =========================================================
+# TIMER LARAGON
 # =========================================================
 $laragonTimer = New-Object System.Windows.Forms.Timer
 $laragonTimer.Interval = 1000
@@ -103,205 +538,10 @@ $laragonTimer.Add_Tick({
 })
 $laragonTimer.Start()
 
-# =========================================================
-# LABEL STATUT
-# =========================================================
-$statusLabel = New-Object System.Windows.Forms.Label
-$statusLabel.Text = "Statut : CLOSED"
-$statusLabel.Width = 260
-$statusLabel.Height = 30
-$statusLabel.Left = 40
-$statusLabel.Top = 180
-$statusLabel.TextAlign = "MiddleCenter"
-$statusLabel.ForeColor = [System.Drawing.Color]::Red
-
-# =========================================================
-# BOUTON ON
-# =========================================================
-$buttonOn = New-Object System.Windows.Forms.Button
-$buttonOn.Text = "ON"
-$buttonOn.Width = 220
-$buttonOn.Height = 40
-$buttonOn.Left = 50
-$buttonOn.Top = 60
-
-$buttonOn.Add_Click({
-
-    if (-not (Test-Port 80 -or Test-Port 3306)) {
-        [System.Windows.Forms.MessageBox]::Show(
-            "Laragon n'est pas lancé. Lance Laragon avant de démarrer l'application.",
-            "Laragon requis",
-            [System.Windows.Forms.MessageBoxButtons]::OK,
-            [System.Windows.Forms.MessageBoxIcon]::Warning
-        )
-        return
-    }
-
-    $statusLabel.Text = "Statut : CHECKING DOCKER..."
-    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
-    $form.Refresh()
-
-    if (-not (Test-DockerReady)) {
-        [System.Windows.Forms.MessageBox]::Show(
-            "Docker Desktop n'est pas lancé ou son moteur Linux n'est pas prêt.",
-            "Docker requis",
-            [System.Windows.Forms.MessageBoxButtons]::OK,
-            [System.Windows.Forms.MessageBoxIcon]::Error
-        )
-
-        $statusLabel.Text = "Statut : DOCKER NOT READY"
-        $statusLabel.ForeColor = [System.Drawing.Color]::Red
-        $form.Refresh()
-        return
-    }
-
-    # GOTENBERG
-    $statusLabel.Text = "Statut : STARTING GOTENBERG..."
-    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
-    $form.Refresh()
-
-    $gotenbergRunning = docker ps -q --filter name=gotenberg
-
-    if (-not $gotenbergRunning) {
-        $gotenbergExists = docker ps -aq --filter name=gotenberg
-
-        if ($gotenbergExists) {
-            docker start gotenberg
-        } else {
-            docker run -d --name gotenberg -p 3000:3000 gotenberg/gotenberg:8
-        }
-    }
-
-    $gotenbergReady = $false
-    for ($i = 0; $i -lt 15; $i++) {
-        if (Test-Port 3000) {
-            $gotenbergReady = $true
-            break
-        }
-        Start-Sleep -Seconds 1
-    }
-
-    if (-not $gotenbergReady) {
-        [System.Windows.Forms.MessageBox]::Show(
-            "Gotenberg n'a pas démarré correctement sur le port 3000.",
-            "Erreur Gotenberg",
-            [System.Windows.Forms.MessageBoxButtons]::OK,
-            [System.Windows.Forms.MessageBoxIcon]::Error
-        )
-
-        $statusLabel.Text = "Statut : GOTENBERG ERROR"
-        $statusLabel.ForeColor = [System.Drawing.Color]::Red
-        $form.Refresh()
-        return
-    }
-
-    # MAILPIT
-    $statusLabel.Text = "Statut : STARTING MAILPIT..."
-    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
-    $form.Refresh()
-
-    $mailpitRunning = docker ps -q --filter name=mailpit
-
-    if (-not $mailpitRunning) {
-        $mailpitExists = docker ps -aq --filter name=mailpit
-
-        if ($mailpitExists) {
-            docker start mailpit
-        } else {
-            docker run -d --name mailpit -p 8026:8025 -p 1025:1025 axllent/mailpit
-        }
-    }
-
-    $mailpitReady = $false
-    for ($i = 0; $i -lt 15; $i++) {
-        if (Test-Port 1025) {
-            $mailpitReady = $true
-            break
-        }
-        Start-Sleep -Seconds 1
-    }
-
-    if (-not $mailpitReady) {
-        [System.Windows.Forms.MessageBox]::Show(
-            "Mailpit n'a pas démarré correctement sur le port 1025.",
-            "Erreur Mailpit",
-            [System.Windows.Forms.MessageBoxButtons]::OK,
-            [System.Windows.Forms.MessageBoxIcon]::Error
-        )
-
-        $statusLabel.Text = "Statut : MAILPIT ERROR"
-        $statusLabel.ForeColor = [System.Drawing.Color]::Red
-        $form.Refresh()
-        return
-    }
-
-    # SYMFONY
-    $statusLabel.Text = "Statut : STARTING SYMFONY..."
-    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
-    $form.Refresh()
-
-    Start-Process powershell -WindowStyle Hidden `
-    -ArgumentList "-Command", "cd '$projectPath'; symfony server:start"
-
-    Start-Sleep -Seconds 3
-
-    Start-Process "http://127.0.0.1:8000"
-
-    $statusLabel.Text = "Statut : APP LAUNCHED"
-    $statusLabel.ForeColor = [System.Drawing.Color]::Green
-    $form.Refresh()
+$form.Add_Shown({
+    Update-LaragonStatus
 })
 
-# =========================================================
-# BOUTON OFF
-# =========================================================
-$buttonOff = New-Object System.Windows.Forms.Button
-$buttonOff.Text = "OFF"
-$buttonOff.Width = 220
-$buttonOff.Height = 40
-$buttonOff.Left = 50
-$buttonOff.Top = 110
-
-$buttonOff.Add_Click({
-
-    $statusLabel.Text = "Statut : CLOSING..."
-    $statusLabel.ForeColor = [System.Drawing.Color]::Orange
-    $form.Refresh()
-
-    for ($i = 1; $i -le 3; $i++) {
-        $points = "." * $i
-        $statusLabel.Text = "Statut : CLOSING$points"
-        $form.Refresh()
-        Start-Sleep -Milliseconds 500
-    }
-
-    Start-Process powershell -WindowStyle Hidden `
-    -ArgumentList "-Command", "cd '$projectPath'; symfony server:stop"
-
-    docker stop gotenberg 2>$null
-    docker stop mailpit 2>$null
-
-    Start-Sleep -Seconds 2
-
-    $statusLabel.Text = "Statut : APP CLOSED"
-    $statusLabel.ForeColor = [System.Drawing.Color]::Red
-    $form.Refresh()
-
-    Start-Sleep -Seconds 2
-    $form.Close()
-})
-
-# =========================================================
-# AJOUT ELEMENTS
-# =========================================================
-$form.Controls.Add($infoLabel)
-$form.Controls.Add($buttonOn)
-$form.Controls.Add($buttonOff)
-$form.Controls.Add($statusLabel)
-
-# =========================================================
-# ARRÊT PROPRE DU TIMER À LA FERMETURE
-# =========================================================
 $form.Add_FormClosed({
     $laragonTimer.Stop()
 })

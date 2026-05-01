@@ -69,8 +69,8 @@
                     </a>
                 </li>
 
-                {# ===== MAILPIT ===== #}
-            {% if is_granted('ROLE_ADMIN') %}
+ {# ===== MAILPIT ===== #}
+{% if is_granted('ROLE_ADMIN') %}
     <li class="nav-item ms-lg-4">
         <a
             class="nav-link d-flex align-items-center"
@@ -152,3 +152,39 @@
         </div>
     </div>
 </nav>
+{% if is_granted('ROLE_ADMIN') %}
+    <div
+        class="modal fade"
+        id="mailpitModal"
+        tabindex="-1"
+        aria-labelledby="mailpitModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mailpitModalLabel">
+                        <i class="fa-solid fa-envelope-open-text me-2"></i>
+                        Mailpit
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+
+                <div class="modal-body p-0" style="height: 75vh;">
+                    <iframe
+                        src="http://127.0.0.1:8025"
+                        style="width: 100%; height: 100%; border: 0; background: white;"
+                    ></iframe>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endif %}
