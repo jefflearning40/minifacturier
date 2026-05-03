@@ -1,183 +1,112 @@
 {{ form_start(form) }}
 
-<div class="container py-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+        <h2 class="h4 mb-1">Facture</h2>
+        <p class="text-muted mb-0">Création / modification</p>
+    </div>
 
-            <div class="d-flex justify-content-between align-items-start mb-4">
-                <div>
-                    <h1 class="h3 mb-1">Facture</h1>
-                    <p class="text-muted mb-0">Création / modification d'une facture</p>
-                </div>
+    <div class="text-end">
+        <div class="mb-3">
+            {{ form_label(form.numberInvoice) }}
+            {{ form_widget(form.numberInvoice, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.numberInvoice) }}
+        </div>
 
-                <div class="text-end">
-                    <div class="mb-3">
-                        {{ form_label(form.numberInvoice) }}
-                        {{ form_widget(form.numberInvoice, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(form.numberInvoice) }}
-                    </div>
-
-                    <div>
-                        {{ form_label(form.saleDate) }}
-                        {{ form_widget(form.saleDate, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(form.saleDate) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="border rounded p-3 h-100 bg-light-subtle">
-                        <h2 class="h6 text-uppercase text-muted mb-3">Vendeur</h2>
-                        {{ form_row(form.seller) }}
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="border rounded p-3 h-100 bg-light-subtle">
-                        <h2 class="h6 text-uppercase text-muted mb-3">Client</h2>
-                        {{ form_row(form.customer) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="alert alert-warning d-none" id="invoice-alert">
-                Veuillez sélectionner un produit et renseigner une quantité minimum de 1.
-            </div>
-
-            <div class="border rounded overflow-hidden mb-4">
-                <div class="table-responsive">
-                    <table class="table align-middle mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th style="min-width: 320px;">Produit</th>
-                                <th style="min-width: 140px;">Prix unitaire HT</th>
-                                <th style="min-width: 120px;">Quantité</th>
-                                <th style="min-width: 140px;">Total ligne HT</th>
-                                <th style="width: 120px;">Action</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="invoice-items-wrapper">
-                            {% for itemForm in form.invoiceItems %}
-                                <tr class="invoice-item">
-                                    <td>
-                                        {{ form_widget(itemForm.product) }}
-                                        {{ form_errors(itemForm.product) }}
-                                    </td>
-                                    <td>
-                                        {{ form_widget(itemForm.price) }}
-                                        {{ form_errors(itemForm.price) }}
-                                    </td>
-                                    <td>
-                                        {{ form_widget(itemForm.quantity) }}
-                                        {{ form_errors(itemForm.quantity) }}
-                                    </td>
-                                    <td>
-                                        <div class="form-control bg-light text-end fw-semibold line-total-display">0.00 €</div>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm remove-item">
-                                            Supprimer
-                                        </button>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr class="invoice-item-empty-placeholder d-none">
-                                    <td colspan="5" class="text-center text-muted py-4">
-                                        Aucune ligne de facture
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div
-                id="invoice-item-prototype"
-                data-prototype="
-                    <tr class='invoice-item'>
-                        <td>
-                            {{ form_widget(form.invoiceItems.vars.prototype.product)|e('html_attr') }}
-                        </td>
-                        <td>
-                            {{ form_widget(form.invoiceItems.vars.prototype.price)|e('html_attr') }}
-                        </td>
-                        <td>
-                            {{ form_widget(form.invoiceItems.vars.prototype.quantity)|e('html_attr') }}
-                        </td>
-                        <td>
-                            <div class='form-control bg-light text-end fw-semibold line-total-display'>0.00 €</div>
-                        </td>
-                        <td class='text-center'>
-                            <button type='button' class='btn btn-outline-danger btn-sm remove-item'>
-                                Supprimer
-                            </button>
-                        </td>
-                    </tr>
-                "
-            ></div>
-
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
-                <button type="button" id="add-invoice-item" class="btn btn-outline-dark">
-                    Ajouter une ligne produit
-                </button>
-
-                <div class="ms-auto">
-                    <div class="border rounded px-4 py-3 bg-light text-end">
-                        <div class="small text-muted text-uppercase mb-1">Total HT estimé</div>
-                        <div class="fs-4 fw-bold" id="invoice-grand-total">0.00 €</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-end gap-2 mt-4">
-                <button class="btn btn-primary px-4" id="invoice-submit" disabled>
-                    {{ button_label|default('Enregistrer') }}
-                </button>
-            </div>
-
+        <div>
+            {{ form_label(form.saleDate) }}
+            {{ form_widget(form.saleDate, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.saleDate) }}
         </div>
     </div>
 </div>
 
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="border rounded p-3 h-100 bg-light-subtle">
+            <h3 class="h6 text-uppercase text-muted mb-3">Vendeur</h3>
+            {{ form_row(form.seller) }}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="border rounded p-3 h-100 bg-light-subtle">
+            <h3 class="h6 text-uppercase text-muted mb-3">Client</h3>
+            {{ form_row(form.customer) }}
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-warning d-none" id="invoice-alert">
+    Veuillez sélectionner un produit et une quantité valide.
+</div>
+
+<div class="border rounded overflow-hidden mb-4">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Qté</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="invoice-items-wrapper">
+                {% for itemForm in form.invoiceItems %}
+                    <tr class="invoice-item">
+                        <td>{{ form_widget(itemForm.product) }}</td>
+                        <td>{{ form_widget(itemForm.price) }}</td>
+                        <td>{{ form_widget(itemForm.quantity) }}</td>
+                        <td>
+                            <div class="form-control bg-light text-end fw-semibold line-total-display">
+                                0.00 €
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-outline-danger btn-sm remove-item">
+                                ✕
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div
+    id="invoice-item-prototype"
+    data-prototype="
+        <tr class='invoice-item'>
+            <td>{{ form_widget(form.invoiceItems.vars.prototype.product)|e('html_attr') }}</td>
+            <td>{{ form_widget(form.invoiceItems.vars.prototype.price)|e('html_attr') }}</td>
+            <td>{{ form_widget(form.invoiceItems.vars.prototype.quantity)|e('html_attr') }}</td>
+            <td><div class='form-control bg-light text-end fw-semibold'>0.00 €</div></td>
+            <td class='text-center'>
+                <button type='button' class='btn btn-outline-danger btn-sm remove-item'>✕</button>
+            </td>
+        </tr>
+    "
+></div>
+
+<div class="d-flex justify-content-between align-items-center mt-4">
+    <button type="button" id="add-invoice-item" class="btn btn-outline-dark">
+        + Ligne produit
+    </button>
+
+    <div class="border rounded px-4 py-2 bg-light text-end">
+        <div class="small text-muted">Total HT</div>
+        <div class="fw-bold" id="invoice-grand-total">0.00 €</div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end mt-4">
+    <button class="btn btn-primary px-4" id="invoice-submit" disabled>
+        {{ button_label|default('Enregistrer') }}
+    </button>
+</div>
+
 {{ form_end(form) }}
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const button = document.getElementById('invoice-submit');
-    const alertBox = document.getElementById('invoice-alert');
-    const wrapper = document.getElementById('invoice-items-wrapper');
-
-    function validateInvoiceForm() {
-        const rows = wrapper.querySelectorAll('.invoice-item');
-        let valid = rows.length > 0;
-
-        rows.forEach(row => {
-            const product = row.querySelector('select');
-            const quantity = row.querySelector('input[name*="[quantity]"]');
-
-            if (!product || !quantity) {
-                valid = false;
-                return;
-            }
-
-            if (!product.value || quantity.value === '' || parseInt(quantity.value, 10) < 1) {
-                valid = false;
-            }
-        });
-
-        button.disabled = !valid;
-        alertBox.classList.toggle('d-none', valid);
-    }
-
-    document.addEventListener('input', validateInvoiceForm);
-    document.addEventListener('change', validateInvoiceForm);
-    document.addEventListener('click', function () {
-        setTimeout(validateInvoiceForm, 100);
-    });
-
-    validateInvoiceForm();
-});
-</script>
