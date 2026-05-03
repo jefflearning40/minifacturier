@@ -1,35 +1,35 @@
-<footer class="bg-dark text-white mt-5 py-4">
+<footer class="bg-dark text-white mt-4 py-2">
     <div class="container">
 
-        <div class="row text-center text-md-start">
+        <div class="row text-center text-md-start gy-2">
 
-            <div class="col-md-4 mb-3">
-                <h5 class="fw-semibold">
-                    <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+            <div class="col-md-4">
+                <h6 class="fw-semibold mb-1 small">
+                    <i class="fa-solid fa-file-invoice-dollar me-1"></i>
                     MiniFacturier
-                </h5>
-                <p class="text-white-50 mb-0">
-                    Application de gestion de factures avec génération PDF et envoi d'emails.
+                </h6>
+                <p class="text-white-50 small mb-0">
+                    Gestion de factures PDF.
                 </p>
             </div>
 
-            <div class="col-md-4 mb-3">
-                <h5 class="fw-semibold">
-                    <i class="fa-solid fa-circle-info me-2"></i>
-                    Informations
-                </h5>
-                <ul class="list-unstyled mb-0">
-                    <li>
+            <div class="col-md-4">
+                <h6 class="fw-semibold mb-1 small">
+                    <i class="fa-solid fa-circle-info me-1"></i>
+                    Infos
+                </h6>
+                <ul class="list-unstyled small mb-0">
+                    <li class="mb-0">
                         <a href="{{ path('app_legal_mentions') }}" class="text-white-50 text-decoration-none">
                             Mentions légales
                         </a>
                     </li>
-                    <li>
+                    <li class="mb-0">
                         <a href="{{ path('app_rgpd') }}" class="text-white-50 text-decoration-none">
-                            Politique RGPD
+                            RGPD
                         </a>
                     </li>
-                    <li>
+                    <li class="mb-0">
                         <a href="{{ path('app_contact') }}" class="text-white-50 text-decoration-none">
                             Contact
                         </a>
@@ -37,27 +37,22 @@
                 </ul>
             </div>
 
-            <div class="col-md-4 mb-3">
-                <h5 class="fw-semibold">
-                    <i class="fa-solid fa-gears me-2"></i>
-                    Technologies
-                </h5>
-                <p class="text-white-50 mb-1">
-                    Laragon. HEIDISQL . MariaDB . Symfony · Twig · Doctrine · Bootstrap
-                </p>
-                <p class="text-white-50 mb-0">
-                    Gotenberg · Mailpit · Docker . powerShell
+            <div class="col-md-4">
+                <h6 class="fw-semibold mb-1 small">
+                    <i class="fa-solid fa-gears me-1"></i>
+                    Tech
+                </h6>
+                <p class="text-white-50 small mb-0">
+                    Symfony · Twig · Bootstrap
                 </p>
             </div>
 
         </div>
 
-        <hr class="border-secondary">
+        <hr class="border-secondary my-1">
 
-        <div class="text-center text-white-50">
-            <small>
-                © {{ "now"|date("Y") }} MiniFacturier — Projet d'examen
-            </small>
+        <div class="text-center text-white-50 small">
+            © {{ "now"|date("Y") }} MiniFacturier
         </div>
 
     </div>

@@ -3,112 +3,62 @@
 {% block title %}MiniFacturier{% endblock %}
 
 {% block body %}
-<div class="container h-100 d-flex flex-column justify-content-center py-4">
+<div class="d-flex flex-column justify-content-center" style="min-height: calc(100vh - 200px);">
 
-    <div class="text-center mb-5">
-        <h1 class="fw-bold mb-3">MiniFacturier</h1>
-        <p class="lead mb-2">
-            Gérez vos clients, vendeurs et factures simplement
-        </p>
-        <p class="text-muted mb-0">
-            Interface rapide et efficace pour votre activité
-        </p>
+    <div class="text-center mb-3">
+        <h1 class="fw-bold mb-1">MiniFacturier</h1>
+        <p class="text-muted small mb-0">Gestion des vendeurs, clients et factures</p>
     </div>
 
-    <div class="row g-4 text-center justify-content-center">
+    <div class="row g-3 row-gap-4 justify-content-center">
 
-        <div class="col-md-6 col-lg-4">
-            <div class="border rounded-4 p-4 h-100">
-                <div class="mb-3">
-                    <i class="fa-solid fa-user-group fa-2x text-primary"></i>
-                </div>
-                <h3 class="h5 fw-bold mb-3">Clients</h3>
-                <p class="text-muted mb-4">
-                    Gérez les informations de vos clients rapidement.
-                </p>
-                <a href="{{ path('app_customer_index') }}" class="btn btn-primary w-100">
-                    Voir les clients
-                </a>
+        <div class="col-sm-6 col-lg-3">
+            <div class="border rounded-4 p-3 text-center h-100">
+                <i class="fa-solid fa-user-group text-primary fs-4 mb-2"></i>
+                <h3 class="h6 fw-bold mb-1">Clients</h3>
+                <p class="text-muted small mb-2">Gérez vos clients</p>
+                <a href="{{ path('app_customer_index') }}" class="btn btn-primary btn-sm w-100">Voir</a>
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-4">
-            <div class="border rounded-4 p-4 h-100">
-                <div class="mb-3">
-                    <i class="fa-solid fa-user-tie fa-2x text-success"></i>
-                </div>
-                <h3 class="h5 fw-bold mb-3">Vendeurs</h3>
-                <p class="text-muted mb-4">
-                    Consultez et modifiez vos vendeurs facilement.
-                </p>
-                <a href="{{ path('app_seller_index') }}" class="btn btn-success w-100">
-                    Voir les vendeurs
-                </a>
+        <div class="col-sm-6 col-lg-3">
+            <div class="border rounded-4 p-3 text-center h-100">
+                <i class="fa-solid fa-user-tie text-success fs-4 mb-2"></i>
+                <h3 class="h6 fw-bold mb-1">Vendeurs</h3>
+                <p class="text-muted small mb-2">Gérez vos vendeurs</p>
+                <a href="{{ path('app_seller_index') }}" class="btn btn-success btn-sm w-100">Voir</a>
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-4">
-            <div class="border rounded-4 p-4 h-100">
-                <div class="mb-3">
-                    <i class="fa-solid fa-file-invoice-dollar fa-2x text-warning"></i>
-                </div>
-                <h3 class="h5 fw-bold mb-3">Factures</h3>
-                <p class="text-muted mb-4">
-                    Créez et suivez vos factures en toute simplicité.
-                </p>
-                <a href="{{ path('app_invoice_index') }}" class="btn btn-warning w-100">
-                    Voir les factures
-                </a>
+        <div class="col-sm-6 col-lg-3">
+            <div class="border rounded-4 p-3 text-center h-100">
+                <i class="fa-solid fa-file-invoice-dollar text-warning fs-4 mb-2"></i>
+                <h3 class="h6 fw-bold mb-1">Factures</h3>
+                <p class="text-muted small mb-2">Suivi des factures</p>
+                <a href="{{ path('app_invoice_index') }}" class="btn btn-warning btn-sm w-100">Voir</a>
             </div>
         </div>
 
-        <div class="col-md-6 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}col-lg-4{% else %}col-lg-6{% endif %}">
-            <div class="border rounded-4 p-4 h-100">
-                <div class="mb-3">
-                    <i class="fa-solid fa-book fa-2x text-dark"></i>
-                </div>
-                <h3 class="h5 fw-bold mb-3">Catalogue</h3>
-                <p class="text-muted mb-4">
-                    Consultez les produits disponibles dans le catalogue.
-                </p>
-                <a href="{{ path('app_catalog_index') }}" class="btn btn-dark w-100">
-                    Voir le catalogue
-                </a>
+        <div class="col-sm-6 col-lg-3">
+            <div class="border rounded-4 p-3 text-center h-100">
+                <i class="fa-solid fa-book text-dark fs-4 mb-2"></i>
+                <h3 class="h6 fw-bold mb-1">Catalogue</h3>
+                <p class="text-muted small mb-2">Produits</p>
+                <a href="{{ path('app_catalog_index') }}" class="btn btn-dark btn-sm w-100">Voir</a>
             </div>
         </div>
 
         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
-            <div class="col-md-6 col-lg-4">
-                <div class="border rounded-4 p-4 h-100">
-                    <div class="mb-3">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <i class="fa-solid fa-chart-pie fa-2x text-info"></i>
-                        {% elseif is_granted('ROLE_SELLER') %}
-                            <i class="fa-solid fa-chart-column fa-2x text-info"></i>
-                        {% endif %}
-                    </div>
-
-                    <h3 class="h5 fw-bold mb-3">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            Statistiques admin
-                        {% elseif is_granted('ROLE_SELLER') %}
-                            Mes statistiques
-                        {% endif %}
-                    </h3>
-
-                    <p class="text-muted mb-4">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            Analysez les ventes globales et suivez les performances générales.
-                        {% elseif is_granted('ROLE_SELLER') %}
-                            Consultez vos ventes et suivez vos performances personnelles.
-                        {% endif %}
-                    </p>
-
+            <div class="col-sm-6 col-lg-3">
+                <div class="border rounded-4 p-3 text-center h-100">
+                    <i class="fa-solid fa-chart-pie text-info fs-4 mb-2"></i>
+                    <h3 class="h6 fw-bold mb-1">Stats</h3>
+                    <p class="text-muted small mb-2">Performances</p>
                     <a
-                        href="{% if is_granted('ROLE_ADMIN') %}{{ path('app_statistics_admin') }}{% elseif is_granted('ROLE_SELLER') %}{{ path('app_statistics_seller') }}{% endif %}"
-                        class="btn btn-info text-white w-100"
+                        href="{% if is_granted('ROLE_ADMIN') %}{{ path('app_statistics_admin') }}{% else %}{{ path('app_statistics_seller') }}{% endif %}"
+                        class="btn btn-info btn-sm text-white w-100"
                     >
-                        Accéder aux statistiques
+                        Voir
                     </a>
                 </div>
             </div>

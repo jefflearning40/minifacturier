@@ -1,0 +1,64 @@
+<footer class="bg-dark text-white mt-5 py-4">
+    <div class="container">
+
+        <div class="row text-center text-md-start">
+
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                    MiniFacturier
+                </h5>
+                <p class="text-white-50 mb-0">
+                    Application de gestion de factures avec génération PDF et envoi d'emails.
+                </p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-circle-info me-2"></i>
+                    Informations
+                </h5>
+                <ul class="list-unstyled mb-0">
+                    <li>
+                        <a href="{{ path('app_legal_mentions') }}" class="text-white-50 text-decoration-none">
+                            Mentions légales
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_rgpd') }}" class="text-white-50 text-decoration-none">
+                            Politique RGPD
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_contact') }}" class="text-white-50 text-decoration-none">
+                            Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-gears me-2"></i>
+                    Technologies
+                </h5>
+                <p class="text-white-50 mb-1">
+                    Laragon. HEIDISQL . MariaDB . Symfony · Twig · Doctrine · Bootstrap
+                </p>
+                <p class="text-white-50 mb-0">
+                    Gotenberg · Mailpit · Docker . powerShell
+                </p>
+            </div>
+
+        </div>
+
+        <hr class="border-secondary">
+
+        <div class="text-center text-white-50">
+            <small>
+                © {{ "now"|date("Y") }} MiniFacturier — Projet d'examen
+            </small>
+        </div>
+
+    </div>
+</footer>

@@ -13,11 +13,12 @@
     {% block stylesheets %}{% endblock %}
 </head>
 
-<body class="d-flex flex-column vh-100">
+<body class="d-flex flex-column min-vh-100">
 
     {% include 'components/navbar.html.twig' %}
 
-    <main class="container flex-grow-1 overflow-auto py-3 mt-5 pt-3">
+    
+    <main class="container flex-grow-1 py-2 pt-4">
         {% block body %}{% endblock %}
     </main>
 

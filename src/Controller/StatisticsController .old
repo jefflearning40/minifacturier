@@ -35,7 +35,6 @@ final class StatisticsController extends AbstractController
         $salesByProduct = $invoiceItemRepository->getSalesByProduct();
 
         $invoiceCountBySeller = $sellerRepository->getInvoiceCountBySeller();
-        $salesEvolution = $invoiceItemRepository->getSalesEvolutionTtc();
 
         return $this->render('statistics/admin.html.twig', [
             'totalSellers' => $totalSellers,
@@ -48,7 +47,6 @@ final class StatisticsController extends AbstractController
             'leastSoldProduct' => $leastSoldProduct,
             'salesByProduct' => $salesByProduct,
             'invoiceCountBySeller' => $invoiceCountBySeller,
-            'salesEvolution' => $salesEvolution,
         ]);
     }
 

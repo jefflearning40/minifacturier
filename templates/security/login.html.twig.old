@@ -1,0 +1,1065 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+
+    <h1 class="mb-4 text-center">Connexion</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <form method="post">
+
+                {% if error %}
+                    <div class="alert alert-danger">
+                        Identifiants invalides.
+                    </div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="alert alert-info">
+                        Vous êtes connecté en tant que {{ app.user.userIdentifier }}.
+                        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Adresse mail</label>
+                    <input
+                        type="email"
+                        value="{{ last_username }}"
+                        name="_username"
+                        id="username"
+                        class="form-control"
+                        autocomplete="email"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input
+                        type="password"
+                        name="_password"
+                        id="password"
+                        class="form-control"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="{{ csrf_token('authenticate') }}"
+                >
+
+                <div class="d-grid">
+                    <button class="btn btn-primary" type="submit">
+                        Se connecter
+                    </button>
+                </div>
+
+            </form>ChatGPT
+
+
+
+Image chargée
+je suis sous symfony laragon heidi sql ext je veux garder les boutons ou pas je sais pas mais comment puis je enjoliver cette page?
+
+Oui, tu peux garder les boutons/nav actuels, mais ta page gagnerait beaucoup avec une carte de connexion moderne au centre.
+
+Je te conseille :
+
+Mettre le formulaire dans une card Bootstrap
+
+Ajouter une petite icône au-dessus du titre
+
+Donner un fond légèrement dégradé à la zone principale
+
+Ajouter un lien “Mot de passe oublié ?”
+
+Garder le bouton bleu, mais avec arrondi + ombre légère
+
+Réduire un peu la hauteur vide entre le formulaire et le footer
+
+Exemple simple avec Bootstrap :
+
+<main class="login-page">
+    <div class="login-card shadow-lg">
+        <div class="text-center mb-4">
+            <i class="fa-solid fa-file-invoice-dollar login-icon"></i>
+            <h1>Connexion</h1>
+            <p class="text-muted">Accédez à votre espace MiniFacturier</p>
+        </div>
+
+        <form method="post">
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">Adresse mail</label>
+                <input type="email" name="email" id="inputEmail" class="form-control form-control-lg" required autofocus>
+            </div>
+
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword" class="form-control form-control-lg" required>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="remember_me" name="_remember_me">
+                    <label class="form-check-label" for="remember_me">
+                        Se souvenir de moi
+                    </label>
+                </div>
+
+                <a href="#" class="small">Mot de passe oublié ?</a>
+            </div>
+
+            <button class="btn btn-primary btn-lg w-100 login-btn" type="submit">
+                Se connecter
+            </button>
+        </form>
+    </div>
+</main>
+Et le CSS :
+
+.login-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(135deg, #f8f9fa, #eaf2ff);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 520px;
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+}
+
+.login-card h1 {
+    font-weight: 700;
+    color: #212529;
+}
+
+.login-icon {
+    font-size: 3rem;
+    color: #0d6efd;
+    margin-bottom: 1rem;
+}
+
+.login-btn {
+    border-radius: 0.8rem;
+    font-weight: 600;
+    padding: 0.8rem;
+}
+
+.form-control {
+    border-radius: 0.7rem;
+}
+Moi je garderais la navbar et le footer, mais je transformerais surtout le formulaire en bloc central élégant, comme une vraie page d’application professionnelle.
+
+
+mais je ne veux pass utriliser card
+
+Parfait 👍 si tu ne veux pas utiliser de card Bootstrap, tu peux quand même obtenir un rendu moderne et propre sans ce composant. En fait, une card n’est rien d’autre qu’un conteneur stylé — on peut le recréer “à la main” avec du CSS plus fin.
+
+👉 L’idée : garder une structure simple, mais jouer sur :
+
+les espacements
+
+les ombres légères
+
+les bordures arrondies
+
+un fond propre
+
+💡 Version sans card (propre et moderne)
+HTML (Twig)
+<main class="login-page">
+    <div class="login-container">
+
+        <div class="login-header">
+            <h1>Connexion</h1>
+            <p>Accédez à votre espace MiniFacturier</p>
+        </div>
+
+        <form method="post">
+
+            <div class="form-group">
+                <label for="inputEmail">Adresse mail</label>
+                <input type="email" name="email" id="inputEmail" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword" required>
+            </div>
+
+            <div class="login-options">
+                <label>
+                    <input type="checkbox" name="_remember_me">
+                    Se souvenir de moi
+                </label>
+
+                <a href="#">Mot de passe oublié ?</a>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Se connecter
+            </button>
+
+        </form>
+
+    </div>
+</main>
+🎨 CSS (le vrai travail est ici)
+.login-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f9fa, #eaf2ff);
+}
+
+.login-container {
+    width: 100%;
+    max-width: 480px;
+    padding: 2.5rem;
+}
+
+/* Header */
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.login-header p {
+    color: #6c757d;
+}
+
+/* Champs */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 0.6rem;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: #0d6efd;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+}
+
+/* Options */
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Bouton */
+.login-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 0.7rem;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background: #0b5ed7;
+    transform: translateY(-1px);
+}
+🔥 Résultat
+Sans utiliser card, tu obtiens :
+
+un design moderne ✔️
+
+centré ✔️
+
+propre et pro ✔️
+
+cohérent avec Symfony / Bootstrap ✔️
+
+💬 Mon conseil (important)
+👉 Tu peux garder ta navbar et ton footer (ils sont très bien)
+
+👉 Le vrai problème de ta page actuelle :
+
+trop “plate”
+
+pas de hiérarchie visuelle
+
+👉 Avec ce style :
+
+le regard va direct sur le formulaire
+
+ça fait appli SaaS (pro)
+
+Si tu veux, je peux aller plus loin :
+👉 version sombre
+👉 animation au focus
+👉 effet glassmorphism (très stylé 😏)
+
+
+voici mon template actuel : login.html.twig :
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+
+    <h1 class="mb-4 text-center">Connexion</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <form method="post">
+
+                {% if error %}
+                    <div class="alert alert-danger">
+                        Identifiants invalides.
+                    </div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="alert alert-info">
+                        Vous êtes connecté en tant que {{ app.user.userIdentifier }}.
+                        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Adresse mail</label>
+                    <input
+                        type="email"
+                        value="{{ last_username }}"
+                        name="_username"
+                        id="username"
+                        class="form-control"
+                        autocomplete="email"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input
+                        type="password"
+                        name="_password"
+                        id="password"
+                        class="form-control"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="{{ csrf_token('authenticate') }}"
+                >
+
+                <div class="d-grid">
+                    <button class="btn btn-primary" type="submit">
+                        Se connecter
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+mon base.html.twig :
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}MiniFacturier{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body class="d-flex flex-column vh-100">
+
+    {% include 'components/navbar.html.twig' %}
+
+    <main class="container flex-grow-1 overflow-auto py-3 mt-5 pt-3">
+        {% block body %}{% endblock %}
+    </main>
+
+    {% include 'components/footer.html.twig' %}
+
+    {# ===== MODAL MAILPIT ===== #}
+    <div class="modal fade" id="mailpitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-envelope-open-text me-2"></i>
+                        Mailpit
+                    </h5>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <iframe
+                        src="http://localhost:8026"
+                        style="width: 100%; height: 80vh; border: none;"
+                    ></iframe>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {# ===== MODAL flash ===== #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="modal fade" id="flashModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <div class="modal-header
+                            {% if label == 'success' %}
+                                bg-success text-white
+                            {% elseif label == 'danger' %}
+                                bg-danger text-white
+                            {% else %}
+                                bg-secondary text-white
+                            {% endif %}
+                        ">
+                            <h5 class="modal-title">
+                                {% if label == 'success' %}
+                                    Succès
+                                {% elseif label == 'danger' %}
+                                    Erreur
+                                {% else %}
+                                    Information
+                                {% endif %}
+                            </h5>
+
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            {{ message }}
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Fermer
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/base.js') }}"></script>
+    <script src="{{ asset('js/stats.js') }}"></script>
+    {% block javascripts %}{% endblock %}
+
+</body>
+</html>
+mon home/index.html.twig :
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}MiniFacturier{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body class="d-flex flex-column vh-100">
+
+    {% include 'components/navbar.html.twig' %}
+
+    <main class="container flex-grow-1 overflow-auto py-3 mt-5 pt-3">
+        {% block body %}{% endblock %}
+    </main>
+
+    {% include 'components/footer.html.twig' %}
+
+    {# ===== MODAL MAILPIT ===== #}
+    <div class="modal fade" id="mailpitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-envelope-open-text me-2"></i>
+                        Mailpit
+                    </h5>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <iframe
+                        src="http://localhost:8026"
+                        style="width: 100%; height: 80vh; border: none;"
+                    ></iframe>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {# ===== MODAL flash ===== #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="modal fade" id="flashModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <div class="modal-header
+                            {% if label == 'success' %}
+                                bg-success text-white
+                            {% elseif label == 'danger' %}
+                                bg-danger text-white
+                            {% else %}
+                                bg-secondary text-white
+                            {% endif %}
+                        ">
+                            <h5 class="modal-title">
+                                {% if label == 'success' %}
+                                    Succès
+                                {% elseif label == 'danger' %}
+                                    Erreur
+                                {% else %}
+                                    Information
+                                {% endif %}
+                            </h5>
+
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            {{ message }}
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Fermer
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/base.js') }}"></script>
+    <script src="{{ asset('js/stats.js') }}"></script>
+    {% block javascripts %}{% endblock %}
+
+</body>
+</html>
+mon navbar.html.twig :
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+
+        <a class="navbar-brand fw-semibold" href="{{ path('app_home') }}">
+            MiniFacturier
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_home') }}">
+                        <i class="fa-solid fa-house me-1"></i> Accueil
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user-group me-1"></i> Clients
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ path('app_customer_index') }}">Liste des clients</a></li>
+
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
+                            <li><a class="dropdown-item" href="{{ path('app_customer_new') }}">Ajouter un client</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-file-invoice-dollar me-1"></i> Factures
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ path('app_invoice_index') }}">Liste des factures</a></li>
+
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
+                            <li><a class="dropdown-item" href="{{ path('app_invoice_new') }}">Ajouter une facture</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user-tie me-1"></i> Vendeurs
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ path('app_seller_index') }}">Liste des vendeurs</a></li>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a class="dropdown-item" href="{{ path('app_seller_new') }}">Ajouter un vendeur</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_catalog_index') }}">
+                        <i class="fa-solid fa-book me-1"></i> Catalogue
+                    </a>
+                </li>
+
+ {# ===== MAILPIT ===== #}
+{% if is_granted('ROLE_ADMIN') %}
+    <li class="nav-item ms-lg-4">
+        <a
+            class="nav-link d-flex align-items-center"
+            href="#"
+            data-bs-toggle="modal"
+            data-bs-target="#mailpitModal"
+        >
+            <i class="fa-solid fa-envelope me-2"></i>
+            Mailpit
+        </a>
+    </li>
+{% endif %}
+
+                {# ===== ADMIN ===== #}
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
+                    <li class="nav-item dropdown ms-lg-3">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-chart-line me-1"></i>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                Admin
+                            {% else %}
+                                Mes stats
+                            {% endif %}
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_statistics_admin') }}">
+                                        Tableau admin
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_SELLER') %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_statistics_seller') }}">
+                                        Mes statistiques
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                {% endif %}
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+
+                {% if app.user %}
+                    <li class="nav-item">
+                        <span class="nav-link text-light">
+                            <i class="fa-solid fa-user me-1"></i>
+                            {{ app.user.firstname }} {{ app.user.lastname }}
+                        </span>
+                    </li>
+
+                    <li class="nav-item d-none d-lg-block">
+                        <span class="nav-link text-secondary">|</span>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>
+                            Se déconnecter
+                        </a>
+                    </li>
+
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">
+                            Se connecter
+                        </a>
+                    </li>
+                {% endif %}
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+{% if is_granted('ROLE_ADMIN') %}
+    <div
+        class="modal fade"
+        id="mailpitModal"
+        tabindex="-1"
+        aria-labelledby="mailpitModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mailpitModalLabel">
+                        <i class="fa-solid fa-envelope-open-text me-2"></i>
+                        Mailpit
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+
+                <div class="modal-body p-0" style="height: 75vh;">
+                    <iframe
+                        src="http://127.0.0.1:8025"
+                        style="width: 100%; height: 100%; border: 0; background: white;"
+                    ></iframe>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endif %}
+mon footer.html.twig :
+<footer class="bg-dark text-white mt-5 py-4">
+    <div class="container">
+
+        <div class="row text-center text-md-start">
+
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                    MiniFacturier
+                </h5>
+                <p class="text-white-50 mb-0">
+                    Application de gestion de factures avec génération PDF et envoi d'emails.
+                </p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-circle-info me-2"></i>
+                    Informations
+                </h5>
+                <ul class="list-unstyled mb-0">
+                    <li>
+                        <a href="{{ path('app_legal_mentions') }}" class="text-white-50 text-decoration-none">
+                            Mentions légales
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_rgpd') }}" class="text-white-50 text-decoration-none">
+                            Politique RGPD
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_contact') }}" class="text-white-50 text-decoration-none">
+                            Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-semibold">
+                    <i class="fa-solid fa-gears me-2"></i>
+                    Technologies
+                </h5>
+                <p class="text-white-50 mb-1">
+                    Laragon. HEIDISQL . MariaDB . Symfony · Twig · Doctrine · Bootstrap
+                </p>
+                <p class="text-white-50 mb-0">
+                    Gotenberg · Mailpit · Docker . powerShell
+                </p>
+            </div>
+
+        </div>
+
+        <hr class="border-secondary">
+
+        <div class="text-center text-white-50">
+            <small>
+                © {{ "now"|date("Y") }} MiniFacturier — Projet d'examen
+            </small>
+        </div>
+
+    </div>
+</footer>  est ce que tu as assez d'elements pour proposer quelque chose sans casser les lien et le system
+
+Oui, tu as donné assez d’éléments. Le plus important : on ne touche pas aux path(), au _csrf_token, aux noms _username / _password, ni à app.user. On change surtout la structure visuelle et le CSS.
+
+Remplace ton login.html.twig par ceci :
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+<section class="login-section">
+
+    <div class="login-wrapper">
+
+        <div class="login-title">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <h1>Connexion</h1>
+            <p>Accédez à votre espace MiniFacturier</p>
+        </div>
+
+        <form method="post" class="login-form">
+
+            {% if error %}
+                <div class="alert alert-danger">
+                    Identifiants invalides.
+                </div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="alert alert-info">
+                    Vous êtes connecté en tant que {{ app.user.userIdentifier }}.
+                    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                </div>
+            {% endif %}
+
+            <div class="login-field">
+                <label for="username">Adresse mail</label>
+                <div class="login-input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input
+                        type="email"
+                        value="{{ last_username }}"
+                        name="_username"
+                        id="username"
+                        autocomplete="email"
+                        required
+                        autofocus
+                    >
+                </div>
+            </div>
+
+            <div class="login-field">
+                <label for="password">Mot de passe</label>
+                <div class="login-input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input
+                        type="password"
+                        name="_password"
+                        id="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+            </div>
+
+            <input
+                type="hidden"
+                name="_csrf_token"
+                value="{{ csrf_token('authenticate') }}"
+            >
+
+            <button class="login-button" type="submit">
+                Se connecter
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+{% endblock %}
+Crée ensuite le fichier :
+
+public/css/login.css
+
+.login-section {
+    min-height: calc(100vh - 260px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 500px;
+}
+
+.login-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-title i {
+    font-size: 3rem;
+    color: #0d6efd;
+    margin-bottom: 1rem;
+}
+
+.login-title h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #212529;
+}
+
+.login-title p {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+.login-form {
+    padding: 0.5rem;
+}
+
+.login-field {
+    margin-bottom: 1.4rem;
+}
+
+.login-field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.login-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #dee2e6;
+    border-radius: 0.8rem;
+    padding: 0 0.9rem;
+    background: #fff;
+    transition: 0.2s ease;
+}
+
+.login-input-group i {
+    color: #6c757d;
+    margin-right: 0.8rem;
+}
+
+.login-input-group input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0.85rem 0;
+    background: transparent;
+}
+
+.login-input-group:focus-within {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.login-button {
+    width: 100%;
+    border: none;
+    border-radius: 0.8rem;
+    padding: 0.9rem;
+    background: #0d6efd;
+    color: white;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.login-button:hover {
+    background: #0b5ed7;
+    transform: translateY(-1px);
+}
+Et oui : ça ne casse pas ton système Symfony, car les champs importants restent identiques :
+
+name="_username"
+name="_password"
+name="_csrf_token"
+value="{{ csrf_token('authenticate') }}"
+Petite remarque : tu as une modale Mailpit dans base.html.twig et aussi dans navbar.html.twig. Il faudrait en garder une seule plus tard, sinon tu risques d’avoir deux fois le même id="mailpitModal".
+
+
+
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

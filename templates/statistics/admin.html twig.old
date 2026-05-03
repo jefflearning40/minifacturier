@@ -177,15 +177,15 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Graphique - Chiffre d'affaires TTC</h5>
+                <h5 class="modal-title">Graphique - Factures par vendeur</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <canvas
-                    id="salesEvolutionChart"
-                    data-labels="{{ salesEvolution|map(s => s.saleDate|date('d/m/Y'))|json_encode|e('html_attr') }}"
-                    data-values="{{ salesEvolution|map(s => s.totalTtc)|json_encode|e('html_attr') }}"
+                    id="sellerChart"
+                    data-labels="{{ invoiceCountBySeller|map(s => s.firstName ~ ' ' ~ s.lastName)|json_encode|e('html_attr') }}"
+                    data-values="{{ invoiceCountBySeller|map(s => s.totalInvoices)|json_encode|e('html_attr') }}"
                 ></canvas>
             </div>
 

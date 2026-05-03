@@ -120,17 +120,6 @@ class InvoiceItemRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function getSalesByProduct(): array
-    {
-        return $this->createQueryBuilder('ii')
-            ->select('ii.productName AS productName, ii.brand AS brand, SUM(ii.quantity) AS totalQuantity')
-            ->groupBy('ii.productName, ii.brand')
-            ->orderBy('totalQuantity', 'DESC')
-            ->addOrderBy('ii.productName', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
     public function getSellerSalesByProduct(Seller $seller): array
     {
         return $this->createQueryBuilder('ii')
@@ -144,18 +133,14 @@ class InvoiceItemRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    public function getSalesEvolutionTtc(): array
-    {
-        return $this->createQueryBuilder('ii')
-            ->join('ii.invoice', 'i')
-            ->select("
-                i.saleDate AS saleDate,
-                SUM((ii.price * ii.quantity) + ((ii.price * ii.quantity) * (ii.vatRate / 100))) AS totalTtc
-            ")
-            ->groupBy('i.saleDate')
-            ->orderBy('i.saleDate', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
+    public function getSalesByProduct(): array
+{
+    return $this->createQueryBuilder('ii')
+        ->select('ii.productName AS productName, ii.brand AS brand, SUM(ii.quantity) AS totalQuantity')
+        ->groupBy('ii.productName, ii.brand')
+        ->orderBy('totalQuantity', 'DESC')
+        ->addOrderBy('ii.productName', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
 }
