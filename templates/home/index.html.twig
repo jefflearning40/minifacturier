@@ -2,68 +2,94 @@
 
 {% block title %}MiniFacturier{% endblock %}
 
+{% block main_class %}container-fluid p-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/home.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="d-flex flex-column justify-content-center" style="min-height: calc(100vh - 200px);">
+<section class="home-section">
 
-    <div class="text-center mb-3">
-        <h1 class="fw-bold mb-1">MiniFacturier</h1>
-        <p class="text-muted small mb-0">Gestion des vendeurs, clients et factures</p>
-    </div>
+    <div class="home-wrapper">
 
-    <div class="row g-3 row-gap-4 justify-content-center">
-
-        <div class="col-sm-6 col-lg-3">
-            <div class="border rounded-4 p-3 text-center h-100">
-                <i class="fa-solid fa-user-group text-primary fs-4 mb-2"></i>
-                <h3 class="h6 fw-bold mb-1">Clients</h3>
-                <p class="text-muted small mb-2">Gérez vos clients</p>
-                <a href="{{ path('app_customer_index') }}" class="btn btn-primary btn-sm w-100">Voir</a>
-            </div>
+        <div class="text-center mb-4">
+            <h1 class="fw-bold mb-1">MiniFacturier</h1>
+            <p class="text-muted small mb-0">Gestion des vendeurs, clients et factures</p>
         </div>
 
-        <div class="col-sm-6 col-lg-3">
-            <div class="border rounded-4 p-3 text-center h-100">
-                <i class="fa-solid fa-user-tie text-success fs-4 mb-2"></i>
-                <h3 class="h6 fw-bold mb-1">Vendeurs</h3>
-                <p class="text-muted small mb-2">Gérez vos vendeurs</p>
-                <a href="{{ path('app_seller_index') }}" class="btn btn-success btn-sm w-100">Voir</a>
-            </div>
-        </div>
+        <div class="row g-4 justify-content-center">
 
-        <div class="col-sm-6 col-lg-3">
-            <div class="border rounded-4 p-3 text-center h-100">
-                <i class="fa-solid fa-file-invoice-dollar text-warning fs-4 mb-2"></i>
-                <h3 class="h6 fw-bold mb-1">Factures</h3>
-                <p class="text-muted small mb-2">Suivi des factures</p>
-                <a href="{{ path('app_invoice_index') }}" class="btn btn-warning btn-sm w-100">Voir</a>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-3">
-            <div class="border rounded-4 p-3 text-center h-100">
-                <i class="fa-solid fa-book text-dark fs-4 mb-2"></i>
-                <h3 class="h6 fw-bold mb-1">Catalogue</h3>
-                <p class="text-muted small mb-2">Produits</p>
-                <a href="{{ path('app_catalog_index') }}" class="btn btn-dark btn-sm w-100">Voir</a>
-            </div>
-        </div>
-
-        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
             <div class="col-sm-6 col-lg-3">
-                <div class="border rounded-4 p-3 text-center h-100">
-                    <i class="fa-solid fa-chart-pie text-info fs-4 mb-2"></i>
-                    <h3 class="h6 fw-bold mb-1">Stats</h3>
-                    <p class="text-muted small mb-2">Performances</p>
-                    <a
-                        href="{% if is_granted('ROLE_ADMIN') %}{{ path('app_statistics_admin') }}{% else %}{{ path('app_statistics_seller') }}{% endif %}"
-                        class="btn btn-info btn-sm text-white w-100"
-                    >
-                        Voir
-                    </a>
+                <div class="home-box">
+                    <i class="fa-solid fa-user-group text-primary mb-2"></i>
+                    <h3>Clients</h3>
+                    <p>Gérez vos clients</p>
+
+                    {{ include('components/buttons/_view.html.twig', {
+                        route: 'app_customer_index',
+                        color: 'btn-primary'
+                    }) }}
                 </div>
             </div>
-        {% endif %}
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="home-box">
+                    <i class="fa-solid fa-user-tie text-success mb-2"></i>
+                    <h3>Vendeurs</h3>
+                    <p>Gérez vos vendeurs</p>
+
+                    {{ include('components/buttons/_view.html.twig', {
+                        route: 'app_seller_index',
+                        color: 'btn-success'
+                    }) }}
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="home-box">
+                    <i class="fa-solid fa-file-invoice-dollar text-warning mb-2"></i>
+                    <h3>Factures</h3>
+                    <p>Suivi des factures</p>
+
+                    {{ include('components/buttons/_view.html.twig', {
+                        route: 'app_invoice_index',
+                        color: 'btn-warning'
+                    }) }}
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="home-box">
+                    <i class="fa-solid fa-book text-dark mb-2"></i>
+                    <h3>Catalogue</h3>
+                    <p>Produits</p>
+
+                    {{ include('components/buttons/_view.html.twig', {
+                        route: 'app_catalog_index',
+                        color: 'btn-secondary'
+                    }) }}
+                </div>
+            </div>
+
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
+                <div class="col-sm-6 col-lg-3">
+                    <div class="home-box">
+                        <i class="fa-solid fa-chart-pie text-info mb-2"></i>
+                        <h3>Stats</h3>
+                        <p>Performances</p>
+
+                        {{ include('components/buttons/_view.html.twig', {
+                            route: is_granted('ROLE_ADMIN') ? 'app_statistics_admin' : 'app_statistics_seller',
+                            color: 'btn-info text-white'
+                        }) }}
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
 
     </div>
-</div>
+
+</section>
 {% endblock %}

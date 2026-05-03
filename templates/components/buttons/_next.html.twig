@@ -3,6 +3,6 @@
     : 1 %}
 
 <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'page': nextPage})) }}"
-   class="btn btn-outline-primary d-flex align-items-center gap-2">
-    Suivant →
+class="btn btn-success btn-sm btn-pagination">
+    <i class="fa-solid fa-arrow-right"></i>
 </a>

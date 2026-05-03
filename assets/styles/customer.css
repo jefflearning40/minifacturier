@@ -1,0 +1,97 @@
+body {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    overflow: hidden;
+}
+
+main {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.customer-section {
+    flex: 1;
+    min-height: 0;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.customer-wrapper {
+    width: 100%;
+    max-width: 1450px;
+    background: transparent;
+    border-radius: 1.2rem;
+    padding: 1.5rem;
+}
+
+.customer-wrapper h1 {
+    color: white;
+    font-weight: 700;
+}
+
+/* TABLEAU */
+.customer-table-wrapper {
+    max-height: 450px;
+    overflow-y: auto;
+    border: 2px solid #1e3c72;
+    border-radius: 0.8rem;
+    background: white;
+}
+
+.customer-table-wrapper table {
+    margin-bottom: 0;
+}
+
+.customer-table-wrapper thead th {
+    z-index: 2;
+}
+
+/* PAGINATION */
+.customer-pagination {
+    color: white;
+}
+
+.customer-pagination .fw-bold {
+    color: white;
+}
+
+.customer-total {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* BOUTONS PRÉCÉDENT / SUIVANT */
+.btn-pagination {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    transition: 0.25s ease;
+}
+
+/* hover global */
+.btn-pagination:hover {
+    transform: translateY(-2px);
+}
+
+/* 🔵 bouton précédent (bleu) */
+.btn-primary.btn-pagination:hover {
+    background: linear-gradient(135deg, #0b5ed7, #084298);
+}
+
+/* 🟢 bouton suivant (vert) */
+.btn-success.btn-pagination:hover {
+    background: linear-gradient(135deg, #157347, #0f5132);
+}
+
+footer {
+    margin-top: 0 !important;
+    flex-shrink: 0;
+}

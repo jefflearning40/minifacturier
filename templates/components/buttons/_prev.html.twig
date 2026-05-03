@@ -3,6 +3,6 @@
     : pagination.pageCount %}
 
 <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'page': prevPage})) }}"
-   class="btn btn-outline-dark d-flex align-items-center gap-2">
-    ← Précédent
+   class="btn btn-primary btn-sm btn-pagination">
+    <i class="fa-solid fa-arrow-left"></i>
 </a>
