@@ -1,0 +1,66 @@
+body {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    overflow: hidden;
+}
+
+main {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.product-section {
+    flex: 1;
+    min-height: 0;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    background: transparent;
+    border-radius: 1.2rem;
+    padding: 1.5rem;
+}
+
+.product-wrapper h1 {
+    color: white;
+    font-weight: 700;
+}
+
+/* TABLEAU */
+.product-table-wrapper {
+    max-height: 450px;
+    overflow-y: auto;
+    border: 2px solid #1e3c72;
+    border-radius: 0.8rem;
+    background: white;
+}
+
+.product-table-wrapper table {
+    margin-bottom: 0;
+}
+
+.product-table-wrapper thead th {
+    z-index: 2;
+}
+
+/* bouton ajouter */
+.product-wrapper .btn-primary {
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    transition: 0.25s ease;
+}
+
+.product-wrapper .btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+footer {
+    margin-top: 0 !important;
+    flex-shrink: 0;
+}
