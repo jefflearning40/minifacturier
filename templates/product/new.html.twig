@@ -2,15 +2,25 @@
 
 {% block title %}Nouveau produit{% endblock %}
 
+{% block main_class %}container-fluid px-0 pt-4 pb-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/product.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container py-5">
+<section class="product-form-section">
 
-    <h1 class="mb-4">Ajouter un produit</h1>
+    <div class="product-form-card">
 
-    {{ include('product/_form.html.twig', {
-        form: form,
-        button_label: 'Créer'
-    }) }}
+        <h1 class="mb-4">Ajouter un produit</h1>
 
-</div>
+        {{ include('product/_form.html.twig', {
+            form: form,
+            button_label: 'Créer'
+        }) }}
+
+    </div>
+
+</section>
 {% endblock %}

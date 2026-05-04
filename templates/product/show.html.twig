@@ -2,52 +2,60 @@
 
 {% block title %}Détail produit{% endblock %}
 
+{% block main_class %}container-fluid px-0 pt-4 pb-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/product.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container py-5">
+<section class="product-show-section">
 
-    <h1 class="mb-4">Détail produit</h1>
+    <div class="product-show-card">
 
-    <div class="border p-4 mb-4">
-        <table class="table mb-0">
-            <tbody>
-                <tr>
-                    <th>Nom</th>
-                    <td>{{ product.name }}</td>
-                </tr>
-                <tr>
-                    <th>Marque</th>
-                    <td>{{ product.brand }}</td>
-                </tr>
-                <tr>
-                    <th>Prix HT</th>
-                    <td>{{ product.price|number_format(2, ',', ' ') }} €</td>
-                </tr>
-                <tr>
-                    <th>TVA (%)</th>
-                    <td>{{ product.vatRate|number_format(2, ',', ' ') }}</td>
-                </tr>
-                <tr>
-                    <th>Prix TTC</th>
-                    <td>{{ (product.price * (1 + product.vatRate / 100))|number_format(2, ',', ' ') }} €</td>
-                </tr>
-            </tbody>
-        </table>
+        <h1 class="mb-4">Détail produit</h1>
+
+        <div class="product-table-wrapper">
+            <table class="table table-bordered align-middle mb-0">
+                <tbody>
+                    <tr>
+                        <th>Nom</th>
+                        <td>{{ product.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Marque</th>
+                        <td>{{ product.brand }}</td>
+                    </tr>
+                    <tr>
+                        <th>Prix HT</th>
+                        <td>{{ product.price|number_format(2, ',', ' ') }} €</td>
+                    </tr>
+                    <tr>
+                        <th>TVA (%)</th>
+                        <td>{{ product.vatRate|number_format(2, ',', ' ') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Prix TTC</th>
+                        <td>{{ (product.price * (1 + product.vatRate / 100))|number_format(2, ',', ' ') }} €</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+
+            {{ include('components/buttons/_back.html.twig', {
+                route: 'app_catalog_index'
+            }) }}
+
+            {{ include('components/buttons/_edit.html.twig', {
+                route: 'app_product_edit',
+                id: product.id
+            }) }}
+
+        </div>
+
     </div>
 
-<div class="d-flex justify-content-between align-items-center mt-4">
-
-    {{ include('components/buttons/_linkprev.html.twig', {
-        route: 'app_catalog_index',
-        label: 'Retour catalogue'
-    }) }}
-
-    {{ include('components/buttons/_linknext.html.twig', {
-        route: 'app_product_edit',
-        params: {id: product.id},
-        label: 'Modifier'
-    }) }}
-
-</div>
-
-</div>
+</section>
 {% endblock %}

@@ -2,90 +2,91 @@
 
 {% block title %}Détail vendeur{% endblock %}
 
+{% block main_class %}container-fluid px-0 pt-4 pb-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/seller.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
+<section class="seller-show-section">
 
-    <h1 class="mb-4">Détail vendeur</h1>
+    <div class="seller-show-card">
 
-    {{ include('components/identity/_person_info.html.twig', {
-        id: seller.id,
-        lastName: seller.lastNameSeller,
-        firstName: seller.firstNameSeller,
-        phone: seller.phoneSeller
-    }) }}
+        <h1 class="mb-4">Détail vendeur</h1>
 
-    <div class="d-flex justify-content-between mb-5">
-        {{ include('components/buttons/_back.html.twig', {
-            route: 'app_seller_index'
+        {{ include('components/identity/_person_info.html.twig', {
+            id: seller.id,
+            lastName: seller.lastNameSeller,
+            firstName: seller.firstNameSeller,
+            phone: seller.phoneSeller
         }) }}
 
-        <div>
-            {{ include('components/buttons/_edit.html.twig', {
-                route: 'app_seller_edit',
-                id: seller.id
+        <div class="d-flex justify-content-between mb-4 mt-3">
+            {{ include('components/buttons/_back.html.twig', {
+                route: 'app_seller_index'
             }) }}
 
-            {{ include('components/buttons/_delete.html.twig', {
-                route: 'app_seller_delete',
-                id: seller.id
-            }) }}
-        </div>
-    </div>
+            <div>
+                {{ include('components/buttons/_edit.html.twig', {
+                    route: 'app_seller_edit',
+                    id: seller.id
+                }) }}
 
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <h2 class="h5 mb-0">Factures réalisées par ce vendeur</h2>
+                {{ include('components/buttons/_delete.html.twig', {
+                    route: 'app_seller_delete',
+                    id: seller.id
+                }) }}
+            </div>
         </div>
 
-        <div class="card-body">
+        <h2 class="h5 mb-3">Factures réalisées</h2>
+
+        <div class="seller-table-wrapper">
             {% if seller.invoices|length > 0 %}
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle mb-0">
-                        <thead class="table-light">
+                <table class="table table-bordered table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Id</th>
+                            <th>Numéro</th>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th class="text-end">Total HT</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for invoice in seller.invoices %}
                             <tr>
-                                <th>Id</th>
-                                <th>Numéro</th>
-                                <th>Date</th>
-                                <th>Client</th>
-                                <th class="text-end">Total HT</th>
-                                <th class="text-center">Action</th>
+                                <td>{{ invoice.id }}</td>
+                                <td>{{ invoice.numberInvoice }}</td>
+                                <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
+                                <td>
+                                    {{ invoice.customer.firstNameCustomer }} {{ invoice.customer.lastNameCustomer|upper }}
+                                </td>
+                                <td class="text-end">
+                                    {{ invoice.grandTotal|number_format(2, ',', ' ') }} €
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ path('app_invoice_show', {
+                                        id: invoice.id,
+                                        from: 'seller',
+                                        sellerId: seller.id
+                                    }) }}" class="btn btn-sm btn-primary">
+                                        Voir
+                                    </a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for invoice in seller.invoices %}
-                                <tr>
-                                    <td>{{ invoice.id }}</td>
-                                    <td>{{ invoice.numberInvoice }}</td>
-                                    <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
-                                    <td>
-                                        {% if invoice.customer %}
-                                            {{ invoice.customer.firstNameCustomer }} {{ invoice.customer.lastNameCustomer|upper }}
-                                        {% else %}
-                                            -
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-end">
-                                        {{ invoice.grandTotal|number_format(2, ',', ' ') }} €
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ path('app_invoice_show', {
-                                            id: invoice.id,
-                                            from: 'seller',
-                                            sellerId: seller.id
-                                        }) }}" class="btn btn-sm btn-outline-primary">
-                                            Voir
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
-                <p class="text-muted mb-0">Aucune facture réalisée par ce vendeur.</p>
+                <p class="text-muted mb-0">Aucune facture.</p>
             {% endif %}
         </div>
+
     </div>
 
-</div>
+</section>
 {% endblock %}

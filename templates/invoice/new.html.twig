@@ -2,21 +2,35 @@
 
 {% block title %}Nouvelle facture{% endblock %}
 
+{% block main_class %}container-fluid p-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/invoice.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
-    <h1 class="mb-4">Créer une facture</h1>
+<section class="invoice-form-section">
 
-    {{ include('invoice/_form.html.twig', {
-        form: form,
-        button_label: 'Créer'
-    }) }}
+    <div class="invoice-form-wrapper">
 
-    <div class="mt-4">
-        {{ include('components/buttons/_back.html.twig', {
-            route: 'app_invoice_index'
-        }) }}
+        <h1>Créer une facture</h1>
+
+        <div class="invoice-form-box">
+            {{ include('invoice/_form.html.twig', {
+                form: form,
+                button_label: 'Créer'
+            }) }}
+        </div>
+
+        <div class="invoice-form-actions d-flex justify-content-start">
+            {{ include('components/buttons/_back.html.twig', {
+                route: 'app_invoice_index'
+            }) }}
+        </div>
+
     </div>
-</div>
+
+</section>
 {% endblock %}
 
 {% block javascripts %}

@@ -2,101 +2,106 @@
 
 {% block title %}Détail client{% endblock %}
 
+{% block main_class %}container-fluid px-0 pt-4 pb-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/customer.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
+<section class="customer-show-section">
 
-    <h1 class="mb-4">Détail client</h1>
+    <div class="customer-show-card">
 
-    {{ include('components/identity/_person_info.html.twig', {
-        id: customer.id,
-        lastName: customer.lastNameCustomer,
-        firstName: customer.firstNameCustomer,
-        phone: customer.phoneCustomer
-    }) }}
+        <h1 class="mb-4">Détail client</h1>
 
-    <div class="d-flex justify-content-between mb-5">
-        {{ include('components/buttons/_back.html.twig', {
-            route: 'app_customer_index'
+        {{ include('components/identity/_person_info.html.twig', {
+            id: customer.id,
+            lastName: customer.lastNameCustomer,
+            firstName: customer.firstNameCustomer,
+            phone: customer.phoneCustomer
         }) }}
 
-        <div>
-            {{ include('components/buttons/_edit.html.twig', {
-                route: 'app_customer_edit',
-                id: customer.id
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+            {{ include('components/buttons/_back.html.twig', {
+                route: 'app_customer_index'
             }) }}
 
-            {% if customer.invoices|length > 0 %}
-                <button
-                    type="button"
-                    class="btn btn-sm btn-secondary"
-                    disabled
-                    title="Suppression impossible : client lié à une facture"
-                >
-                    <i class="bi bi-trash3-fill"></i>
-                </button>
-            {% else %}
-                {{ include('components/buttons/_delete.html.twig', {
-                    route: 'app_customer_delete',
+            <div>
+                {{ include('components/buttons/_edit.html.twig', {
+                    route: 'app_customer_edit',
                     id: customer.id
                 }) }}
-            {% endif %}
-        </div>
-    </div>
 
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <h2 class="h5 mb-0">Factures liées au client</h2>
+                {% if customer.invoices|length > 0 %}
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-secondary"
+                        disabled
+                        title="Suppression impossible : client lié à une facture"
+                    >
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                {% else %}
+                    {{ include('components/buttons/_delete.html.twig', {
+                        route: 'app_customer_delete',
+                        id: customer.id
+                    }) }}
+                {% endif %}
+            </div>
         </div>
 
-        <div class="card-body">
+        <h2 class="h5 mb-3">Factures liées au client</h2>
+
+        <div class="customer-linked-table">
             {% if customer.invoices|length > 0 %}
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle mb-0">
-                        <thead class="table-light">
+                <table class="table table-bordered table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Id</th>
+                            <th>Numéro</th>
+                            <th>Date</th>
+                            <th>Vendeur</th>
+                            <th class="text-end">Total HT</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for invoice in customer.invoices %}
                             <tr>
-                                <th>Id</th>
-                                <th>Numéro</th>
-                                <th>Date</th>
-                                <th>Vendeur</th>
-                                <th class="text-end">Total HT</th>
-                                <th class="text-center">Action</th>
+                                <td>{{ invoice.id }}</td>
+                                <td>{{ invoice.numberInvoice }}</td>
+                                <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
+                                <td>
+                                    {% if invoice.seller %}
+                                        {{ invoice.seller.firstNameSeller }} {{ invoice.seller.lastNameSeller|upper }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    {{ invoice.grandTotal|number_format(2, ',', ' ') }} €
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ path('app_invoice_show', {
+                                        id: invoice.id,
+                                        from: 'customer',
+                                        customerId: customer.id
+                                    }) }}" class="btn btn-sm btn-primary">
+                                        Voir
+                                    </a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for invoice in customer.invoices %}
-                                <tr>
-                                    <td>{{ invoice.id }}</td>
-                                    <td>{{ invoice.numberInvoice }}</td>
-                                    <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
-                                    <td>
-                                        {% if invoice.seller %}
-                                            {{ invoice.seller.firstNameSeller }} {{ invoice.seller.lastNameSeller|upper }}
-                                        {% else %}
-                                            -
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-end">
-                                        {{ invoice.grandTotal|number_format(2, ',', ' ') }} €
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ path('app_invoice_show', {
-                                            id: invoice.id,
-                                            from: 'customer',
-                                            customerId: customer.id
-                                        }) }}" class="btn btn-sm btn-outline-primary">
-                                            Voir
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
                 <p class="text-muted mb-0">Aucune facture liée à ce client.</p>
             {% endif %}
         </div>
+
     </div>
 
-</div>
+</section>
 {% endblock %}

@@ -1,10 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
 
+        <!-- LOGO -->
         <a class="navbar-brand fw-semibold" href="{{ path('app_home') }}">
             MiniFacturier
         </a>
 
+        <!-- TOGGLER -->
         <button
             class="navbar-toggler"
             type="button"
@@ -16,78 +18,126 @@
 
         <div class="collapse navbar-collapse" id="mainNavbar">
 
+            <!-- MENU GAUCHE -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
+                <!-- ACCUEIL -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_home') }}">
                         <i class="fa-solid fa-house me-1"></i> Accueil
                     </a>
                 </li>
 
+                <!-- CLIENTS -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-user-group me-1"></i> Clients
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ path('app_customer_index') }}">Liste des clients</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ path('app_customer_index') }}">
+                                Liste des clients
+                            </a>
+                        </li>
 
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
-                            <li><a class="dropdown-item" href="{{ path('app_customer_new') }}">Ajouter un client</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_customer_new') }}">
+                                    Ajouter un client
+                                </a>
+                            </li>
                         {% endif %}
                     </ul>
                 </li>
 
+                <!-- FACTURES -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-file-invoice-dollar me-1"></i> Factures
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ path('app_invoice_index') }}">Liste des factures</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ path('app_invoice_index') }}">
+                                Liste des factures
+                            </a>
+                        </li>
 
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
-                            <li><a class="dropdown-item" href="{{ path('app_invoice_new') }}">Ajouter une facture</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_invoice_new') }}">
+                                    Ajouter une facture
+                                </a>
+                            </li>
                         {% endif %}
                     </ul>
                 </li>
 
+                <!-- VENDEURS -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-user-tie me-1"></i> Vendeurs
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ path('app_seller_index') }}">Liste des vendeurs</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ path('app_seller_index') }}">
+                                Liste des vendeurs
+                            </a>
+                        </li>
 
                         {% if is_granted('ROLE_ADMIN') %}
-                            <li><a class="dropdown-item" href="{{ path('app_seller_new') }}">Ajouter un vendeur</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_seller_new') }}">
+                                    Ajouter un vendeur
+                                </a>
+                            </li>
                         {% endif %}
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_catalog_index') }}">
+                <!-- CATALOGUE -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-book me-1"></i> Catalogue
                     </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="{{ path('app_catalog_index') }}">
+                                Liste des produits
+                            </a>
+                        </li>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_product_new') }}">
+                                    Ajouter un produit
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
                 </li>
 
- {# ===== MAILPIT ===== #}
-{% if is_granted('ROLE_ADMIN') %}
-    <li class="nav-item ms-lg-4">
-        <a
-            class="nav-link d-flex align-items-center"
-            href="#"
-            data-bs-toggle="modal"
-            data-bs-target="#mailpitModal"
-        >
-            <i class="fa-solid fa-envelope me-2"></i>
-            Mailpit
-        </a>
-    </li>
-{% endif %}
+                <!-- MAILPIT -->
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item ms-lg-4">
+                        <a
+                            class="nav-link"
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#mailpitModal"
+                        >
+                            <i class="fa-solid fa-envelope me-1"></i> Mailpit
+                        </a>
+                    </li>
+                {% endif %}
 
-                {# ===== ADMIN ===== #}
+                <!-- ADMIN / STATS -->
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
                     <li class="nav-item dropdown ms-lg-3">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-chart-line me-1"></i>
                             {% if is_granted('ROLE_ADMIN') %}
                                 Admin
@@ -118,6 +168,7 @@
 
             </ul>
 
+            <!-- UTILISATEUR -->
             <ul class="navbar-nav ms-auto">
 
                 {% if app.user %}
@@ -152,39 +203,3 @@
         </div>
     </div>
 </nav>
-{% if is_granted('ROLE_ADMIN') %}
-    <div
-        class="modal fade"
-        id="mailpitModal"
-        tabindex="-1"
-        aria-labelledby="mailpitModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content bg-dark text-light">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mailpitModalLabel">
-                        <i class="fa-solid fa-envelope-open-text me-2"></i>
-                        Mailpit
-                    </h5>
-
-                    <button
-                        type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-
-                <div class="modal-body p-0" style="height: 75vh;">
-                    <iframe
-                        src="http://127.0.0.1:8025"
-                        style="width: 100%; height: 100%; border: 0; background: white;"
-                    ></iframe>
-                </div>
-
-            </div>
-        </div>
-    </div>
-{% endif %}

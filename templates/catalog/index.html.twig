@@ -19,11 +19,7 @@
                 <p class="mb-0 catalog-subtitle">Liste des produits disponibles</p>
             </div>
 
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app_product_new') }}" class="btn btn-primary">
-                    Ajouter un produit
-                </a>
-            {% endif %}
+        
         </div>
 
         <form method="get" class="mb-4">

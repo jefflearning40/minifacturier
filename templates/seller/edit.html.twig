@@ -2,34 +2,38 @@
 
 {% block title %}Modifier vendeur{% endblock %}
 
+{% block main_class %}container-fluid px-0 pt-4 pb-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/seller.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
+<section class="seller-form-section">
 
-    <h1 class="mb-4">Modifier vendeur</h1>
+    <div class="seller-form-card">
 
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
+        <h1 class="mb-4">Modifier vendeur</h1>
 
-            {{ include('seller/_form.html.twig', {
-                button_label: 'Modifier',
-                button_class: 'btn-primary'
+        {{ include('seller/_form.html.twig', {
+            button_label: 'Modifier',
+            button_class: 'btn-primary'
+        }) }}
+
+        <div class="d-flex justify-content-between mt-4">
+
+            {{ include('components/buttons/_back.html.twig', {
+                route: 'app_seller_index'
             }) }}
 
-            <div class="d-flex justify-content-between mt-4">
-
-                {{ include('components/buttons/_back.html.twig', {
-                    route: 'app_seller_index'
-                }) }}
-
-                {{ include('components/buttons/_delete.html.twig', {
-                    route: 'app_seller_delete',
-                    id: seller.id
-                }) }}
-
-            </div>
+            {{ include('components/buttons/_delete.html.twig', {
+                route: 'app_seller_delete',
+                id: seller.id
+            }) }}
 
         </div>
+
     </div>
 
-</div>
+</section>
 {% endblock %}
