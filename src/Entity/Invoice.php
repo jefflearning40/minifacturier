@@ -165,4 +165,32 @@ class Invoice
     {
         return $this->getGrandTotalHt();
     }
+
+    public function getMainItem(): ?InvoiceItem
+    {
+        if ($this->invoiceItems->isEmpty()) {
+            return null;
+        }
+
+        $mainItem = null;
+        $highestTotal = 0;
+
+        foreach ($this->invoiceItems as $item) {
+            $total = (float) $item->getTotalHt();
+
+            if ($mainItem === null || $total > $highestTotal) {
+                $mainItem = $item;
+                $highestTotal = $total;
+            }
+        }
+
+        return $mainItem;
+    }
+
+    public function getOtherItemsCount(): int
+    {
+        $count = $this->invoiceItems->count();
+
+        return $count > 1 ? $count - 1 : 0;
+    }
 }

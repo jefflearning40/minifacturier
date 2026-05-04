@@ -26,10 +26,23 @@
                 route: 'app_seller_index'
             }) }}
 
-            {{ include('components/buttons/_delete.html.twig', {
-                route: 'app_seller_delete',
-                id: seller.id
-            }) }}
+            {% if is_granted('ROLE_ADMIN') %}
+                {% if seller.invoices|length > 0 %}
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-secondary"
+                        disabled
+                        title="Suppression impossible : vendeur lié à une facture"
+                    >
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                {% else %}
+                    {{ include('components/buttons/_delete.html.twig', {
+                        route: 'app_seller_delete',
+                        id: seller.id
+                    }) }}
+                {% endif %}
+            {% endif %}
 
         </div>
 

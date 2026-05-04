@@ -35,92 +35,96 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                {% for invoice in invoices %}
-                    <tr>
-                        <td>{{ invoice.id }}</td>
-                        <td>{{ invoice.numberInvoice }}</td>
+               <tbody>
+{% for invoice in invoices %}
+    {% set mainItem = invoice.mainItem %}
 
-                        <td>
-                            {% for item in invoice.invoiceItems %}
-                                <div>{{ item.productName }}</div>
-                            {% else %}
-                                <div class="text-muted">Aucune ligne</div>
-                            {% endfor %}
-                        </td>
+    <tr>
+        <td>{{ invoice.id }}</td>
+        <td>{{ invoice.numberInvoice }}</td>
 
-                        <td>
-                            {% for item in invoice.invoiceItems %}
-                                <div>{{ item.brand }}</div>
-                            {% else %}
-                                <div class="text-muted">-</div>
-                            {% endfor %}
-                        </td>
+        <td>
+            {% if mainItem %}
+                {{ mainItem.productName }}
 
-                        <td>
-                            {% for item in invoice.invoiceItems %}
-                                <div>{{ item.price }}</div>
-                            {% else %}
-                                <div class="text-muted">-</div>
-                            {% endfor %}
-                        </td>
+                {% if invoice.otherItemsCount > 0 %}
+                    <span class="badge bg-secondary ms-2">
+                        + {{ invoice.otherItemsCount }} autre{% if invoice.otherItemsCount > 1 %}s{% endif %}
+                    </span>
+                {% endif %}
+            {% else %}
+                <span class="text-muted">Aucune ligne</span>
+            {% endif %}
+        </td>
 
-                        <td>
-                            {% for item in invoice.invoiceItems %}
-                                <div>{{ item.quantity }}</div>
-                            {% else %}
-                                <div class="text-muted">-</div>
-                            {% endfor %}
-                        </td>
+        <td>
+            {% if mainItem %}
+                {{ mainItem.brand }}
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
 
-                        <td>
-                            {% for item in invoice.invoiceItems %}
-                                <div>{{ item.total }}</div>
-                            {% else %}
-                                <div class="text-muted">-</div>
-                            {% endfor %}
-                        </td>
+        <td>
+            {% if mainItem %}
+                {{ mainItem.price|number_format(2, ',', ' ') }}
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
 
-                        <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
+        <td>
+            {% if mainItem %}
+                {{ mainItem.quantity }}
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
 
-                        <td>
-                            {% if invoice.seller %}
-                                {{ invoice.seller.firstNameSeller }} {{ invoice.seller.lastNameSeller|upper }}
-                            {% endif %}
-                        </td>
+        <td>
+            {{ invoice.grandTotal|number_format(2, ',', ' ') }}
+        </td>
 
-                        <td>
-                            {% if invoice.customer %}
-                                {{ invoice.customer.firstNameCustomer }} {{ invoice.customer.lastNameCustomer|upper }}
-                            {% endif %}
-                        </td>
+        <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
 
-                        <td class="text-center">
-                            {{ include('components/buttons/_show.html.twig', {
-                                route: 'app_invoice_show',
-                                id: invoice.id
-                            }) }}
+        <td>
+            {% if invoice.seller %}
+                {{ invoice.seller.firstNameSeller }} {{ invoice.seller.lastNameSeller|upper }}
+            {% endif %}
+        </td>
 
-                            {{ include('components/buttons/_edit.html.twig', {
-                                route: 'app_invoice_edit',
-                                id: invoice.id
-                            }) }}
+        <td>
+            {% if invoice.customer %}
+                {{ invoice.customer.firstNameCustomer }} {{ invoice.customer.lastNameCustomer|upper }}
+            {% endif %}
+        </td>
 
-                            {{ include('components/buttons/_delete.html.twig', {
-                                route: 'app_invoice_delete',
-                                id: invoice.id,
-                                size: 'btn-sm'
-                            }) }}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="11" class="text-center">
-                            Aucune facture trouvée
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
+        <td class="text-center">
+            {{ include('components/buttons/_show.html.twig', {
+                route: 'app_invoice_show',
+                id: invoice.id
+            }) }}
+
+            {{ include('components/buttons/_edit.html.twig', {
+                route: 'app_invoice_edit',
+                id: invoice.id
+            }) }}
+
+            {{ include('components/buttons/_delete.html.twig', {
+                route: 'app_invoice_delete',
+                id: invoice.id,
+                size: 'btn-sm'
+            }) }}
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="11" class="text-center">
+            Aucune facture trouvée
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
             </table>
         </div>
 

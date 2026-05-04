@@ -2,35 +2,64 @@
 
 {% block title %}Mentions légales{% endblock %}
 
+{% block main_class %}container-fluid px-0 pt-4 pb-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/legal.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
-    <h1>Mentions légales</h1>
+<section class="legal-section">
 
-    <h2 class="mt-4">Éditeur du site</h2>
-    <p>
-        MiniFacturier est une application réalisée dans le cadre d’un projet d’examen.
-    </p>
+    <div class="container">
 
-    <p>
-        Développeur : Jean-François  
-        Email : contact@minifacturier.com
-    </p>
+        <div class="card shadow-sm border-0 legal-page-card">
+            <div class="card-body p-4 p-md-5">
 
-    <h2 class="mt-4">Nature du projet</h2>
-    <p>
-        Ce site est une application pédagogique développée dans un but de démonstration
-        des compétences en développement web.
-    </p>
+                <h1 class="mb-4">
+                    <i class="fa-solid fa-scale-balanced me-2"></i>
+                    Mentions légales
+                </h1>
 
-    <h2 class="mt-4">Technologies utilisées</h2>
-    <p>
-        Symfony · Twig · Doctrine · Bootstrap · Docker · Mailpit · Gotenberg
-    </p>
+                <div class="legal-text-section">
+                    <h2>Éditeur du site</h2>
+                    <p>
+                        MiniFacturier est une application réalisée dans le cadre d’un projet d’examen.
+                    </p>
+                    <p>
+                        <strong>Développeur :</strong> Jean-François<br>
+                        <strong>Email :</strong> contact@minifacturier.com
+                    </p>
+                </div>
 
-    <h2 class="mt-4">Responsabilité</h2>
-    <p>
-        Les informations présentes sur ce site sont fournies à titre de démonstration.
-        et générées par Mockaroo et aucune garantie n’est apportée quant à leur exactitude ou leur similtude avec des personnes physiques ou objet de catalogue existants.
-    </p>
-</div>
+                <div class="legal-text-section">
+                    <h2>Nature du projet</h2>
+                    <p>
+                        Ce site est une application pédagogique développée dans un but de démonstration
+                        des compétences en développement web.
+                    </p>
+                </div>
+
+                <div class="legal-text-section">
+                    <h2>Technologies utilisées</h2>
+                    <p>
+                        Symfony · Twig · Doctrine · Bootstrap · Docker · Mailpit · Gotenberg
+                    </p>
+                </div>
+
+                <div class="legal-text-section">
+                    <h2>Responsabilité</h2>
+                    <p>
+                        Les informations présentes sur ce site sont fournies à titre de démonstration.
+                        Elles sont générées avec Mockaroo et aucune garantie n’est apportée quant à leur exactitude
+                        ou leur similitude avec des personnes physiques, entreprises ou produits existants.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
 {% endblock %}

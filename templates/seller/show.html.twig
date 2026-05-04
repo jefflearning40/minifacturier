@@ -27,17 +27,30 @@
                 route: 'app_seller_index'
             }) }}
 
-            <div>
-                {{ include('components/buttons/_edit.html.twig', {
-                    route: 'app_seller_edit',
-                    id: seller.id
-                }) }}
+            {% if is_granted('ROLE_ADMIN') %}
+                <div>
+                    {{ include('components/buttons/_edit.html.twig', {
+                        route: 'app_seller_edit',
+                        id: seller.id
+                    }) }}
 
-                {{ include('components/buttons/_delete.html.twig', {
-                    route: 'app_seller_delete',
-                    id: seller.id
-                }) }}
-            </div>
+                    {% if seller.invoices|length > 0 %}
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-secondary"
+                            disabled
+                            title="Suppression impossible : vendeur lié à une facture"
+                        >
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
+                    {% else %}
+                        {{ include('components/buttons/_delete.html.twig', {
+                            route: 'app_seller_delete',
+                            id: seller.id
+                        }) }}
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
 
         <h2 class="h5 mb-3">Factures réalisées</h2>
@@ -63,7 +76,11 @@
                                 <td>{{ invoice.numberInvoice }}</td>
                                 <td>{{ invoice.saleDate ? invoice.saleDate|date('d/m/Y') : '' }}</td>
                                 <td>
-                                    {{ invoice.customer.firstNameCustomer }} {{ invoice.customer.lastNameCustomer|upper }}
+                                    {% if invoice.customer %}
+                                        {{ invoice.customer.firstNameCustomer }} {{ invoice.customer.lastNameCustomer|upper }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
                                 </td>
                                 <td class="text-end">
                                     {{ invoice.grandTotal|number_format(2, ',', ' ') }} €

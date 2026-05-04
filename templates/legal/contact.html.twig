@@ -2,48 +2,56 @@
 
 {% block title %}Contact{% endblock %}
 
+{% block main_class %}container-fluid px-0 pt-4 pb-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/legal.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
+<section class="legal-section">
 
-    <h1 class="mb-4">Contact</h1>
+    <div class="legal-card legal-contact-card">
 
-    <div class="row g-4">
+        <div class="legal-header">
+            <h1>Contact</h1>
+            <p>Une question, une remarque ou un besoin d’information ? Contactez MiniFacturier.</p>
+        </div>
 
-        <div class="col-md-5">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h2 class="h5 mb-3">
+        <div class="row g-4">
+
+            <div class="col-md-5">
+                <div class="legal-info-box h-100">
+                    <h2>
                         <i class="fa-solid fa-address-card me-2"></i>
                         Informations
                     </h2>
 
-                    <p class="mb-2">
+                    <p>
                         <i class="fa-solid fa-phone me-2"></i>
                         06 00 00 00 00
                     </p>
 
-                    <p class="mb-2">
+                    <p>
                         <i class="fa-solid fa-envelope me-2"></i>
                         contact@minifacturier.com
                     </p>
 
-                    <p class="mb-2">
+                    <p>
                         <i class="fa-solid fa-location-dot me-2"></i>
                         1 rue de la ville, 40 les landes
                     </p>
 
-                    <p class="text-muted mt-3 mb-0">
+                    <div class="legal-note">
                         MiniFacturier est une application de gestion de factures réalisée dans le cadre d’un projet d’examen.
-                    </p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-7">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
+            <div class="col-md-7">
+                <div class="legal-form-box">
 
-                    <h2 class="h5 mb-3">
+                    <h2>
                         <i class="fa-solid fa-paper-plane me-2"></i>
                         Envoyer un message
                     </h2>
@@ -69,15 +77,17 @@
 
                         <div class="mb-3">
                             <label for="message" class="form-label">Message</label>
-                            <textarea id="message" name="message" rows="6" class="form-control" required></textarea>
+                            <textarea id="message" name="message" rows="5" class="form-control" required></textarea>
                         </div>
 
-                        <div class="d-flex justify-content-end gap-2">
-                            <a href="{{ path('app_home') }}" class="btn btn-secondary">
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="{{ path('app_home') }}" class="btn btn-back">
+                                <i class="bi bi-arrow-left me-1"></i>
                                 Annuler
                             </a>
 
                             <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-paper-plane me-1"></i>
                                 Envoyer
                             </button>
                         </div>
@@ -86,8 +96,10 @@
 
                 </div>
             </div>
+
         </div>
 
     </div>
-</div>
+
+</section>
 {% endblock %}

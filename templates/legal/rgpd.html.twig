@@ -2,44 +2,79 @@
 
 {% block title %}Politique RGPD{% endblock %}
 
+{% block main_class %}container-fluid px-0 pt-4 pb-0{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/legal.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
-    <h1>Politique de confidentialité</h1>
+<section class="legal-section">
 
-    <p>
-        L'application MiniFacturier collecte certaines données personnelles
-        dans le cadre de son fonctionnement.
-    </p>
+    <div class="container">
 
-    <h2 class="mt-4">Données collectées</h2>
-    <p>
-        Les données susceptibles d’être collectées sont :
-        nom, prénom, adresse email et informations liées aux factures.
-    </p>
+        <div class="card shadow-sm border-0 legal-page-card">
+            <div class="card-body p-4 p-md-5">
 
-    <h2 class="mt-4">Finalité</h2>
-    <p>
-        Ces données sont utilisées uniquement pour :
-        la gestion des factures et la communication via le formulaire de contact.
-    </p>
+                <h1 class="mb-4">
+                    <i class="fa-solid fa-shield-halved me-2"></i>
+                    Politique de confidentialité
+                </h1>
 
-    <h2 class="mt-4">Sécurité</h2>
-    <p>
-        Les données sont protégées et accessibles uniquement aux utilisateurs autorisés
-        (administrateurs et vendeurs).
-        Aucune donnée n’est transmise à des tiers.
-    </p>
+                <div class="legal-text-section">
+                    <p>
+                        L'application MiniFacturier collecte certaines données personnelles
+                        dans le cadre de son fonctionnement.
+                    </p>
+                </div>
 
-    <h2 class="mt-4">Droits des utilisateurs</h2>
-    <p>
-        Conformément au RGPD, vous disposez d’un droit d’accès, de modification
-        et de suppression de vos données personnelles.
-    </p>
+                <div class="legal-text-section">
+                    <h2>Données collectées</h2>
+                    <p>
+                        Les données susceptibles d’être collectées sont :
+                        nom, prénom, adresse email et informations liées aux factures.
+                    </p>
+                </div>
 
-    <h2 class="mt-4">Contact</h2>
-    <p>
-        Pour toute demande concernant vos données :
-        contact@minifacturier.com ou sur la page contact via le lien Contact dans informatins
-    </p>
-</div>
+                <div class="legal-text-section">
+                    <h2>Finalité</h2>
+                    <p>
+                        Ces données sont utilisées uniquement pour :
+                        la gestion des factures et la communication via le formulaire de contact.
+                    </p>
+                </div>
+
+                <div class="legal-text-section">
+                    <h2>Sécurité</h2>
+                    <p>
+                        Les données sont protégées et accessibles uniquement aux utilisateurs autorisés
+                        (administrateurs et vendeurs). Aucune donnée n’est transmise à des tiers.
+                    </p>
+                </div>
+
+                <div class="legal-text-section">
+                    <h2>Droits des utilisateurs</h2>
+                    <p>
+                        Conformément au RGPD, vous disposez d’un droit d’accès, de modification
+                        et de suppression de vos données personnelles.
+                    </p>
+                </div>
+
+                <div class="legal-text-section">
+                    <h2>Contact</h2>
+                    <p>
+                        Pour toute demande concernant vos données :
+                        <br>
+                        <strong>contact@minifacturier.com</strong>
+                        <br>
+                        ou via la page Contact accessible depuis le site.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
 {% endblock %}

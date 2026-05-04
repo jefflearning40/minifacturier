@@ -56,25 +56,27 @@
                                 id: seller.id
                             }) }}
 
-                            {{ include('components/buttons/_edit.html.twig', {
-                                route: 'app_seller_edit',
-                                id: seller.id
-                            }) }}
-
-                            {% if seller.invoices|length > 0 %}
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-secondary"
-                                    disabled
-                                    title="Suppression impossible : vendeur lié à une facture"
-                                >
-                                    <i class="bi bi-trash3-fill"></i>
-                                </button>
-                            {% else %}
-                                {{ include('components/buttons/_delete.html.twig', {
-                                    route: 'app_seller_delete',
+                            {% if is_granted('ROLE_ADMIN') %}
+                                {{ include('components/buttons/_edit.html.twig', {
+                                    route: 'app_seller_edit',
                                     id: seller.id
                                 }) }}
+
+                                {% if seller.invoices|length > 0 %}
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-secondary"
+                                        disabled
+                                        title="Suppression impossible : vendeur lié à une facture"
+                                    >
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                {% else %}
+                                    {{ include('components/buttons/_delete.html.twig', {
+                                        route: 'app_seller_delete',
+                                        id: seller.id
+                                    }) }}
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>

@@ -41,7 +41,11 @@ final class SellerController extends AbstractController
     #[Route('/new', name: 'app_seller_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('danger', 'Accès refusé : seul un administrateur peut créer un vendeur.');
+
+            return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
+        }
 
         $seller = new Seller();
         $form = $this->createForm(SellerType::class, $seller);
@@ -75,7 +79,11 @@ final class SellerController extends AbstractController
     #[Route('/{id}/edit', name: 'app_seller_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Seller $seller, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('danger', 'Accès refusé : seul un administrateur peut modifier un vendeur.');
+
+            return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
+        }
 
         $form = $this->createForm(SellerType::class, $seller);
         $form->handleRequest($request);
@@ -97,15 +105,21 @@ final class SellerController extends AbstractController
     #[Route('/{id}', name: 'app_seller_delete', methods: ['POST'])]
     public function delete(Request $request, Seller $seller, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('danger', 'Accès refusé : seul un administrateur peut supprimer un vendeur.');
+
+            return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
+        }
 
         if (!$this->isCsrfTokenValid('delete' . $seller->getId(), $request->getPayload()->getString('_token'))) {
             $this->addFlash('danger', 'Jeton de sécurité invalide. Suppression refusée.');
+
             return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
         }
 
         if ($seller->getInvoices()->count() > 0) {
             $this->addFlash('danger', 'Suppression impossible : ce vendeur est lié à une ou plusieurs factures.');
+
             return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
         }
 
