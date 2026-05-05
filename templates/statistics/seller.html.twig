@@ -2,87 +2,124 @@
 
 {% block title %}Mes statistiques{% endblock %}
 
+{# IMPORTANT : centrage ici #}
+{% block main_class %}container py-4{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/styles/seller_statistics.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container py-5">
 
-    <h1 class="mb-4">Mes statistiques</h1>
+<div class="seller-stats-wrapper">
 
-    <div class="mb-4">
-        <strong>Vendeur :</strong>
-        {{ seller.lastNameSeller|upper }} {{ seller.firstNameSeller }}
-    </div>
+    <div class="seller-stats-card">
 
-    <!-- KPI -->
-    <div class="row text-center mb-5">
+        <!-- HEADER -->
+        <div class="stats-header">
+            <h1>Mes statistiques</h1>
+            <p>
+                Vendeur :
+                <strong>{{ seller.lastNameSeller|upper }} {{ seller.firstNameSeller }}</strong>
+            </p>
+        </div>
 
-        <div class="col-md-6">
-            <div class="border p-3">
-                <div class="text-muted small text-uppercase">Mes factures</div>
-                <div class="fs-3 fw-bold">{{ totalInvoices }}</div>
+        <!-- KPI -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="stats-kpi-card">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <div>
+                        <span>Mes factures</span>
+                        <strong>{{ totalInvoices }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="stats-kpi-card success">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <div>
+                        <span>Produits vendus</span>
+                        <strong>{{ totalProductsSold }}</strong>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="border p-3">
-                <div class="text-muted small text-uppercase">Produits vendus</div>
-                <div class="fs-3 fw-bold">{{ totalProductsSold }}</div>
+        <!-- CONTENU -->
+        <div class="row g-4">
+
+            <!-- CA -->
+            <div class="col-lg-5">
+                <div class="stats-card h-100">
+
+                    <h3>Mes ventes</h3>
+
+                    <div class="stats-total">
+                        {{ totalSalesTtc|number_format(2, ',', ' ') }} €
+                    </div>
+
+                    <div class="stats-sub">Total TTC</div>
+
+                    <div class="stats-lines">
+                        <div>
+                            <span>Total HT</span>
+                            <strong>{{ totalSalesHt|number_format(2, ',', ' ') }} €</strong>
+                        </div>
+
+                        <div>
+                            <span>Total TVA</span>
+                            <strong>{{ totalVat|number_format(2, ',', ' ') }} €</strong>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
 
-    </div>
+            <!-- TABLE -->
+            <div class="col-lg-7">
+                <div class="stats-card h-100">
 
-    <!-- CA -->
-    <div class="border p-4 mb-5">
-        <h4 class="mb-4">Mes ventes</h4>
+                    <h3>Produits vendus</h3>
 
-        <table class="table w-auto ms-auto text-end">
-            <tr>
-                <th>Total HT</th>
-                <td>{{ totalSalesHt|number_format(2, ',', ' ') }} €</td>
-            </tr>
-            <tr>
-                <th>Total TVA</th>
-                <td>{{ totalVat|number_format(2, ',', ' ') }} €</td>
-            </tr>
-            <tr class="fw-bold">
-                <th>Total TTC</th>
-                <td>{{ totalSalesTtc|number_format(2, ',', ' ') }} €</td>
-            </tr>
-        </table>
-    </div>
+                    <div class="table-wrapper">
+                        <table class="table table-bordered table-sm align-middle mb-0">
+                            <thead class="table-dark sticky-top">
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Marque</th>
+                                    <th class="text-end">Quantité</th>
+                                </tr>
+                            </thead>
 
-    <!-- Tableau produits -->
-    <div class="border p-4">
-        <h4 class="mb-4">Produits vendus</h4>
+                            <tbody>
+                                {% for product in salesByProduct %}
+                                    <tr>
+                                        <td>{{ product.productName }}</td>
+                                        <td class="text-muted">{{ product.brand }}</td>
+                                        <td class="text-end fw-semibold">
+                                            {{ product.totalQuantity }}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">
+                                            Aucune vente
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Produit</th>
-                        <th>Marque</th>
-                        <th class="text-end">Quantité</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in salesByProduct %}
-                        <tr>
-                            <td>{{ product.productName }}</td>
-                            <td class="text-muted">{{ product.brand }}</td>
-                            <td class="text-end">{{ product.totalQuantity }}</td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="3" class="text-center text-muted">
-                                Aucune vente
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                </div>
+            </div>
+
         </div>
 
     </div>
 
 </div>
+
 {% endblock %}
