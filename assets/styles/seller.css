@@ -46,6 +46,27 @@ main {
     margin-bottom: 0;
 }
 
+/* ===== ACTIONS TABLE SELLER ===== */
+.seller-actions-col {
+    width: 220px;
+    min-width: 220px;
+    white-space: nowrap;
+}
+
+.seller-account-col {
+    width: 90px;
+    min-width: 90px;
+    white-space: nowrap;
+}
+
+.seller-actions-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: nowrap;
+}
+
 /* ===== SHOW SELLER ===== */
 .seller-show-section {
     flex: 1;
@@ -60,13 +81,10 @@ main {
     width: 100%;
     max-width: 1100px;
     height: 100%;
-
     background: white;
     border-radius: 1rem;
     padding: 2rem;
-
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-
     overflow-y: auto;
 }
 
@@ -96,13 +114,10 @@ main {
     width: 100%;
     max-width: 700px;
     height: 100%;
-
     background: white;
     border-radius: 1rem;
     padding: 2rem;
-
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-
     overflow-y: auto;
 }
 
@@ -127,14 +142,11 @@ main {
     width: 40px;
     height: 40px;
     border-radius: 0.6rem;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 0;
     font-weight: 600;
-
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
     transition: 0.25s ease;
 }

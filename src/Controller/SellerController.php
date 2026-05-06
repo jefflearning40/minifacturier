@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Seller;
+use App\Entity\User;
 use App\Form\SellerType;
 use App\Repository\SellerRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +11,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/seller')]
@@ -39,8 +43,12 @@ final class SellerController extends AbstractController
     }
 
     #[Route('/new', name: 'app_seller_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher,
+        MailerInterface $mailer
+    ): Response {
         if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('danger', 'Accès refusé : seul un administrateur peut créer un vendeur.');
 
@@ -52,10 +60,62 @@ final class SellerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // 1. On enregistre d'abord le vendeur pour récupérer son ID
             $entityManager->persist($seller);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Vendeur créé avec succès.');
+            // 2. Création automatique du compte User
+            $user = new User();
+
+            $firstname = strtolower($seller->getFirstNameSeller());
+            $sellerId = $seller->getId();
+
+            // Exemple : stephane.vendeur108@test.com
+            $email = $firstname . '.vendeur' . $sellerId . '@test.com';
+
+            // Exemple : seller108
+            $plainPassword = 'seller' . $sellerId;
+
+            $user->setEmail($email);
+            $user->setRoles(['ROLE_SELLER']);
+            $user->setFirstname($seller->getFirstNameSeller());
+            $user->setLastname($seller->getLastNameSeller());
+
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $plainPassword
+            );
+
+            $user->setPassword($hashedPassword);
+
+            // 3. Liaison entre Seller et User
+            $seller->setUser($user);
+
+            // 4. Sauvegarde du User et de la liaison seller.user_id
+            $entityManager->persist($user);
+            $entityManager->persist($seller);
+            $entityManager->flush();
+
+            // 5. Envoi des identifiants dans Mailpit
+            $emailMessage = (new Email())
+                ->from('admin@minifacturier.com')
+                ->to($email)
+                ->subject('Votre compte vendeur MiniFacturier')
+                ->text(
+                    "Bonjour " . $seller->getFirstNameSeller() . ",\n\n" .
+                    "Votre compte vendeur a été créé.\n\n" .
+                    "Email : " . $email . "\n" .
+                    "Mot de passe : " . $plainPassword . "\n\n" .
+                    "Vous pouvez maintenant vous connecter."
+                );
+
+            $mailer->send($emailMessage);
+
+            $this->addFlash(
+                'success',
+                'Vendeur créé avec succès. Les identifiants ont été envoyés dans Mailpit.'
+            );
 
             return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -64,6 +124,42 @@ final class SellerController extends AbstractController
             'seller' => $seller,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{id}/resend-login', name: 'app_seller_resend_login', methods: ['GET'])]
+    public function resendLogin(
+        Seller $seller,
+        MailerInterface $mailer
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $user = $seller->getUser();
+
+        if (!$user) {
+            $this->addFlash('danger', 'Ce vendeur ne possède pas encore de compte de connexion.');
+
+            return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $plainPassword = 'seller' . $seller->getId();
+
+        $emailMessage = (new Email())
+            ->from('admin@minifacturier.com')
+            ->to($user->getEmail())
+            ->subject('Rappel de vos identifiants MiniFacturier')
+            ->text(
+                "Bonjour " . $seller->getFirstNameSeller() . ",\n\n" .
+                "Voici vos identifiants de connexion :\n\n" .
+                "Email : " . $user->getEmail() . "\n" .
+                "Mot de passe : " . $plainPassword . "\n\n" .
+                "Vous pouvez maintenant vous connecter."
+            );
+
+        $mailer->send($emailMessage);
+
+        $this->addFlash('success', 'Les identifiants ont été renvoyés dans Mailpit.');
+
+        return $this->redirectToRoute('app_seller_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}', name: 'app_seller_show', methods: ['GET'])]

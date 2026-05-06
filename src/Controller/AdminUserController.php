@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\SellerUserType;
-use App\Repository\SellerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,18 +20,37 @@ class AdminUserController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
+
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $form = $this->createForm(SellerUserType::class);
+
         $form->handleRequest($request);
 
+        // Vérifie si le formulaire est envoyé et valide
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // =========================
+            // TEST TEMPORAIRE
+            // =========================
+            dd('FORMULAIRE VALIDE', $form->getData());
+
+            // =========================
+            // CODE NORMAL
+            // =========================
             $data = $form->getData();
 
+            $seller = $data['seller'];
+
             $user = new User();
+
             $user->setEmail($data['email']);
+
             $user->setRoles(['ROLE_SELLER']);
+
+            $user->setFirstname($seller->getFirstNameSeller());
+
+            $user->setLastname($seller->getLastNameSeller());
 
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
@@ -41,15 +59,18 @@ class AdminUserController extends AbstractController
 
             $user->setPassword($hashedPassword);
 
-            $seller = $data['seller'];
-
-            
             $seller->setUser($user);
 
             $em->persist($user);
+
+            $em->persist($seller);
+
             $em->flush();
 
-            $this->addFlash('success', 'Compte vendeur créé avec succès.');
+            $this->addFlash(
+                'success',
+                'Compte vendeur créé avec succès.'
+            );
 
             return $this->redirectToRoute('app_seller_index');
         }
