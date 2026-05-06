@@ -1,3 +1,7 @@
+/* ===== IMPORT VARIABLES ===== */
+@import url('./variables.css');
+
+/* ===== GLOBAL ===== */
 body {
-    background-color: skyblue;
+    background-color: var(--color-body-bg);
 }

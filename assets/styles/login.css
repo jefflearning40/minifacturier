@@ -1,6 +1,8 @@
-/* ===== FOND GLOBAL (SUPPRIME LA BANDE) ===== */
+@import url('./variables.css');
+
+/* ===== FOND GLOBAL ===== */
 body {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    background: var(--bg-body-gradient);
 }
 
 /* ===== MAIN ===== */
@@ -30,7 +32,7 @@ main {
     padding: 2rem;
     border-radius: 1.2rem;
 
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-main);
 
     animation: fadeUp 0.6s ease;
 }
@@ -43,19 +45,19 @@ main {
 
 .login-title i {
     font-size: 3rem;
-    color: #0d6efd;
+    color: var(--color-primary-hover);
     margin-bottom: 1rem;
 }
 
 .login-title h1 {
     font-size: 2.4rem;
     font-weight: 700;
-    color: #212529;
+    color: var(--color-text);
     margin-bottom: 0.5rem;
 }
 
 .login-title p {
-    color: #6c757d;
+    color: var(--color-text-muted);
     margin-bottom: 0;
 }
 
@@ -72,22 +74,26 @@ main {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    color: #212529;
+    color: var(--color-text);
 }
 
 /* ===== INPUT GROUP ===== */
 .login-input-group {
     display: flex;
     align-items: center;
-    border: 1px solid #dee2e6;
+
+    border: 1px solid var(--border-color);
     border-radius: 0.9rem;
+
     padding: 0 0.9rem;
-    background: #fff;
+
+    background: var(--color-white);
+
     transition: 0.25s ease;
 }
 
 .login-input-group i {
-    color: #6c757d;
+    color: var(--color-text-muted);
     margin-right: 0.8rem;
 }
 
@@ -95,12 +101,14 @@ main {
     width: 100%;
     border: none;
     outline: none;
+
     padding: 0.9rem 0;
+
     background: transparent;
 }
 
 .login-input-group:focus-within {
-    border-color: #0d6efd;
+    border-color: var(--color-primary-hover);
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.18);
 }
 
@@ -108,12 +116,14 @@ main {
 .toggle-password {
     cursor: pointer;
     margin-left: 0.5rem;
-    color: #6c757d;
+
+    color: var(--color-text-muted);
+
     transition: 0.2s ease;
 }
 
 .toggle-password:hover {
-    color: #0d6efd;
+    color: var(--color-primary-hover);
 }
 
 /* ===== BOUTON ===== */
@@ -121,10 +131,17 @@ main {
     width: 100%;
     border: none;
     border-radius: 0.9rem;
+
     padding: 0.95rem;
 
-    background: linear-gradient(135deg, #0d6efd, #084298);
-    color: white;
+    background:
+        linear-gradient(
+            135deg,
+            var(--color-primary-hover),
+            var(--color-primary-hover-dark)
+        );
+
+    color: var(--color-white);
     font-weight: 700;
 
     transition: 0.25s ease;
@@ -132,6 +149,7 @@ main {
 
 .login-button:hover {
     transform: translateY(-2px);
+
     box-shadow: 0 10px 24px rgba(13, 110, 253, 0.35);
 }
 
@@ -148,7 +166,7 @@ main {
     }
 }
 
-/* ===== FOOTER FIX (sécurité) ===== */
+/* ===== FOOTER ===== */
 footer {
     margin-top: 0 !important;
 }

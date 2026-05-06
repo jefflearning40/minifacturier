@@ -1,0 +1,56 @@
+/* ===== VARIABLES GLOBALES ===== */
+
+:root {
+
+    /* ===== COULEURS PRINCIPALES ===== */
+    --color-primary: #1e3c72;
+    --color-primary-light: #2a5298;
+
+    --color-primary-hover: #0b5ed7;
+    --color-primary-hover-dark: #084298;
+
+    /* ===== SUCCÈS ===== */
+    --color-success: #198754;
+    --color-success-dark: #157347;
+    --color-success-darker: #0f5132;
+
+    /* ===== AUTRES COULEURS ===== */
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+
+    --color-white: #ffffff;
+    --color-black: #000000;
+
+    /* ===== TEXTE ===== */
+    --color-text: #212529;
+    --color-text-muted: #6c757d;
+    --color-text-secondary: #495057;
+    --color-text-light:
+        rgba(255, 255, 255, 0.85);
+
+    /* ===== FONDS ===== */
+    --color-body-bg: skyblue;
+
+    --bg-body-gradient:
+        linear-gradient(
+            135deg,
+            #1e3c72,
+            #2a5298
+        );
+
+    --bg-card: #ffffff;
+
+    --bg-table-hover: #f1f5ff;
+
+    /* ===== BORDURES ===== */
+    --border-color: #dee2e6;
+
+    --border-primary: #1e3c72;
+
+    /* ===== SHADOWS ===== */
+    --shadow-main:
+        0 20px 50px rgba(0, 0, 0, 0.25);
+
+    --shadow-pagination:
+        0 6px 16px rgba(0, 0, 0, 0.18);
+}

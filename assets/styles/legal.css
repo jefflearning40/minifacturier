@@ -1,21 +1,26 @@
+@import url('./variables.css');
+
 /* ===== FOND GLOBAL ===== */
 body {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    background: var(--bg-body-gradient);
 }
 
-/* évite le scroll inutile */
+/* ===== MAIN ===== */
 main {
     display: flex;
     flex-direction: column;
+
     min-height: calc(100vh - 120px);
 }
 
 /* ===== SECTION ===== */
 .legal-section {
     flex: 1;
+
     display: flex;
     justify-content: center;
     align-items: center;
+
     padding: 1rem;
 }
 
@@ -23,13 +28,17 @@ main {
 .legal-card {
     width: 100%;
     max-width: 900px;
-    background: white;
+
+    background: var(--bg-card);
+
     border-radius: 1rem;
+
     padding: 2rem;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+
+    box-shadow: var(--shadow-main);
 }
 
-/* VERSION RGPD (compacte) */
+/* ===== VERSION RGPD ===== */
 .legal-rgpd-card {
     padding: 1.8rem 2rem;
 }
@@ -37,43 +46,57 @@ main {
 /* ===== TITRE ===== */
 .legal-card h1 {
     font-size: 1.6rem;
+
     font-weight: 700;
 }
 
 /* ===== INTRO ===== */
 .legal-intro {
-    color: #6c757d;
+    color: var(--color-text-muted);
+
     font-size: 0.95rem;
+
     margin-bottom: 1rem;
 }
 
 /* ===== BLOCS ===== */
 .legal-block {
     padding: 0.6rem 0;
+
     border-left: 3px solid transparent;
+
     padding-left: 0.8rem;
+
     transition: 0.2s ease;
 }
 
-/* effet propre au hover */
+/* ===== HOVER ===== */
 .legal-block:hover {
-    border-left: 3px solid #0d6efd;
-    background: rgba(13, 110, 253, 0.05);
+    border-left: 3px solid var(--color-primary-hover);
+
+    background:
+        rgba(13, 110, 253, 0.05);
+
     border-radius: 0.4rem;
 }
 
-/* TITRES SECTIONS */
+/* ===== TITRES ===== */
 .legal-block h2 {
     font-size: 1rem;
+
     font-weight: 600;
-    color: #1e3c72;
+
+    color: var(--color-primary);
+
     margin-bottom: 0.2rem;
 }
 
-/* TEXTE */
+/* ===== TEXTE ===== */
 .legal-block p {
     font-size: 0.9rem;
-    color: #495057;
+
+    color: var(--color-text-secondary);
+
     margin: 0;
 }
 
