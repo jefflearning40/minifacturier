@@ -3,117 +3,295 @@ body {
     background: linear-gradient(135deg, #1e3c72, #2a5298);
 }
 
-/* ===== SECTION ===== */
-.seller-stats-section {
-    padding: 1.5rem;
-    display: flex;
-    justify-content: center;
+/* ===== MAIN ===== */
+.seller-main {
+    padding: 0;
 }
 
-/* ===== CARD PRINCIPALE ===== */
-.seller-stats-card {
+/* ===== DASHBOARD ===== */
+.seller-dashboard {
+    padding: 5.2rem 1rem 1rem;
+}
+
+.dashboard-container {
     width: 100%;
     max-width: 1100px;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 1.8rem;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    margin: 0 auto;
 }
 
 /* ===== HEADER ===== */
-.stats-header h1 {
-    font-weight: 800;
-    margin-bottom: 5px;
-}
+.dashboard-header {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 16px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
 
-.stats-header p {
-    color: #6c757d;
-    margin-bottom: 1.2rem;
-}
-
-/* ===== KPI ===== */
-.stats-kpi-card {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 12px;
-    border: 1px solid #dee2e6;
+    justify-content: space-between;
+    gap: 1rem;
+
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
 }
 
-.stats-kpi-card i {
-    font-size: 1.4rem;
-    color: #1e3c72;
-}
-
-.stats-kpi-card span {
-    font-size: 0.8rem;
-    color: #6c757d;
-}
-
-.stats-kpi-card strong {
-    display: block;
+.dashboard-header h1 {
+    margin: 0 0 0.2rem;
     font-size: 1.6rem;
     font-weight: 800;
-    color: #1e3c72;
+    color: #212529;
 }
 
-/* ===== VARIANTE KPI ===== */
-.stats-kpi-card.success i {
-    color: #198754;
+.dashboard-header p {
+    margin: 0;
+    color: #6c757d;
 }
 
-/* ===== CARTES ===== */
-.stats-card {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 1.3rem;
-    border: 1px solid #dee2e6;
-    height: 100%;
+.dashboard-header strong {
+    color: #212529;
 }
 
-.stats-card h3 {
-    font-size: 1rem;
+.dashboard-badge {
+    background: #1e3c72;
+    color: white;
+    border-radius: 999px;
+    padding: 0.6rem 0.9rem;
     font-weight: 700;
+    white-space: nowrap;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ===== KPI CARDS ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
     margin-bottom: 1rem;
 }
 
-/* ===== TOTAL ===== */
-.stats-total {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #1e3c72;
+.stat-card {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 14px;
+    padding: 0.8rem 1rem;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
-.stats-sub {
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.stat-icon.blue {
+    background: linear-gradient(135deg, #0d6efd, #084298);
+}
+
+.stat-icon.green {
+    background: linear-gradient(135deg, #198754, #0f5132);
+}
+
+.stat-icon.purple {
+    background: linear-gradient(135deg, #6f42c1, #432874);
+}
+
+.stat-card span {
+    display: block;
     font-size: 0.8rem;
     color: #6c757d;
-    margin-bottom: 1rem;
+    margin-bottom: 0.15rem;
 }
 
-/* ===== LIGNES ===== */
-.stats-lines {
+.stat-card strong {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #212529;
+}
+
+/* ===== CONTENT ===== */
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 1rem;
+}
+
+.panel-card {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.7rem;
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #212529;
+}
+
+.panel-header i {
+    color: #1e3c72;
+    font-size: 1.2rem;
+}
+
+/* ===== VENTES ===== */
+.big-total {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #1e3c72;
+    margin-bottom: 0.1rem;
+}
+
+.sales-card p {
+    color: #6c757d;
+    margin-bottom: 0.8rem;
+}
+
+.amount-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0.6rem;
 }
 
-.stats-lines div {
-    background: white;
-    border-radius: 8px;
-    padding: 8px 10px;
-    display: flex;
-    justify-content: space-between;
+.amount-list div {
+    background: #f8f9fa;
     border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 0.65rem 0.8rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.amount-list span {
+    color: #6c757d;
+}
+
+.amount-list strong {
+    color: #212529;
 }
 
 /* ===== TABLE ===== */
-.table-wrapper {
-    max-height: 200px; 
+.table-container {
+    max-height: 270px;
     overflow-y: auto;
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
 }
 
-.table-wrapper table {
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.table-container thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.table-container th {
+    background: #212529;
+    color: white;
+    padding: 0.55rem 0.75rem;
     font-size: 0.85rem;
+    text-align: left;
+}
+
+.table-container td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+    color: #212529;
+    font-size: 0.9rem;
+}
+
+.table-container tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.table-container th:last-child,
+.table-container td:last-child {
+    text-align: right;
+}
+
+.quantity {
+    font-weight: 800;
+    color: #1e3c72;
+}
+
+.empty-table {
+    text-align: center !important;
+    color: #6c757d !important;
+    padding: 1.5rem !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .seller-dashboard {
+        padding: 5.2rem 0.8rem 1rem;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .dashboard-badge {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stat-card strong {
+        font-size: 1.1rem;
+    }
+
+    .big-total {
+        font-size: 1.5rem;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table-container table {
+        min-width: 540px;
+    }
 }
