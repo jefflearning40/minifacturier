@@ -23,7 +23,8 @@
                 <thead class="table-dark sticky-top">
                     <tr>
                         <th>Id</th>
-                        <th>Nom complet</th>
+                        <th class="seller-name-col">Nom complet</th>
+                        <th class="text-center seller-status-col">Activité</th>
                         <th>Téléphone</th>
                         <th class="text-center seller-actions-col">Actions</th>
                         <th class="text-center seller-account-col">Compte</th>
@@ -35,18 +36,16 @@
                     <tr>
                         <td>{{ seller.id }}</td>
 
-                        <td>
+                        <td class="seller-name-col">
                             {{ seller.firstNameSeller }}
                             {{ seller.lastNameSeller|upper }}
+                        </td>
 
+                        <td class="text-center seller-status-col">
                             {% if seller.invoices|length > 0 %}
-                                <span class="badge bg-success ms-2">Actif</span>
+                                <span class="badge bg-success">Actif</span>
                             {% else %}
-                                <span class="badge bg-danger ms-2">Inactif</span>
-                            {% endif %}
-
-                            {% if seller.user %}
-                                <span class="badge bg-primary ms-2">Compte</span>
+                                <span class="badge bg-danger">Inactif</span>
                             {% endif %}
                         </td>
 
@@ -107,15 +106,13 @@
                                 <div class="modal-content">
 
                                     <div class="modal-header bg-dark text-white">
-                                        <h5 class="modal-title">
-                                            Identifiants vendeur
-                                        </h5>
+                                        <h5 class="modal-title">Identifiants vendeur</h5>
 
                                         <button
                                             type="button"
                                             class="btn-close btn-close-white"
-                                            data-bs-dismiss="modal">
-                                        </button>
+                                            data-bs-dismiss="modal"
+                                        ></button>
                                     </div>
 
                                     <div class="modal-body">
@@ -143,7 +140,8 @@
                                     <div class="modal-footer">
                                         <a
                                             href="{{ path('app_seller_resend_login', {'id': seller.id}) }}"
-                                            class="btn btn-primary">
+                                            class="btn btn-primary"
+                                        >
                                             <i class="fa-solid fa-paper-plane me-1"></i>
                                             Renvoyer dans Mailpit
                                         </a>
@@ -151,7 +149,8 @@
                                         <button
                                             type="button"
                                             class="btn btn-secondary"
-                                            data-bs-dismiss="modal">
+                                            data-bs-dismiss="modal"
+                                        >
                                             Fermer
                                         </button>
                                     </div>
@@ -163,7 +162,7 @@
 
                 {% else %}
                     <tr>
-                        <td colspan="5" class="text-center">
+                        <td colspan="6" class="text-center">
                             Aucun vendeur trouvé
                         </td>
                     </tr>
