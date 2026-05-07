@@ -16,23 +16,22 @@ class InvoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('numberInvoice', null, [
-                'label' => 'Numéro de facture',
-                'attr' => [
-                    'placeholder' => 'Entrez le numéro de facture',
-                ],
-            ])
             ->add('saleDate', null, [
                 'label' => 'Date de vente',
-            ])
-            ->add('seller', EntityType::class, [
+            ]);
+
+        if ($options['show_seller']) {
+            $builder->add('seller', EntityType::class, [
                 'class' => Seller::class,
                 'choice_label' => function (Seller $seller) {
                     return $seller->getFirstNameSeller() . ' ' . $seller->getLastNameSeller();
                 },
                 'label' => 'Vendeur',
                 'placeholder' => 'Choisissez un vendeur',
-            ])
+            ]);
+        }
+
+        $builder
             ->add('customer', EntityType::class, [
                 'class' => Customer::class,
                 'choice_label' => function (Customer $customer) {
@@ -56,6 +55,7 @@ class InvoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Invoice::class,
+            'show_seller' => true,
         ]);
     }
 }

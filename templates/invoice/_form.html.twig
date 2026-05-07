@@ -7,10 +7,8 @@
     </div>
 
     <div class="text-end">
-        <div class="mb-3">
-            {{ form_label(form.numberInvoice) }}
-            {{ form_widget(form.numberInvoice, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.numberInvoice) }}
+        <div class="alert alert-info py-2 px-3 mb-3">
+            Le numéro de facture sera généré automatiquement.
         </div>
 
         <div>
@@ -22,19 +20,28 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-6">
-        <div class="border rounded p-3 h-100 bg-light-subtle">
-            <h3 class="h6 text-uppercase text-muted mb-3">Vendeur</h3>
-            {{ form_row(form.seller) }}
+    {% if form.seller is defined %}
+        <div class="col-md-6">
+            <div class="border rounded p-3 h-100 bg-light-subtle">
+                <h3 class="h6 text-uppercase text-muted mb-3">Vendeur</h3>
+                {{ form_row(form.seller) }}
+            </div>
         </div>
-    </div>
 
-    <div class="col-md-6">
-        <div class="border rounded p-3 h-100 bg-light-subtle">
-            <h3 class="h6 text-uppercase text-muted mb-3">Client</h3>
-            {{ form_row(form.customer) }}
+        <div class="col-md-6">
+            <div class="border rounded p-3 h-100 bg-light-subtle">
+                <h3 class="h6 text-uppercase text-muted mb-3">Client</h3>
+                {{ form_row(form.customer) }}
+            </div>
         </div>
-    </div>
+    {% else %}
+        <div class="col-md-12">
+            <div class="border rounded p-3 h-100 bg-light-subtle">
+                <h3 class="h6 text-uppercase text-muted mb-3">Client</h3>
+                {{ form_row(form.customer) }}
+            </div>
+        </div>
+    {% endif %}
 </div>
 
 <div class="alert alert-warning d-none" id="invoice-alert">
@@ -84,9 +91,15 @@
             <td>{{ form_widget(form.invoiceItems.vars.prototype.product)|e('html_attr') }}</td>
             <td>{{ form_widget(form.invoiceItems.vars.prototype.price)|e('html_attr') }}</td>
             <td>{{ form_widget(form.invoiceItems.vars.prototype.quantity)|e('html_attr') }}</td>
-            <td><div class='form-control bg-light text-end fw-semibold'>0.00 €</div></td>
+            <td>
+                <div class='form-control bg-light text-end fw-semibold line-total-display'>
+                    0.00 €
+                </div>
+            </td>
             <td class='text-center'>
-                <button type='button' class='btn btn-outline-danger btn-sm remove-item'>✕</button>
+                <button type='button' class='btn btn-outline-danger btn-sm remove-item'>
+                    ✕
+                </button>
             </td>
         </tr>
     "

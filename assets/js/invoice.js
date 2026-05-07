@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const prototypeHolder = document.getElementById('invoice-item-prototype');
     const addButton = document.getElementById('add-invoice-item');
     const grandTotalElement = document.getElementById('invoice-grand-total');
+    const submitButton = document.getElementById('invoice-submit');
 
-    // Le script ne fonctionne que sur la page facture
-    if (!wrapper || !prototypeHolder || !addButton || !grandTotalElement) {
+    if (!wrapper || !prototypeHolder || !addButton || !grandTotalElement || !submitButton) {
         return;
     }
 
@@ -63,11 +63,54 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateGrandTotal() {
         let grandTotal = 0;
 
-        wrapper.querySelectorAll('.invoice-item').forEach(item => {
+        wrapper.querySelectorAll('.invoice-item').forEach(function (item) {
             grandTotal += updateLineTotal(item);
         });
 
         grandTotalElement.textContent = grandTotal.toFixed(2) + ' €';
+    }
+
+    function updateSubmitButton() {
+        const seller = document.querySelector('#invoice_seller');
+        const customer = document.querySelector('#invoice_customer');
+
+        let hasValidLine = false;
+
+        wrapper.querySelectorAll('.invoice-item').forEach(function (item) {
+            const product = item.querySelector('select');
+            const quantity = item.querySelector('input[id*="_quantity"]');
+
+            if (
+                product &&
+                product.value &&
+                quantity &&
+                toNumber(quantity.value) > 0
+            ) {
+                hasValidLine = true;
+            }
+        });
+
+        /*
+            Si on est ADMIN :
+            le champ vendeur existe, donc il doit être rempli.
+
+            Si on est VENDEUR :
+            le champ vendeur n’existe pas dans le formulaire,
+            donc on considère que le vendeur est valide automatiquement.
+        */
+        const sellerIsValid = !seller || seller.value;
+
+        submitButton.disabled = !(
+            sellerIsValid &&
+            customer &&
+            customer.value &&
+            hasValidLine
+        );
+    }
+
+    function refreshInvoice() {
+        updateGrandTotal();
+        updateSubmitButton();
     }
 
     function bindCalculationEvents(item) {
@@ -79,14 +122,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (select) {
             select.addEventListener('change', function () {
                 updateFromProduct(item);
-                updateGrandTotal();
+                refreshInvoice();
             });
         }
 
-        [priceInput, quantityInput].forEach(input => {
+        [priceInput, quantityInput].forEach(function (input) {
             if (input) {
                 input.addEventListener('input', function () {
-                    updateGrandTotal();
+                    refreshInvoice();
                 });
             }
         });
@@ -94,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (removeButton) {
             removeButton.addEventListener('click', function () {
                 item.remove();
-                updateGrandTotal();
+                refreshInvoice();
             });
         }
 
@@ -117,14 +160,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
         wrapper.appendChild(newItem);
         bindCalculationEvents(newItem);
-        updateGrandTotal();
+        refreshInvoice();
 
         index++;
     });
 
-    wrapper.querySelectorAll('.invoice-item').forEach(item => {
+    const seller = document.querySelector('#invoice_seller');
+    const customer = document.querySelector('#invoice_customer');
+
+    if (seller) {
+        seller.addEventListener('change', refreshInvoice);
+    }
+
+    if (customer) {
+        customer.addEventListener('change', refreshInvoice);
+    }
+
+    wrapper.querySelectorAll('.invoice-item').forEach(function (item) {
         bindCalculationEvents(item);
     });
 
-    updateGrandTotal();
+    refreshInvoice();
 });
