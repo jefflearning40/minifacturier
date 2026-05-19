@@ -1,0 +1,42 @@
+/* ===== NAVBAR LOGO ===== */
+
+.navbar-logo{
+    width:52px;
+    height:52px;
+
+    object-fit:contain;
+}
+
+/* ===== TITRE SHOP MANAGER ===== */
+
+.navbar-title{
+
+    font-family:'Trebuchet MS', sans-serif;
+
+    font-size:1.7rem;
+
+    font-weight:900;
+
+    letter-spacing:1.5px;
+
+    color:rgb(201, 255, 6);
+}
+
+/* ===== ALIGNEMENT ===== */
+
+.navbar-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    transition:0.25s;
+}
+
+.navbar-brand:hover{
+
+    transform:scale(1.02);
+
+}

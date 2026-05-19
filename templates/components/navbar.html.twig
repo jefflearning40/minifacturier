@@ -2,9 +2,23 @@
     <div class="container">
 
         <!-- LOGO -->
-        <a class="navbar-brand fw-semibold" href="{{ path('app_home') }}">
-            MiniFacturier
-        </a>
+<a class="navbar-brand fw-semibold d-flex align-items-center gap-2"
+href="{{ path('app_home') }}">
+
+    <!-- ICONE -->
+    <img
+        src="{{ asset('images/shopmanager3.ico') }}"
+        alt="Logo Shop Manager"
+        width="48"
+        height="48"
+    >
+
+    <!-- TEXTE -->
+    <span>
+        Shop Manager
+    </span>
+
+</a>
 
         <!-- TOGGLER -->
         <button
@@ -134,7 +148,7 @@
                     </li>
                 {% endif %}
 
-               <!-- ADMIN / STATS -->
+<!-- ADMIN / STATS -->
 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SELLER') %}
     <li class="nav-item dropdown ms-lg-3">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
