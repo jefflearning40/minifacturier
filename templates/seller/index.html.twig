@@ -32,141 +32,173 @@
                 </thead>
 
                 <tbody>
-                {% for seller in sellers %}
-                    <tr>
-                        <td>{{ seller.id }}</td>
+                    {% for seller in sellers %}
+                        <tr>
+                            <td>{{ seller.id }}</td>
 
-                        <td class="seller-name-col">
-                            {{ seller.firstNameSeller }}
-                            {{ seller.lastNameSeller|upper }}
-                        </td>
+                            <td class="seller-name-col">
+                                {{ seller.firstNameSeller }}
+                                {{ seller.lastNameSeller|upper }}
+                            </td>
 
-                        <td class="text-center seller-status-col">
-                            {% if seller.invoices|length > 0 %}
-                                <span class="badge bg-success">Actif</span>
-                            {% else %}
-                                <span class="badge bg-danger">Inactif</span>
-                            {% endif %}
-                        </td>
+                            <td class="text-center seller-status-col">
+                                {% if seller.invoices|length > 0 %}
+                                    <span class="badge bg-success">Actif</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactif</span>
+                                {% endif %}
+                            </td>
 
-                        <td>{{ seller.phoneSeller }}</td>
+                            <td>{{ seller.phoneSeller }}</td>
 
-                        <td class="text-center seller-actions-col">
-                            <div class="seller-actions-buttons">
-                                {{ include('components/buttons/_show.html.twig', {
-                                    route: 'app_seller_show',
-                                    id: seller.id
-                                }) }}
+                            <td class="text-center seller-actions-col">
+                                <div class="seller-actions-buttons">
 
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    {{ include('components/buttons/_edit.html.twig', {
-                                        route: 'app_seller_edit',
+                                    {{ include('components/buttons/_show.html.twig', {
+                                        route: 'app_seller_show',
                                         id: seller.id
                                     }) }}
 
-                                    {% if seller.invoices|length > 0 %}
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-secondary"
-                                            disabled
-                                            title="Suppression impossible : vendeur lié à une facture"
-                                        >
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                    {% else %}
-                                        {{ include('components/buttons/_delete.html.twig', {
-                                            route: 'app_seller_delete',
+                                    {% if is_granted('ROLE_ADMIN') %}
+
+                                        {{ include('components/buttons/_edit.html.twig', {
+                                            route: 'app_seller_edit',
                                             id: seller.id
                                         }) }}
+
+                                        {% if seller.invoices|length > 0 %}
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-secondary"
+                                                disabled
+                                                title="Suppression impossible : vendeur lié à une facture"
+                                            >
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        {% else %}
+                                            {{ include('components/buttons/_delete.html.twig', {
+                                                route: 'app_seller_delete',
+                                                id: seller.id
+                                            }) }}
+                                        {% endif %}
+
                                     {% endif %}
-                                {% endif %}
-                            </div>
-                        </td>
-
-                        <td class="text-center seller-account-col">
-                            {% if is_granted('ROLE_ADMIN') and seller.user %}
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-primary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#sellerLoginModal{{ seller.id }}"
-                                    title="Voir les identifiants"
-                                >
-                                    <i class="fa-solid fa-eye"></i>
-                                </button>
-                            {% else %}
-                                <span class="text-muted">—</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    {% if is_granted('ROLE_ADMIN') and seller.user %}
-                        <div class="modal fade" id="sellerLoginModal{{ seller.id }}" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-
-                                    <div class="modal-header bg-dark text-white">
-                                        <h5 class="modal-title">Identifiants vendeur</h5>
-
-                                        <button
-                                            type="button"
-                                            class="btn-close btn-close-white"
-                                            data-bs-dismiss="modal"
-                                        ></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <p>
-                                            <strong>Vendeur :</strong>
-                                            {{ seller.firstNameSeller }} {{ seller.lastNameSeller|upper }}
-                                        </p>
-
-                                        <p>
-                                            <strong>Email :</strong>
-                                            {{ seller.user.email }}
-                                        </p>
-
-                                        <p>
-                                            <strong>Mot de passe :</strong>
-                                            seller{{ seller.id }}
-                                        </p>
-
-                                        <div class="alert alert-info small mb-0">
-                                            En cas de perte des identifiants, le vendeur peut contacter
-                                            l’entreprise via le footer ou le téléphone interne.
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <a
-                                            href="{{ path('app_seller_resend_login', {'id': seller.id}) }}"
-                                            class="btn btn-primary"
-                                        >
-                                            <i class="fa-solid fa-paper-plane me-1"></i>
-                                            Renvoyer dans Mailpit
-                                        </a>
-
-                                        <button
-                                            type="button"
-                                            class="btn btn-secondary"
-                                            data-bs-dismiss="modal"
-                                        >
-                                            Fermer
-                                        </button>
-                                    </div>
 
                                 </div>
-                            </div>
-                        </div>
-                    {% endif %}
+                            </td>
 
-                {% else %}
-                    <tr>
-                        <td colspan="6" class="text-center">
-                            Aucun vendeur trouvé
-                        </td>
-                    </tr>
-                {% endfor %}
+                            <td class="text-center seller-account-col">
+                                {% if is_granted('ROLE_ADMIN') %}
+
+                                    {% if seller.user %}
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-outline-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#sellerLoginModal{{ seller.id }}"
+                                            title="Voir les identifiants"
+                                        >
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    {% else %}
+                                       <form
+    method="post"
+    action="{{ path('app_seller_create_login', {'id': seller.id}) }}"
+    style="display:inline;"
+>
+
+    <button
+        type="submit"
+        class="btn btn-sm btn-outline-success"
+        title="Créer un compte de connexion"
+    >
+
+        <i class="fa-solid fa-plus"></i>
+
+    </button>
+
+</form>
+                                    {% endif %}
+
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        {% if is_granted('ROLE_ADMIN') and seller.user %}
+                            <div
+                                class="modal fade"
+                                id="sellerLoginModal{{ seller.id }}"
+                                tabindex="-1"
+                                aria-hidden="true"
+                            >
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header bg-dark text-white">
+                                            <h5 class="modal-title">Identifiants vendeur</h5>
+
+                                            <button
+                                                type="button"
+                                                class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal"
+                                            ></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <p>
+                                                <strong>Vendeur :</strong>
+                                                {{ seller.firstNameSeller }}
+                                                {{ seller.lastNameSeller|upper }}
+                                            </p>
+
+                                            <p>
+                                                <strong>Email :</strong>
+                                                {{ seller.user.email }}
+                                            </p>
+
+                                            <p>
+                                                <strong>Mot de passe :</strong>
+                                                seller{{ seller.id }}
+                                            </p>
+
+                                            <div class="alert alert-info small mb-0">
+                                                En cas de perte des identifiants, le vendeur peut contacter
+                                                l’entreprise via le footer ou le téléphone interne.
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <a
+                                                href="{{ path('app_seller_resend_login', {'id': seller.id}) }}"
+                                                class="btn btn-primary"
+                                            >
+                                                <i class="fa-solid fa-paper-plane me-1"></i>
+                                                Renvoyer dans Mailpit
+                                            </a>
+
+                                            <button
+                                                type="button"
+                                                class="btn btn-secondary"
+                                                data-bs-dismiss="modal"
+                                            >
+                                                Fermer
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                Aucun vendeur trouvé
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
 
             </table>
