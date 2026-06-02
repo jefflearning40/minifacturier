@@ -1,68 +1,120 @@
 /* ============================= */
-/* TABLETTES */
+/* TABLETTES / PETITS ÉCRANS */
 /* ============================= */
 
-@media (max-width:768px){
+@media (max-width: 768px) {
 
-.seller-table-wrapper,
-.customer-table-wrapper,
-.invoice-table-wrapper,
-.catalog-table-wrapper,
-.stats-table-wrapper{
+    .seller-table-wrapper,
+    .customer-table-wrapper,
+    .invoice-table-wrapper,
+    .catalog-table-wrapper,
+    .stats-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
+    }
 
-width:100%;
+    .seller-table-wrapper table,
+    .customer-table-wrapper table,
+    .invoice-table-wrapper table,
+    .catalog-table-wrapper table,
+    .stats-table-wrapper table {
+        min-width: 900px;
+    }
 
-overflow-x:auto;
+    .seller-wrapper,
+    .customer-wrapper,
+    .invoice-wrapper,
+    .catalog-wrapper {
+        padding: 0.8rem;
+    }
 
-overflow-y:auto;
-
-}
-
-/* IMPORTANT */
-
-.seller-table-wrapper table,
-.customer-table-wrapper table,
-.invoice-table-wrapper table,
-.catalog-table-wrapper table,
-.stats-table-wrapper table{
-
-min-width:900px;
-
-}
-
+    .table {
+        font-size: 0.9rem;
+    }
 }
 
 /* ============================= */
 /* SMARTPHONE */
 /* ============================= */
 
-@media (max-width:576px){
+@media (max-width: 576px) {
 
-body{
+    html,
+    body {
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
 
-overflow:auto;
+    main {
+        min-height: auto !important;
+        overflow: visible !important;
+    }
 
+    .home-section,
+    .seller-section,
+    .customer-section,
+    .invoice-section,
+    .catalog-section,
+    .stats-section,
+    .seller-dashboard {
+        min-height: auto !important;
+        overflow: visible !important;
+        padding: 1rem 0.6rem 2rem;
+    }
+
+    .home-wrapper,
+    .seller-wrapper,
+    .customer-wrapper,
+    .invoice-wrapper,
+    .catalog-wrapper {
+        padding: 0.6rem;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    .table {
+        font-size: 0.82rem;
+    }
+
+    .btn {
+        font-size: 0.85rem;
+    }
+
+    .navbar-brand span {
+        font-size: 1.1rem;
+    }
+
+    footer {
+        padding: 0.6rem 0 !important;
+    }
+
+    footer h6,
+    footer p,
+    footer li,
+    footer .small {
+        font-size: 0.78rem;
+    }
 }
 
-h1{
+/* ============================= */
+/* TRÈS GRANDS ÉCRANS */
+/* ============================= */
 
-font-size:1.7rem;
+@media (min-width: 1600px) {
 
-}
+    .seller-wrapper,
+    .customer-wrapper,
+    .invoice-wrapper,
+    .catalog-wrapper {
+        max-width: 1800px;
+    }
 
-footer{
-
-padding:.6rem 0 !important;
-
-}
-
-footer h6,
-footer p,
-footer li,
-footer .small{
-
-font-size:.78rem;
-
-}
-
+    .table {
+        font-size: 1.05rem;
+    }
 }
