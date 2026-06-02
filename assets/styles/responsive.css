@@ -1,0 +1,68 @@
+/* ============================= */
+/* TABLETTES */
+/* ============================= */
+
+@media (max-width:768px){
+
+.seller-table-wrapper,
+.customer-table-wrapper,
+.invoice-table-wrapper,
+.catalog-table-wrapper,
+.stats-table-wrapper{
+
+width:100%;
+
+overflow-x:auto;
+
+overflow-y:auto;
+
+}
+
+/* IMPORTANT */
+
+.seller-table-wrapper table,
+.customer-table-wrapper table,
+.invoice-table-wrapper table,
+.catalog-table-wrapper table,
+.stats-table-wrapper table{
+
+min-width:900px;
+
+}
+
+}
+
+/* ============================= */
+/* SMARTPHONE */
+/* ============================= */
+
+@media (max-width:576px){
+
+body{
+
+overflow:auto;
+
+}
+
+h1{
+
+font-size:1.7rem;
+
+}
+
+footer{
+
+padding:.6rem 0 !important;
+
+}
+
+footer h6,
+footer p,
+footer li,
+footer .small{
+
+font-size:.78rem;
+
+}
+
+}
