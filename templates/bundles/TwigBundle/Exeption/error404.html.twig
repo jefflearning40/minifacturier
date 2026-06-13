@@ -1,2 +1,42 @@
-<h1 style="color:red;">TEST 404 PERSO</h1>
-<a href="/">Retour accueil</a>
+{% extends 'base.html.twig' %}
+
+{% block title %}Page introuvable{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+
+            <div class="mt-5 mb-4">
+                <i class="bi bi-search text-warning" style="font-size: 5rem;"></i>
+            </div>
+
+            <h1 class="display-5 fw-bold mb-4">
+                <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                Erreur 404
+            </h1>
+
+            <h3 class="text-secondary mb-4">
+                Page introuvable
+            </h3>
+
+            <p class="lead">
+                <i class="bi bi-signpost-split me-2"></i>
+                La page que vous recherchez n'existe pas ou a été déplacée.
+            </p>
+
+            <p class="text-muted mb-5">
+                Vérifiez l'adresse saisie ou revenez à l'accueil de l'application.
+            </p>
+
+            <a href="{{ path('app_home') }}" class="btn btn-primary btn-lg">
+                <i class="bi bi-house-door me-2"></i>
+                Retour à l'accueil
+            </a>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
